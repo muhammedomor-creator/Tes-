@@ -353,7 +353,7 @@
                 <div class="py-4 space-y-4 text-sm text-gray-600 dark:text-gray-300">
                     <div class="flex gap-3 items-start">
                         <i class="fa-solid fa-shield-heart text-primary mt-1"></i>
-                        <p>Blood seekers cannot directly see or contact the blood donors' phone numbers.</p>
+                        <p>Blood seekers cannot directly contact donors. Our Admin Panel will handle all communication and coordination.</p>
                     </div>
                     <div class="flex gap-3 items-start">
                         <i class="fa-solid fa-user-shield text-primary mt-1"></i>
@@ -594,7 +594,7 @@
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
                 else await signInAnonymously(auth);
             } catch (e) { 
-                // Removed the error toast to fix the auto-login bug.
+                // Silenced the error completely so no toast is shown to fix the auto-login bug.
                 console.warn("Silent auth validation:", e.message); 
             }
         };
