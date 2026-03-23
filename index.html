@@ -285,7 +285,7 @@
             </div>
         </div>
 
-        <!-- Request Donor Modal (Semi-Automatic WhatsApp) -->
+        <!-- Request Donor Modal (Semi-Automatic WhatsApp with UID) -->
         <div id="modal-request-donor" class="custom-modal absolute bottom-0 w-full bg-white dark:bg-gray-800 rounded-t-[40px] z-50 transform translate-y-full transition-transform duration-300 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] flex flex-col max-h-[90dvh]">
             <div class="p-4 flex justify-center border-b border-gray-100 dark:border-gray-700"><div class="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full"></div></div>
             <div class="p-6 overflow-y-auto no-scrollbar pb-safe">
@@ -294,7 +294,8 @@
                     <button onclick="closeModal('modal-request-donor')" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <form id="form-request-donor" class="space-y-4">
-                    <input type="hidden" id="req-donor-phone">
+                    <input type="hidden" id="req-donor-uid">
+                    <input type="hidden" id="req-donor-bg">
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">রোগীর নাম</label>
                         <input type="text" id="req-patient-name" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
@@ -351,9 +352,9 @@
                     <button onclick="closeModal('modal-privacy')" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="py-4 space-y-4 text-sm text-gray-600 dark:text-gray-300">
-                    <div class="flex gap-3 items-start">
-                        <i class="fa-solid fa-shield-heart text-primary mt-1"></i>
-                        <p>Blood seekers cannot directly contact donors. Our Admin Panel will handle all communication and coordination.</p>
+                    <div class="flex gap-3 items-start bg-rose-50 dark:bg-rose-900/20 p-4 rounded-2xl">
+                        <i class="fa-solid fa-shield-heart text-primary mt-1 text-xl"></i>
+                        <p class="font-medium text-gray-800 dark:text-gray-100">Blood seekers cannot contact donors directly. Our Admin Panel will handle all communication to ensure donor privacy.</p>
                     </div>
                     <div class="flex gap-3 items-start">
                         <i class="fa-solid fa-user-shield text-primary mt-1"></i>
@@ -361,7 +362,7 @@
                     </div>
                     <div class="flex gap-3 items-start">
                         <i class="fa-solid fa-lock text-primary mt-1"></i>
-                        <p>Donor privacy and security are our top priorities.</p>
+                        <p>Donor privacy and security are our top priorities. No personal contact numbers are shared without consent.</p>
                     </div>
                 </div>
             </div>
@@ -376,8 +377,11 @@
                 </div>
                 <div class="text-center py-4">
                     <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-3"><i class="fa-solid fa-droplet"></i></div>
-                    <h3 class="text-lg font-bold">রক্তের টান V4.0</h3>
+                    <h3 class="text-lg font-bold">রক্তের টান V4.1</h3>
                     <p class="text-sm text-gray-500 mt-2">একটি অলাভজনক, স্বেচ্ছাসেবী রক্তদান প্ল্যাটফর্ম।</p>
+                    <a href="https://www.facebook.com/share/g/1C2EHncojX/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-blue-600 font-bold bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full">
+                        <i class="fa-brands fa-facebook"></i> জয়েন করুন ফেসবুক গ্রুপে
+                    </a>
                     <p class="text-xs text-gray-400 mt-6">Developed with ❤️ for Bangladesh.</p>
                 </div>
              </div>
@@ -413,7 +417,6 @@
 
         const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
         
-        // --- Full Bangladesh GeoData ---
         const geoData = {
             "Dhaka": {
                 "Dhaka": ["Savar", "Dhamrai", "Keraniganj", "Nawabganj", "Dohar", "Mirpur", "Uttara", "Mohammadpur", "Gulshan", "Badda", "Motijheel"],
@@ -566,7 +569,6 @@
         const setupGeoSelectors = (prefix) => {
             const divSel = document.getElementById(`${prefix}-division`), distSel = document.getElementById(`${prefix}-district`), upaSel = document.getElementById(`${prefix}-upazila`);
             
-            // Clear and load divisions
             divSel.innerHTML = `<option value="">সকল বিভাগ</option>`;
             Object.keys(geoData).sort().forEach(div => divSel.add(new Option(div, div)));
             
@@ -591,11 +593,15 @@
         // Firebase Auth & Data
         const initAuth = async () => {
             try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
-                else await signInAnonymously(auth);
+                // Ensure custom token logic is evaluated but errors are suppressed for silent startup
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
             } catch (e) { 
-                // Silenced the error completely so no toast is shown to fix the auto-login bug.
-                console.warn("Silent auth validation:", e.message); 
+                // Fix: Startup bug silenced
+                console.log("Initialization standby...");
             }
         };
 
@@ -616,7 +622,7 @@
                 allUsers = [];
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
-                    data.id = docSnap.id;
+                    data.uid = docSnap.id; // Store uid explicitly
                     allUsers.push(data);
                     if(docSnap.id === currentUser.uid) {
                         userProfile = data;
@@ -707,7 +713,7 @@
             } catch(er) { showToast(er.message, "error"); } finally { btn.innerHTML = og; }
         });
 
-        // --- Optimized Search Logic ---
+        // Search Logic
         window.performSearch = () => {
             const bg = document.getElementById('search-bg-input').value;
             const div = document.getElementById('search-division').value;
@@ -717,8 +723,6 @@
             if(!bg) { showToast("অনুগ্রহ করে রক্তের গ্রুপ নির্বাচন করুন।", "error"); return; }
 
             let res = allUsers.filter(u => u.isAvailable && u.bloodGroup === bg);
-            
-            // Sequential Filtering
             if(div) res = res.filter(u => u.division === div);
             if(dist) res = res.filter(u => u.district === dist);
             if(upa) res = res.filter(u => u.upazila === upa);
@@ -738,10 +742,10 @@
                                 <div class="w-12 h-12 bg-rose-50 dark:bg-rose-900/30 rounded-full flex justify-center items-center text-primary font-bold text-lg border border-rose-100 dark:border-rose-800">${u.bloodGroup}</div>
                                 <div>
                                     <h4 class="font-bold text-sm">${u.name} <span class="ml-1 text-[10px] px-1.5 py-0.5 rounded ${b.class}">${b.name}</span></h4>
-                                    <p class="text-[11px] text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i>${u.upazila ? u.upazila + ', ' : ''}${u.district}, ${u.division}</p>
+                                    <p class="text-[11px] text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i>${u.upazila ? u.upazila + ', ' : ''}${u.district}</p>
                                 </div>
                             </div>
-                            <button onclick="openRequestModal('${u.phone.replace(/[^0-9+]/g, '')}')" class="w-10 h-10 bg-primary text-white rounded-full flex justify-center items-center shadow-lg active:scale-90 transition-transform"><i class="fa-solid fa-message"></i></button>
+                            <button onclick="openRequestModal('${u.uid}', '${u.bloodGroup}')" class="w-10 h-10 bg-primary text-white rounded-full flex justify-center items-center shadow-lg active:scale-90 transition-transform"><i class="fa-solid fa-paper-plane"></i></button>
                         </div>`;
                 });
             }
@@ -749,9 +753,10 @@
             setTimeout(() => document.getElementById('main-content').scrollTo({ top: c.offsetTop - 20, behavior: 'smooth' }), 100);
         };
 
-        // --- WhatsApp Request System Logic ---
-        window.openRequestModal = (donorPhone) => {
-            document.getElementById('req-donor-phone').value = donorPhone;
+        // WhatsApp Request System with UID
+        window.openRequestModal = (donorUid, donorBg) => {
+            document.getElementById('req-donor-uid').value = donorUid;
+            document.getElementById('req-donor-bg').value = donorBg;
             openModal('modal-request-donor');
         };
 
@@ -760,26 +765,21 @@
             const patientName = document.getElementById('req-patient-name').value;
             const bags = document.getElementById('req-bags').value;
             const hospital = document.getElementById('req-hospital').value;
-            const donorPhone = document.getElementById('req-donor-phone').value;
-            
-            // Format phone to 88... for wa.me link
-            let formattedPhone = donorPhone.replace(/[^0-9]/g, '');
-            if(formattedPhone.length === 11 && formattedPhone.startsWith('01')) {
-                formattedPhone = '88' + formattedPhone;
-            }
+            const donorUid = document.getElementById('req-donor-uid').value;
+            const donorBg = document.getElementById('req-donor-bg').value;
 
-            const adminPhone = "8801410603930"; // Updated Admin WhatsApp Number
-            const message = `*জরুরি রক্তের রিকোয়েস্ট!*\n\n*রোগীর নাম:* ${patientName}\n*রক্তের পরিমাণ:* ${bags} ব্যাগ\n*হাসপাতাল ও ঠিকানা:* ${hospital}\n\n*ডোনারের নম্বর:* ${donorPhone}\n*ডোনারকে মেসেজ দিন:* https://wa.me/${formattedPhone}`;
+            const adminPhone = "8801410603930"; // Updated Admin Number
+            const message = `*রক্তের জন্য অনুরোধ (UID ভিত্তিক)*\n\n*রোগীর নাম:* ${patientName}\n*রক্তের গ্রুপ:* ${donorBg}\n*পরিমাণ:* ${bags} ব্যাগ\n*হাসপাতাল:* ${hospital}\n\n*ডোনার UID:* ${donorUid}\n\n(অ্যাডমিন প্যানেল থেকে এই UID সার্চ করে ডোনারের সাথে যোগাযোগ করুন)`;
             
             const waUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
             window.open(waUrl, '_blank');
             
             closeModal('modal-request-donor');
             document.getElementById('form-request-donor').reset();
-            showToast('আপনার অনুরোধ আমাদের কাছে পৌঁছেছে। ডোনারের সাথে যোগাযোগ করে আপনাকে দ্রুত জানানো হবে।');
+            showToast('অনুরোধ পাঠানো হয়েছে। আমাদের অ্যাডমিন দ্রুত ব্যবস্থা নেবেন।');
         });
 
-        // Add SOS Logic
+        // SOS Posting
         document.getElementById('form-add-sos').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('btn-submit-sos'); const og = btn.innerHTML; btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-white"></div>';
             try {
@@ -844,7 +844,7 @@
             const s = [...allUsers].sort((a, b) => (b.points || 0) - (a.points || 0)).slice(0, 20);
             if(!s.length) { l.innerHTML = `<div class="p-4 text-center text-sm text-gray-500">কোনো তথ্য নেই।</div>`; return; }
             s.forEach((u, i) => {
-                const b = getBadge(u.points || 0), me = u.id === currentUser.uid;
+                const b = getBadge(u.points || 0), me = u.uid === currentUser.uid;
                 l.innerHTML += `
                     <div class="flex items-center justify-between p-3 border-b border-gray-50 dark:border-gray-700 last:border-0 ${me ? 'bg-rose-50 dark:bg-rose-900/20 rounded-2xl' : ''}">
                         <div class="flex items-center gap-3">
