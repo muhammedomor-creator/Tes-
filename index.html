@@ -213,12 +213,18 @@
 
                 <div class="bg-white dark:bg-gray-800 rounded-[32px] p-2 shadow-soft border border-gray-100 dark:border-gray-700">
                     <div class="p-3 flex justify-between items-center border-b border-gray-100 dark:border-gray-700">
-                        <span class="text-sm font-medium"><i class="fa-solid fa-moon w-6 text-center text-gray-400"></i> ডার্ক মোড</span>
+                        <span class="text-sm font-medium flex items-center"><i class="fa-solid fa-moon w-6 text-center text-gray-400"></i> ডার্ক মোড</span>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="dark-mode-toggle" class="sr-only peer" onchange="toggleDarkMode(this.checked)">
                             <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gray-800"></div>
                         </label>
                     </div>
+                    <a href="https://www.facebook.com/share/g/1C2EHncojX/" target="_blank" class="w-full text-left p-3 flex items-center text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors border-b border-gray-100 dark:border-gray-700">
+                        <i class="fa-brands fa-facebook w-6 text-center text-blue-500"></i> Our Facebook Group
+                    </a>
+                    <button onclick="openModal('modal-privacy')" class="w-full text-left p-3 flex items-center text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors border-b border-gray-100 dark:border-gray-700">
+                        <i class="fa-solid fa-shield-halved w-6 text-center text-gray-400"></i> Privacy Policy
+                    </button>
                     <button onclick="openModal('modal-about')" class="w-full text-left p-3 flex items-center text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors">
                         <i class="fa-solid fa-circle-info w-6 text-center text-gray-400"></i> আমাদের সম্পর্কে
                     </button>
@@ -334,6 +340,30 @@
                     </div>
                     <button type="submit" id="btn-submit-profile" class="w-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white font-bold py-3.5 rounded-2xl shadow-lg mt-4 flex justify-center items-center gap-2 active:scale-95 transition-all">সংরক্ষণ করুন</button>
                 </form>
+            </div>
+        </div>
+
+        <!-- Privacy Policy Modal -->
+        <div id="modal-privacy" class="custom-modal absolute bottom-0 w-full bg-white dark:bg-gray-800 rounded-t-[40px] z-50 transform translate-y-full transition-transform duration-300 shadow-[0_-20px_50px_rgba(0,0,0,0.2)]">
+            <div class="p-6 pb-safe">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Privacy Policy</h2>
+                    <button onclick="closeModal('modal-privacy')" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="py-4 space-y-4 text-sm text-gray-600 dark:text-gray-300">
+                    <div class="flex gap-3 items-start">
+                        <i class="fa-solid fa-shield-heart text-primary mt-1"></i>
+                        <p>Blood seekers cannot directly see or contact the blood donors' phone numbers.</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <i class="fa-solid fa-user-shield text-primary mt-1"></i>
+                        <p>When blood is needed, our official Admin Panel will contact the donor to coordinate the process.</p>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <i class="fa-solid fa-lock text-primary mt-1"></i>
+                        <p>Donor privacy and security are our top priorities.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -563,7 +593,10 @@
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
                 else await signInAnonymously(auth);
-            } catch (e) { showToast("লগইন ব্যর্থ হয়েছে।", "error"); }
+            } catch (e) { 
+                // Removed the error toast to fix the auto-login bug.
+                console.warn("Silent auth validation:", e.message); 
+            }
         };
 
         window.loginWithGoogle = async () => {
@@ -735,7 +768,7 @@
                 formattedPhone = '88' + formattedPhone;
             }
 
-            const adminPhone = "8801572922663";
+            const adminPhone = "8801410603930"; // Updated Admin WhatsApp Number
             const message = `*জরুরি রক্তের রিকোয়েস্ট!*\n\n*রোগীর নাম:* ${patientName}\n*রক্তের পরিমাণ:* ${bags} ব্যাগ\n*হাসপাতাল ও ঠিকানা:* ${hospital}\n\n*ডোনারের নম্বর:* ${donorPhone}\n*ডোনারকে মেসেজ দিন:* https://wa.me/${formattedPhone}`;
             
             const waUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
