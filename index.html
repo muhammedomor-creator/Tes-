@@ -3,403 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student LMS Platform</title>
-    <style>
-        /* =========================================
-           CSS Variables & Global Styles 
-           ========================================= */
-        :root {
-            --bg-gradient: linear-gradient(135deg, #f4f7f6 0%, #d4dcf5 50%, #e8dff5 100%);
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-            --text-main: #2d3748;
-            --text-muted: #4a5568;
-            --primary: #5a67d8;
-            --primary-hover: #434190;
-            --danger: #e53e3e;
-        }
+    <title>OzeenLMS | Premium Learning</title>
+    
+    <!-- Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons: Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    <style>
+        :root {
+            --brand-font: 'Poppins', sans-serif;
         }
 
         body {
-            background: var(--bg-gradient);
+            font-family: var(--brand-font);
+            /* Dark-themed modern gradient */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
             background-attachment: fixed;
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
+            color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* =========================================
-           Glassmorphism Utilities 
-           ========================================= */
-        .glass-panel {
-            background: var(--glass-bg);
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(30, 41, 59, 0.4);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: var(--glass-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
         }
 
         .glass-input {
-            width: 100%;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            font-size: 1rem;
-            color: var(--text-main);
-            outline: none;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .glass-input:focus {
-            box-shadow: 0 0 0 3px rgba(90, 103, 216, 0.3);
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .glass-btn {
-            width: 100%;
-            padding: 12px;
-            background: var(--primary);
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .glass-btn:hover {
-            background: var(--primary-hover);
-        }
-
-        /* =========================================
-           Authentication Section 
-           ========================================= */
-        #auth-view {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            padding: 40px 30px;
-            text-align: center;
-        }
-
-        .login-card h2 {
-            margin-bottom: 24px;
-            color: var(--text-main);
-            font-weight: 700;
-        }
-
-        #auth-error {
-            color: var(--danger);
-            font-size: 0.875rem;
-            margin-bottom: 16px;
-            min-height: 20px;
-        }
-
-        /* =========================================
-           Main App Layout & Navigation 
-           ========================================= */
-        #app-view {
-            display: none; /* Hidden until authenticated */
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 20px;
-            margin: 10px 20px;
-            position: sticky;
-            top: 10px;
-            z-index: 100;
-        }
-
-        .logo-space {
-            /* Blank space for future logo */
-            width: 120px;
-            height: 40px;
-            background: transparent;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto; /* Allows scrolling on tiny screens */
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        .nav-links::-webkit-scrollbar {
-            display: none;
-        }
-
-        .nav-item {
-            padding: 8px 16px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            border-radius: 8px;
-            white-space: nowrap;
             transition: all 0.3s ease;
         }
 
-        .nav-item:hover, .nav-item.active {
-            background: rgba(255, 255, 255, 0.7);
-            color: var(--primary);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        .glass-input:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+            background: rgba(15, 23, 42, 0.8);
         }
 
-        .nav-item.logout {
-            color: var(--danger);
+        .glass-button {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.05) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
         }
 
-        /* =========================================
-           Content Sections (SPA logic) 
-           ========================================= */
-        .content-section {
-            display: none;
-            padding: 20px;
-            flex: 1;
-            animation: fadeIn 0.4s ease-in-out;
+        .glass-button:hover {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(56, 189, 248, 0.1) 100%);
+            transform: translateY(-1px);
         }
 
-        .content-section.active {
-            display: block;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Navigation Active States */
+        .nav-item.active {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            border-right: 3px solid #38bdf8;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-item.active {
+                border-right: none;
+                border-top: 3px solid #38bdf8;
+                background: linear-gradient(to bottom, rgba(56, 189, 248, 0.1) 0%, transparent 100%);
+            }
+        }
+
+        /* Hide sections initially */
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.4s ease forwards; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Generic Section Styling */
-        .section-header {
-            margin-bottom: 24px;
+        /* Loader */
+        .loader {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #38bdf8;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
         }
-
-        .section-header h1 {
-            font-size: 1.75rem;
-        }
-
-        /* Grid for Cards (Home/Courses) */
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        .info-card {
-            padding: 24px;
-        }
-
-        .info-card h3 {
-            margin-bottom: 12px;
-            color: var(--primary);
-        }
-
-        .info-card p {
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* =========================================
-           Live Class Layout (Mobile First)
-           ========================================= */
-        .live-class-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            height: calc(100vh - 140px); /* Fill remaining space */
-            min-height: 600px;
-        }
-
-        .video-wrapper, .interaction-wrapper {
-            flex: 1;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .iframe-container {
-            flex: 1;
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000; /* Dark background for loading state */
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .placeholder-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            text-align: center;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* =========================================
-           Responsive Design (Tablet/Desktop) 
-           ========================================= */
-        @media (min-width: 768px) {
-            .grid-layout {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            }
-
-            .live-class-container {
-                flex-direction: row;
-            }
-
-            .video-wrapper {
-                flex: 2; /* Video takes up more space on desktop */
-            }
-
-            .interaction-wrapper {
-                flex: 1;
-            }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body class="min-h-screen overflow-hidden selection:bg-sky-500/30">
 
-    <!-- Authentication View -->
-    <div id="auth-view">
-        <div class="glass-panel login-card">
-            <h2>Student Portal Login</h2>
-            <div id="auth-error"></div>
-            <form id="login-form">
-                <input type="email" id="email" class="glass-input" placeholder="Email Address" required>
-                <input type="password" id="password" class="glass-input" placeholder="Password" required>
-                <button type="submit" class="glass-btn">Login</button>
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[100] flex flex-col gap-2"></div>
+
+    <!-- Screen 1: Login UI -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="glass-panel p-8 max-w-md w-full text-center relative overflow-hidden">
+            <!-- Decorative blur orbs -->
+            <div class="absolute -top-20 -left-20 w-40 h-40 bg-sky-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -right-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
+            
+            <h1 class="text-4xl font-bold tracking-tight mb-2 relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">OzeenLMS</h1>
+            <p class="text-slate-400 mb-8 relative z-10 text-sm">Sign in to access your premium learning dashboard.</p>
+            
+            <button id="btn-google-login" class="glass-button w-full py-3 px-4 rounded-xl flex items-center justify-center gap-3 text-white font-medium relative z-10">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.58c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.58-2.77c-.98.66-2.23 1.06-3.7 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Continue with Google
+            </button>
+            <div id="login-loader" class="hidden justify-center mt-4 relative z-10">
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complete Profile Modal (Forced for new users) -->
+    <div id="profile-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm">
+        <div class="glass-panel p-6 md:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <h2 class="text-2xl font-bold mb-1 text-sky-400">Complete Your Profile</h2>
+            <p class="text-slate-400 text-sm mb-6">Please provide your details to access OzeenLMS.</p>
+            
+            <form id="form-complete-profile" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Full Name</label>
+                        <input type="text" id="p-name" required class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Phone Number</label>
+                        <input type="tel" id="p-phone" required class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="+1 234 567 890">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs text-slate-400 mb-1">College/School/University Name</label>
+                        <input type="text" id="p-institution" required class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="Harvard University">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs text-slate-400 mb-1">Address</label>
+                        <textarea id="p-address" required rows="2" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="123 Education St..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Blood Group</label>
+                        <select id="p-blood" required class="glass-input w-full rounded-lg px-3 py-2 text-sm">
+                            <option value="" disabled selected>Select</option>
+                            <option value="A+">A+</option><option value="A-">A-</option>
+                            <option value="B+">B+</option><option value="B-">B-</option>
+                            <option value="O+">O+</option><option value="O-">O-</option>
+                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold mt-6 mb-3 text-sky-400 border-b border-white/10 pb-2">Academic Results</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">SSC GPA/Grade</label>
+                        <input type="text" id="p-ssc" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="e.g. 5.00">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">HSC GPA/Grade</label>
+                        <input type="text" id="p-hsc" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="e.g. 5.00">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">University CGPA</label>
+                        <input type="text" id="p-cgpa" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="e.g. 3.8">
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit" id="btn-save-profile" class="w-full glass-button py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+                        <span>Save & Continue</span>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- Main Application View -->
-    <div id="app-view">
-        <!-- Navigation -->
-        <nav class="glass-panel navbar">
-            <div class="logo-space"></div>
-            <div class="nav-links">
-                <button class="nav-item active" data-target="home-section">Home</button>
-                <button class="nav-item" data-target="courses-section">My Courses</button>
-                <button class="nav-item" data-target="live-section">Live Class</button>
-                <button class="nav-item logout" id="logout-btn">Logout</button>
+    <!-- Main Application UI (Hidden until authenticated) -->
+    <div id="app-ui" class="hidden flex h-screen w-full">
+        
+        <!-- Desktop Sidebar -->
+        <aside class="glass w-64 hidden md:flex flex-col h-full border-r border-white/5 relative z-20">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 tracking-wide">OzeenLMS</h1>
             </div>
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <button onclick="navigate('dashboard')" id="nav-desktop-dashboard" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white transition-colors text-sm font-medium">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </button>
+                <button onclick="navigate('live')" id="nav-desktop-live" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white transition-colors text-sm font-medium">
+                    <i data-lucide="monitor-play" class="w-5 h-5 text-red-400"></i> Live Class
+                </button>
+                <button onclick="navigate('profile')" id="nav-desktop-profile" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white transition-colors text-sm font-medium">
+                    <i data-lucide="user" class="w-5 h-5"></i> My Profile
+                </button>
+                <button onclick="navigate('resources')" id="nav-desktop-resources" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white transition-colors text-sm font-medium">
+                    <i data-lucide="library" class="w-5 h-5"></i> Resources
+                </button>
+            </nav>
+            <div class="p-4 mt-auto">
+                <div class="glass-panel p-4 flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-500 flex items-center justify-center text-white font-bold" id="sidebar-avatar">U</div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-medium truncate" id="sidebar-name">Loading...</p>
+                        <p class="text-xs text-slate-400 truncate">Student</p>
+                    </div>
+                </div>
+                <button id="btn-logout" class="w-full flex items-center justify-center gap-2 text-slate-400 hover:text-red-400 transition-colors text-sm py-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 h-full overflow-y-auto pb-20 md:pb-0 relative">
+            <div class="max-w-7xl mx-auto p-4 md:p-8">
+                
+                <!-- Section: Dashboard -->
+                <div id="section-dashboard" class="section active">
+                    <div class="glass-panel p-6 md:p-8 mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+                        <h2 class="text-3xl font-bold mb-2">Welcome back, <span id="dash-name" class="text-sky-400">Student</span>! 👋</h2>
+                        <p class="text-slate-400 max-w-2xl">Ready to continue your learning journey? Check out your enrolled courses or join the live class.</p>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <i data-lucide="book-open" class="text-indigo-400"></i> Enrolled Courses
+                    </h3>
+                    <div id="courses-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <!-- Fetched from Firestore -->
+                        <div class="glass-panel p-6 flex justify-center items-center h-32">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Live Class Hub -->
+                <div id="section-live" class="section">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold flex items-center gap-2">
+                            <span class="relative flex h-3 w-3">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                            </span>
+                            Live Class Hub
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-140px)] min-h-[600px]">
+                        <!-- Left: YouTube Embed (Takes 2/3 space on large screens) -->
+                        <div class="lg:col-span-2 glass-panel overflow-hidden flex flex-col">
+                            <div class="p-3 border-b border-white/10 bg-black/20 flex items-center gap-2">
+                                <i data-lucide="youtube" class="text-red-500"></i>
+                                <span class="font-medium text-sm">Class Stream</span>
+                            </div>
+                            <div class="flex-1 w-full bg-black relative">
+                                <iframe id="yt-frame" class="absolute inset-0 w-full h-full" src="" title="YouTube Live Stream" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+
+                        <!-- Right: Slido Q&A Embed (Takes 1/3 space) -->
+                        <div class="glass-panel overflow-hidden flex flex-col h-[500px] lg:h-full">
+                            <div class="p-3 border-b border-white/10 bg-black/20 flex items-center gap-2">
+                                <i data-lucide="message-square" class="text-green-400"></i>
+                                <span class="font-medium text-sm">Live Q&A (Slido)</span>
+                            </div>
+                            <div class="flex-1 w-full relative bg-white">
+                                <iframe id="slido-frame" class="absolute inset-0 w-full h-full" src="" frameborder="0" title="Slido Q&A"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: My Profile (Read/Edit via Firestore) -->
+                <div id="section-profile" class="section">
+                    <h2 class="text-2xl font-bold mb-6">My Profile</h2>
+                    
+                    <div class="glass-panel p-6 md:p-8 max-w-3xl">
+                        <form id="form-edit-profile" class="space-y-6">
+                            <!-- Notice: Read-only visual indicator for inputs to follow "students are read-only" but allowing form updates for their own profile -->
+                            <div class="bg-sky-500/10 border border-sky-500/20 text-sky-200 text-sm p-3 rounded-lg flex gap-2 items-start mb-6">
+                                <i data-lucide="info" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                                <p>This is your student record. File uploads are disabled for security. Update your text details below.</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">Full Name</label>
+                                    <input type="text" id="e-name" required class="glass-input w-full rounded-lg px-3 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">Phone Number</label>
+                                    <input type="tel" id="e-phone" required class="glass-input w-full rounded-lg px-3 py-2 text-sm">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs text-slate-400 mb-1">College/School/University Name</label>
+                                    <input type="text" id="e-institution" required class="glass-input w-full rounded-lg px-3 py-2 text-sm">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs text-slate-400 mb-1">Address</label>
+                                    <textarea id="e-address" required rows="2" class="glass-input w-full rounded-lg px-3 py-2 text-sm"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">Blood Group</label>
+                                    <select id="e-blood" required class="glass-input w-full rounded-lg px-3 py-2 text-sm [&>option]:bg-slate-800">
+                                        <option value="A+">A+</option><option value="A-">A-</option>
+                                        <option value="B+">B+</option><option value="B-">B-</option>
+                                        <option value="O+">O+</option><option value="O-">O-</option>
+                                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-semibold mt-8 mb-4 text-sky-400 border-b border-white/10 pb-2">Academic Results</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">SSC GPA/Grade</label>
+                                    <input type="text" id="e-ssc" class="glass-input w-full rounded-lg px-3 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">HSC GPA/Grade</label>
+                                    <input type="text" id="e-hsc" class="glass-input w-full rounded-lg px-3 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">University CGPA</label>
+                                    <input type="text" id="e-cgpa" class="glass-input w-full rounded-lg px-3 py-2 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="pt-4 flex justify-end">
+                                <button type="submit" id="btn-update-profile" class="glass-button px-6 py-2.5 rounded-lg font-medium flex items-center gap-2">
+                                    <i data-lucide="save" class="w-4 h-4"></i> Update Profile
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Section: Resources (Placeholder for structural completeness) -->
+                <div id="section-resources" class="section">
+                    <h2 class="text-2xl font-bold mb-6">Learning Resources</h2>
+                    <div class="glass-panel p-12 text-center">
+                        <i data-lucide="folder-open" class="w-16 h-16 mx-auto text-slate-600 mb-4"></i>
+                        <h3 class="text-xl font-medium text-slate-300">No resources available</h3>
+                        <p class="text-slate-500 mt-2 text-sm">Study materials will appear here when uploaded by instructors.</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="md:hidden glass fixed bottom-0 w-full flex justify-around items-center p-2 pb-safe z-50 border-t border-white/5">
+            <button onclick="navigate('dashboard')" id="nav-mobile-dashboard" class="nav-item active flex flex-col items-center p-2 rounded-lg text-slate-400 hover:text-white w-16">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mb-1"></i>
+                <span class="text-[10px] font-medium">Dash</span>
+            </button>
+            <button onclick="navigate('live')" id="nav-mobile-live" class="nav-item flex flex-col items-center p-2 rounded-lg text-slate-400 hover:text-white w-16">
+                <i data-lucide="monitor-play" class="w-5 h-5 mb-1 text-red-400"></i>
+                <span class="text-[10px] font-medium">Live</span>
+            </button>
+            <button onclick="navigate('profile')" id="nav-mobile-profile" class="nav-item flex flex-col items-center p-2 rounded-lg text-slate-400 hover:text-white w-16">
+                <i data-lucide="user" class="w-5 h-5 mb-1"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </button>
+            <button onclick="navigate('resources')" id="nav-mobile-resources" class="nav-item flex flex-col items-center p-2 rounded-lg text-slate-400 hover:text-white w-16">
+                <i data-lucide="library" class="w-5 h-5 mb-1"></i>
+                <span class="text-[10px] font-medium">Docs</span>
+            </button>
         </nav>
-
-        <!-- Home Section -->
-        <section id="home-section" class="content-section active">
-            <div class="section-header">
-                <h1>Welcome Back!</h1>
-                <p>Here is an overview of your academic progress.</p>
-            </div>
-            <div class="grid-layout">
-                <div class="glass-panel info-card">
-                    <h3>Upcoming Assignments</h3>
-                    <p>You have 2 pending assignments due this week. Ensure you complete your reading materials.</p>
-                </div>
-                <div class="glass-panel info-card">
-                    <h3>Recent Announcements</h3>
-                    <p>The mid-term schedule has been posted. Check your email for detailed information regarding the syllabus.</p>
-                </div>
-                <div class="glass-panel info-card">
-                    <h3>Overall Progress</h3>
-                    <p>You have completed 65% of your registered courses. Keep up the good work!</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- My Courses Section -->
-        <section id="courses-section" class="content-section">
-            <div class="section-header">
-                <h1>My Courses</h1>
-                <p>Access your enrolled subjects and study materials.</p>
-            </div>
-            <div class="grid-layout">
-                <div class="glass-panel info-card">
-                    <h3>Advanced Mathematics</h3>
-                    <p>Instructor: Dr. Smith</p>
-                    <p>Status: In Progress</p>
-                </div>
-                <div class="glass-panel info-card">
-                    <h3>Introduction to Physics</h3>
-                    <p>Instructor: Prof. Johnson</p>
-                    <p>Status: Completed</p>
-                </div>
-                <div class="glass-panel info-card">
-                    <h3>Computer Science 101</h3>
-                    <p>Instructor: Ms. Davis</p>
-                    <p>Status: Enrolled</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Live Class Section -->
-        <section id="live-section" class="content-section">
-            <div class="section-header">
-                <h1>Live Session</h1>
-                <p>Watch the lecture and interact with the Q&A below.</p>
-            </div>
-            <div class="live-class-container">
-                <!-- Video Side -->
-                <div class="glass-panel video-wrapper">
-                    <div class="placeholder-text">Waiting for Live Stream...</div>
-                    <div class="iframe-container">
-                        <iframe id="youtube-frame" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-                    </div>
-                </div>
-
-                <!-- Interaction Side (Slido/Pigeonhole) -->
-                <div class="glass-panel interaction-wrapper">
-                    <div class="placeholder-text">Waiting for Q&A Portal...</div>
-                    <div class="iframe-container">
-                        <iframe id="slido-frame" src=""></iframe>
-                    </div>
-                </div>
-            </div>
-        </section>
     </div>
 
-    <!-- Firebase SDK Integration & Logic -->
+    <!-- Firebase SDK Implementation -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // Import Firebase v9 modules using explicit CDN URLs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Firebase Configuration (Provided by User)
+        // Your Exact Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDF1Y8EnGitKSOweA6kxwR-lYqG9qjCNEg",
             authDomain: "ozeenlms.firebaseapp.com",
@@ -414,123 +431,289 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
 
-        // DOM Elements
-        const authView = document.getElementById('auth-view');
-        const appView = document.getElementById('app-view');
-        const loginForm = document.getElementById('login-form');
-        const authError = document.getElementById('auth-error');
-        const logoutBtn = document.getElementById('logout-btn');
-        const navItems = document.querySelectorAll('.nav-item:not(.logout)');
-        const contentSections = document.querySelectorAll('.content-section');
+        // State Management
+        let currentUser = null;
+        let userDataCache = null;
+
+        // UI Initialization
+        lucide.createIcons();
         
-        // Live Class DOM Elements
-        const youtubeFrame = document.getElementById('youtube-frame');
-        const slidoFrame = document.getElementById('slido-frame');
+        // Custom Toast Notification System
+        window.showToast = (message, type = 'success') => {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bg = type === 'success' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-200' : 'bg-red-500/20 border-red-500/50 text-red-200';
+            toast.className = `glass px-4 py-3 rounded-lg border ${bg} text-sm font-medium shadow-lg transform transition-all duration-300 translate-x-full opacity-0 flex items-center gap-2 max-w-sm`;
+            toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-4 h-4"></i> ${message}`;
+            
+            container.appendChild(toast);
+            lucide.createIcons({root: toast});
+            
+            // Animate in
+            setTimeout(() => { toast.classList.remove('translate-x-full', 'opacity-0'); }, 10);
+            // Animate out
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        };
 
-        let unsubscribeFirestore = null;
+        // DOM Elements mapping
+        const els = {
+            loginScreen: document.getElementById('login-screen'),
+            appUI: document.getElementById('app-ui'),
+            profileModal: document.getElementById('profile-modal'),
+            btnLogin: document.getElementById('btn-google-login'),
+            btnLogout: document.getElementById('btn-logout'),
+            loginLoader: document.getElementById('login-loader'),
+            
+            // Displays
+            sidebarName: document.getElementById('sidebar-name'),
+            sidebarAvatar: document.getElementById('sidebar-avatar'),
+            dashName: document.getElementById('dash-name'),
+            coursesGrid: document.getElementById('courses-grid'),
+            
+            // Live Iframes
+            ytFrame: document.getElementById('yt-frame'),
+            slidoFrame: document.getElementById('slido-frame'),
+            
+            // Forms
+            formCompleteProfile: document.getElementById('form-complete-profile'),
+            btnSaveProfile: document.getElementById('btn-save-profile'),
+            formEditProfile: document.getElementById('form-edit-profile'),
+            btnUpdateProfile: document.getElementById('btn-update-profile')
+        };
 
-        // =========================================
-        // Authentication Logic
-        // =========================================
-        
-        // Listen for auth state changes
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in
-                authView.style.display = 'none';
-                appView.style.display = 'flex';
-                startLiveClassListener();
-            } else {
-                // User is signed out
-                authView.style.display = 'flex';
-                appView.style.display = 'none';
-                if (unsubscribeFirestore) {
-                    unsubscribeFirestore(); // Clean up listener on logout
-                }
+        // Navigation Logic
+        window.navigate = (sectionId) => {
+            // Update active states on nav items
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`nav-desktop-${sectionId}`)?.classList.add('active');
+            document.getElementById(`nav-mobile-${sectionId}`)?.classList.add('active');
+
+            // Toggle sections
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`section-${sectionId}`).classList.add('active');
+
+            // Trigger specific logic on tab switch
+            if (sectionId === 'live') fetchLiveConfig();
+            if (sectionId === 'profile' && userDataCache) populateEditProfile(userDataCache);
+        };
+
+        // --- Auth Flow ---
+        els.btnLogin.addEventListener('click', async () => {
+            els.btnLogin.classList.add('hidden');
+            els.loginLoader.classList.remove('hidden');
+            els.loginLoader.classList.add('flex');
+            try {
+                await signInWithPopup(auth, googleProvider);
+                // The onAuthStateChanged listener handles the rest
+            } catch (error) {
+                console.error("Auth Error:", error);
+                showToast("Login failed. Check console or domain whitelist.", 'error');
+                els.btnLogin.classList.remove('hidden');
+                els.loginLoader.classList.add('hidden');
+                els.loginLoader.classList.remove('flex');
             }
         });
 
-        // Handle Login Submission
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            authError.textContent = 'Logging in...';
-            
-            signInWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    authError.textContent = '';
-                    loginForm.reset();
-                })
-                .catch((error) => {
-                    authError.textContent = "Login Failed: " + error.message;
-                });
+        els.btnLogout.addEventListener('click', () => signOut(auth));
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                els.loginScreen.classList.add('hidden');
+                els.appUI.classList.remove('hidden');
+                
+                els.sidebarAvatar.textContent = user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U';
+                
+                await checkAndLoadProfile(user.uid);
+                loadDashboardCourses();
+            } else {
+                currentUser = null;
+                userDataCache = null;
+                els.appUI.classList.add('hidden');
+                els.loginScreen.classList.remove('hidden');
+                els.btnLogin.classList.remove('hidden');
+                els.loginLoader.classList.add('hidden');
+                els.loginLoader.classList.remove('flex');
+            }
         });
 
-        // Handle Logout
-        logoutBtn.addEventListener('click', () => {
-            signOut(auth).catch((error) => {
-                console.error("Logout Error:", error);
-            });
-        });
+        // --- Database Logic ---
 
-        // =========================================
-        // SPA Navigation Logic
-        // =========================================
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const targetSectionId = item.getAttribute('data-target');
+        // Check if user exists in `users` collection
+        async function checkAndLoadProfile(uid) {
+            try {
+                const userRef = doc(db, "users", uid);
+                const docSnap = await getDoc(userRef);
 
-                // Update Active Tab UI
-                navItems.forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
-
-                // Hide all sections, show target section
-                contentSections.forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.getElementById(targetSectionId).classList.add('active');
-            });
-        });
-
-        // =========================================
-        // Real-Time Firestore Sync (Live Class)
-        // =========================================
-        function startLiveClassListener() {
-            // Reference to collection: 'settings', doc: 'live_config'
-            const liveConfigRef = doc(db, 'settings', 'live_config');
-            
-            unsubscribeFirestore = onSnapshot(liveConfigRef, (docSnap) => {
                 if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    
-                    // Update YouTube video dynamically if videoId exists
-                    if (data.videoId) {
-                        youtubeFrame.style.display = 'block';
-                        youtubeFrame.src = `https://www.youtube.com/embed/${data.videoId}?autoplay=1`;
-                    } else {
-                        youtubeFrame.style.display = 'none';
-                        youtubeFrame.src = "";
-                    }
-
-                    // Update Slido/Pigeonhole URL dynamically
-                    if (data.slidoUrl) {
-                        slidoFrame.style.display = 'block';
-                        slidoFrame.src = data.slidoUrl;
-                    } else {
-                        slidoFrame.style.display = 'none';
-                        slidoFrame.src = "";
-                    }
+                    // Profile complete
+                    userDataCache = docSnap.data();
+                    updateUIWithUserData(userDataCache);
                 } else {
-                    console.log("No live configuration found in database.");
-                    youtubeFrame.src = "";
-                    slidoFrame.src = "";
+                    // New User -> Force Complete Profile
+                    els.profileModal.classList.remove('hidden');
+                    els.profileModal.classList.add('flex');
+                    // Pre-fill name from Google
+                    document.getElementById('p-name').value = currentUser.displayName || '';
                 }
-            }, (error) => {
-                console.error("Error listening to live config:", error);
-            });
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+                showToast("Error connecting to database. Check permissions.", "error");
+            }
+        }
+
+        function updateUIWithUserData(data) {
+            els.sidebarName.textContent = data.fullName;
+            els.dashName.textContent = data.fullName.split(' ')[0]; // First name
+        }
+
+        // Save New Profile (From Modal)
+        els.formCompleteProfile.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            els.btnSaveProfile.innerHTML = '<div class="loader w-5 h-5 border-2"></div> Saving...';
+            els.btnSaveProfile.disabled = true;
+
+            const profileData = {
+                fullName: document.getElementById('p-name').value,
+                phone: document.getElementById('p-phone').value,
+                institution: document.getElementById('p-institution').value,
+                address: document.getElementById('p-address').value,
+                bloodGroup: document.getElementById('p-blood').value,
+                ssc: document.getElementById('p-ssc').value,
+                hsc: document.getElementById('p-hsc').value,
+                cgpa: document.getElementById('p-cgpa').value,
+                createdAt: new Date().toISOString(),
+                // Mock initial courses
+                enrolledCourses: [
+                    { id: 'c1', title: 'Advanced Frontend Architecture', instructor: 'Tech Lead', progress: 15, color: 'sky' },
+                    { id: 'c2', title: 'UI/UX Glassmorphism Principles', instructor: 'Design Systems', progress: 40, color: 'purple' }
+                ]
+            };
+
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), profileData);
+                userDataCache = profileData;
+                updateUIWithUserData(userDataCache);
+                els.profileModal.classList.add('hidden');
+                els.profileModal.classList.remove('flex');
+                showToast("Profile created successfully!");
+                loadDashboardCourses();
+            } catch (error) {
+                console.error("Error saving profile:", error);
+                showToast("Failed to save profile.", "error");
+            } finally {
+                els.btnSaveProfile.innerHTML = 'Save & Continue';
+                els.btnSaveProfile.disabled = false;
+            }
+        });
+
+        // Update Profile (From Edit Section)
+        function populateEditProfile(data) {
+            document.getElementById('e-name').value = data.fullName || '';
+            document.getElementById('e-phone').value = data.phone || '';
+            document.getElementById('e-institution').value = data.institution || '';
+            document.getElementById('e-address').value = data.address || '';
+            document.getElementById('e-blood').value = data.bloodGroup || '';
+            document.getElementById('e-ssc').value = data.ssc || '';
+            document.getElementById('e-hsc').value = data.hsc || '';
+            document.getElementById('e-cgpa').value = data.cgpa || '';
+        }
+
+        els.formEditProfile.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const originalText = els.btnUpdateProfile.innerHTML;
+            els.btnUpdateProfile.innerHTML = '<div class="loader w-4 h-4 border-2"></div> Updating...';
+            els.btnUpdateProfile.disabled = true;
+
+            const updateData = {
+                fullName: document.getElementById('e-name').value,
+                phone: document.getElementById('e-phone').value,
+                institution: document.getElementById('e-institution').value,
+                address: document.getElementById('e-address').value,
+                bloodGroup: document.getElementById('e-blood').value,
+                ssc: document.getElementById('e-ssc').value,
+                hsc: document.getElementById('e-hsc').value,
+                cgpa: document.getElementById('e-cgpa').value,
+            };
+
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), updateData, { merge: true });
+                userDataCache = { ...userDataCache, ...updateData };
+                updateUIWithUserData(userDataCache);
+                showToast("Profile updated successfully!");
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                showToast("Failed to update profile.", "error");
+            } finally {
+                els.btnUpdateProfile.innerHTML = originalText;
+                els.btnUpdateProfile.disabled = false;
+            }
+        });
+
+        // Load Dashboard Courses
+        function loadDashboardCourses() {
+            if (!userDataCache || !userDataCache.enrolledCourses) {
+                els.coursesGrid.innerHTML = `<div class="col-span-full glass-panel p-6 text-center text-slate-400">No enrolled courses yet.</div>`;
+                return;
+            }
+
+            els.coursesGrid.innerHTML = userDataCache.enrolledCourses.map(course => `
+                <div class="glass-panel p-5 group hover:border-${course.color}-400/50 transition-colors cursor-pointer relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-${course.color}-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+                    <div class="w-10 h-10 rounded-lg bg-${course.color}-500/20 flex items-center justify-center text-${course.color}-400 mb-4">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-semibold mb-1 text-lg">${course.title}</h4>
+                    <p class="text-xs text-slate-400 mb-4">Instructor: ${course.instructor}</p>
+                    
+                    <div class="w-full bg-slate-800 rounded-full h-1.5 mb-2">
+                      <div class="bg-${course.color}-400 h-1.5 rounded-full" style="width: ${course.progress}%"></div>
+                    </div>
+                    <p class="text-right text-[10px] text-slate-400 font-medium">${course.progress}% Completed</p>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        // Live Class Hub Integration
+        let unsubscribeLive = null;
+        
+        function fetchLiveConfig() {
+            if (unsubscribeLive) return; // Already listening
+
+            // Real-time listener for live_config using user's DB structure
+            const docRef = doc(db, "settings", "live_config");
+            
+            // Fallbacks if data empty or permissions fail
+            const defaultYt = "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=1"; // Lofi placeholder
+            const defaultSlido = "https://wall.sli.do/event/sample";
+
+            try {
+                unsubscribeLive = onSnapshot(docRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        els.ytFrame.src = data.youtubeUrl || defaultYt;
+                        els.slidoFrame.src = data.slidoUrl || defaultSlido;
+                    } else {
+                        // Document doesn't exist yet, show fallbacks
+                        els.ytFrame.src = defaultYt;
+                        els.slidoFrame.src = defaultSlido;
+                    }
+                }, (error) => {
+                    console.error("Live Config Read Error:", error);
+                    // If Firestore rules block reads, use fallbacks
+                    if(!els.ytFrame.src) els.ytFrame.src = defaultYt;
+                    if(!els.slidoFrame.src) els.slidoFrame.src = defaultSlido;
+                });
+            } catch (err) {
+                console.error("Snapshot error:", err);
+            }
         }
     </script>
 </body>
