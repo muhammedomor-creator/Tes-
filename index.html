@@ -1,773 +1,1047 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OzeenLMS - Premium Learning</title>
-    
-    <!-- Google Fonts: Poppins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Tailwind CSS (for layout and utility classes) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <style>
-        /* Base & Reset */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            color: #f8fafc;
-            min-height: 100vh;
-            margin: 0;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>OzeenLMS – Smart Learning Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════
+   OZEENLMS — DESIGN SYSTEM
+═══════════════════════════════════════════════════ */
+:root {
+  --bg:         #04060e;
+  --bg2:        #090c1a;
+  --card:       rgba(255,255,255,0.048);
+  --cardH:      rgba(255,255,255,0.085);
+  --border:     rgba(255,255,255,0.09);
+  --borderG:    rgba(99,179,255,0.32);
+  --a1:         #63b3ff;
+  --a1d:        #3a8fe8;
+  --a2:         #a78bfa;
+  --a3:         #34d399;
+  --warn:       #fbbf24;
+  --red:        #f87171;
+  --t1:         #edf0fc;
+  --t2:         #7e8a9e;
+  --t3:         #3d4558;
+  --sw:         265px;
+  --nh:         66px;
+  --r:          18px;
+  --rs:         10px;
+  --rx:         7px;
+  --glass:      blur(24px) saturate(170%);
+  --sh:         0 12px 48px rgba(0,0,0,.6);
+  --shs:        0 4px 20px rgba(0,0,0,.35);
+  --ease:       cubic-bezier(.4,0,.2,1);
+  --spring:     cubic-bezier(.34,1.56,.64,1);
+  --t:          .22s;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);font-family:'Poppins',sans-serif;color:var(--t1);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 75% 65% at 8% 15%, rgba(99,179,255,.12) 0%,transparent 65%),
+    radial-gradient(ellipse 60% 50% at 92% 85%, rgba(167,139,250,.10) 0%,transparent 60%),
+    radial-gradient(ellipse 45% 45% at 50% 50%, rgba(52,211,153,.05) 0%,transparent 55%);}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:99px}
 
-        /* Glassmorphism Utilities */
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-        
-        .glass-panel {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
-        }
+/* ── AUTH ───────────────────────────────── */
+#auth{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .4s}
+#auth.off{opacity:0;pointer-events:none}
+.auth-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.o1{width:500px;height:500px;top:-150px;left:-150px;background:rgba(99,179,255,.09)}
+.o2{width:400px;height:400px;bottom:-120px;right:-100px;background:rgba(167,139,250,.08)}
+.auth-box{
+  position:relative;z-index:1;
+  background:rgba(255,255,255,.045);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
+  border:1px solid var(--border);border-radius:28px;
+  padding:56px 48px;text-align:center;width:100%;max-width:450px;margin:20px;
+  box-shadow:var(--sh);animation:pop .6s var(--spring) both;
+}
+@keyframes pop{from{opacity:0;transform:scale(.9) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.auth-icon{width:68px;height:68px;border-radius:20px;margin:0 auto 16px;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;box-shadow:0 10px 40px rgba(99,179,255,.4);letter-spacing:-1px}
+.auth-brand{font-size:28px;font-weight:900;letter-spacing:-.5px;margin-bottom:3px}
+.auth-brand span{color:var(--a1)}
+.auth-tag{font-size:11px;color:var(--t2);letter-spacing:.5px;margin-bottom:32px}
+.auth-h{font-size:22px;font-weight:800;margin-bottom:8px}
+.auth-p{font-size:13px;color:var(--t2);margin-bottom:36px;line-height:1.75}
+.gbtn{
+  width:100%;padding:15px 20px;border-radius:14px;
+  background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.13);
+  color:var(--t1);font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all var(--t) var(--ease);
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  position:relative;overflow:hidden;
+}
+.gbtn:hover{background:rgba(255,255,255,.11);border-color:rgba(99,179,255,.35);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.gbtn:active{transform:translateY(0)}
+.auth-ft{margin-top:24px;font-size:11px;color:var(--t3);line-height:1.9}
 
-        .glass-input {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-        
-        .glass-input:focus {
-            background: rgba(0, 0, 0, 0.4);
-            border-color: #818cf8;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
-        }
+/* ── LOADING ─────────────────────────────── */
+#loading{position:fixed;inset:0;z-index:998;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.spin{width:40px;height:40px;border-radius:50%;border:3px solid rgba(255,255,255,.08);border-top-color:var(--a1);animation:spin .75s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-        .glass-input option {
-            background: #1e1b4b; /* Dark bg for dropdown options */
-            color: white;
-        }
+/* ── APP SHELL ───────────────────────────── */
+#app{position:relative;z-index:1;display:flex;height:100vh;opacity:0;transition:opacity .5s ease}
+#app.on{opacity:1}
 
-        .glass-btn {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
-            transition: all 0.3s ease;
-        }
+/* ── SIDEBAR ─────────────────────────────── */
+.sidebar{
+  width:var(--sw);height:100vh;position:fixed;top:0;left:0;
+  display:flex;flex-direction:column;
+  background:rgba(9,12,26,.87);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
+  border-right:1px solid var(--border);z-index:200;
+  padding:26px 0 20px;transition:transform var(--t) var(--ease);
+}
+.sb-brand{display:flex;align-items:center;gap:11px;padding:0 22px 26px;border-bottom:1px solid var(--border)}
+.sb-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 4px 18px rgba(99,179,255,.35)}
+.sb-brand-t{font-size:19px;font-weight:900;letter-spacing:-.4px}
+.sb-brand-t span{color:var(--a1)}
+.sb-brand-s{font-size:9.5px;color:var(--t3);font-weight:600;letter-spacing:.4px}
+.sb-nav{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.sb-sec{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);padding:12px 14px 5px;margin-top:4px}
+.ni{
+  display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--rs);
+  cursor:pointer;font-size:13.5px;font-weight:500;color:var(--t2);
+  border:1px solid transparent;transition:all var(--t) var(--ease);position:relative;user-select:none;
+}
+.ni:hover{color:var(--t1);background:var(--card)}
+.ni.on{color:var(--a1);background:rgba(99,179,255,.1);border-color:rgba(99,179,255,.2);font-weight:600}
+.ni.on::before{content:'';position:absolute;left:-1px;top:22%;bottom:22%;width:3px;border-radius:0 3px 3px 0;background:var(--a1)}
+.ni-ico{font-size:17px;width:22px;text-align:center;flex-shrink:0;transition:transform var(--t)}
+.ni.on .ni-ico{transform:scale(1.1)}
+.ni-lbl{flex:1}
+.live-badge{background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:99px;animation:badgePop 2s ease infinite;display:none;letter-spacing:.3px}
+@keyframes badgePop{0%,100%{box-shadow:0 0 0 0 rgba(248,113,113,.5)}50%{box-shadow:0 0 0 5px rgba(248,113,113,0)}}
+.sb-foot{padding:0 12px}
+.sb-user{padding:11px 13px;border-radius:var(--rs);background:var(--card);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all var(--t)}
+.sb-user:hover{background:var(--cardH);border-color:var(--borderG)}
+.sb-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;overflow:hidden}
+.sb-av img{width:100%;height:100%;object-fit:cover;display:block}
+.sb-ui{flex:1;min-width:0}
+.sb-un{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-ur{font-size:10px;color:var(--t2)}
+.sb-out{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t2);cursor:pointer;transition:all var(--t)}
+.sb-out:hover{color:var(--red);background:rgba(248,113,113,.1)}
 
-        .glass-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
-        }
+/* ── MAIN ────────────────────────────────── */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+.topbar{position:sticky;top:0;z-index:100;padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,6,14,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);flex-shrink:0}
+.tb-left{display:flex;align-items:center;gap:12px}
+.menu-btn{display:none;width:34px;height:34px;border-radius:var(--rx);background:var(--card);border:1px solid var(--border);align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all var(--t)}
+.menu-btn:hover{background:var(--cardH);border-color:var(--borderG)}
+.tb-title{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.tb-right{display:flex;align-items:center;gap:9px}
+.tb-btn{width:36px;height:36px;border-radius:var(--rs);background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all var(--t);color:var(--t2)}
+.tb-btn:hover{background:var(--cardH);border-color:var(--borderG);color:var(--t1)}
+.live-pill{display:none;align-items:center;gap:5px;background:rgba(248,113,113,.14);border:1px solid rgba(248,113,113,.28);border-radius:99px;padding:4px 11px;font-size:10.5px;font-weight:700;color:var(--red);letter-spacing:.5px;cursor:pointer;transition:all var(--t)}
+.live-pill:hover{background:rgba(248,113,113,.24)}
+.live-pill.on{display:flex}
+.live-dot-s{width:6px;height:6px;border-radius:50%;background:var(--red);animation:badgePop 1.4s infinite}
+.pc{padding:28px;flex:1}
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
+/* ── PAGES ───────────────────────────────── */
+.pg{display:none;animation:pgIn .3s var(--ease) both}
+.pg.on{display:block}
+@keyframes pgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-        /* SPA Navigation States */
-        .page-section { display: none; }
-        .page-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
+/* ── CARDS ───────────────────────────────── */
+.card{background:var(--card);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);border-radius:var(--r);padding:24px;transition:border-color var(--t),box-shadow var(--t)}
+.card.glow:hover{border-color:rgba(255,255,255,.13);box-shadow:0 0 0 1px rgba(99,179,255,.07)}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sec-h h2{font-size:16px;font-weight:800;letter-spacing:-.2px}
 
-        .nav-link.active {
-            background: rgba(255, 255, 255, 0.1);
-            border-left: 4px solid #818cf8;
-            color: #818cf8;
-        }
-        
-        @media (max-width: 768px) {
-            .nav-link.active {
-                border-left: none;
-                border-top: 3px solid #818cf8;
-                background: transparent;
-            }
-        }
+/* ── BUTTONS ─────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--rs);font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;border:none;outline:none;transition:all var(--t) var(--ease);white-space:nowrap;user-select:none}
+.btn:active{transform:scale(.97)}
+.btn-p{background:linear-gradient(135deg,var(--a1),var(--a1d));color:#fff;box-shadow:0 4px 18px rgba(99,179,255,.35)}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(99,179,255,.5)}
+.btn-g{background:var(--card);color:var(--t1);border:1px solid var(--border)}
+.btn-g:hover{border-color:var(--borderG);background:var(--cardH)}
+.btn-r{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.22)}
+.btn-r:hover{background:rgba(248,113,113,.2)}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* ── TAGS ────────────────────────────────── */
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.t-b{background:rgba(99,179,255,.12);color:var(--a1);border:1px solid rgba(99,179,255,.2)}
+.t-v{background:rgba(167,139,250,.12);color:var(--a2);border:1px solid rgba(167,139,250,.2)}
+.t-g{background:rgba(52,211,153,.12);color:var(--a3);border:1px solid rgba(52,211,153,.2)}
+.t-r{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.2)}
+.t-y{background:rgba(251,191,36,.12);color:var(--warn);border:1px solid rgba(251,191,36,.2)}
 
-        /* Hide elements dynamically */
-        .hidden { display: none !important; }
-        
-        /* Video Aspect Ratio */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-            border-radius: 1rem;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+/* ── EMPTY ───────────────────────────────── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px;gap:10px;text-align:center;color:var(--t2);grid-column:1/-1}
+.empty-ico{font-size:46px;opacity:.32;margin-bottom:4px}
+.empty-t{font-size:15px;font-weight:700;color:var(--t1)}
+.empty-s{font-size:12.5px;line-height:1.75;max-width:280px}
+
+/* ══════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════ */
+.welcome{
+  background:linear-gradient(135deg,rgba(99,179,255,.17) 0%,rgba(167,139,250,.13) 55%,rgba(52,211,153,.09) 100%);
+  border-color:rgba(99,179,255,.24);padding:32px;position:relative;overflow:hidden;margin-bottom:22px;
+}
+.welcome::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(99,179,255,.15) 0%,transparent 70%);pointer-events:none}
+.welcome::after{content:'OzeenLMS';position:absolute;right:18px;bottom:-22px;font-size:80px;font-weight:900;opacity:.04;letter-spacing:-3px;color:#fff;user-select:none;pointer-events:none}
+.wg{font-size:11.5px;font-weight:700;color:var(--a1);letter-spacing:.9px;text-transform:uppercase;margin-bottom:8px}
+.wn{font-size:28px;font-weight:900;letter-spacing:-.5px;margin-bottom:6px;line-height:1.2}
+.ws{font-size:13px;color:var(--t2);line-height:1.6}
+.wa{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:18px 20px;display:flex;flex-direction:column;gap:10px;transition:all var(--t) var(--ease);position:relative;overflow:hidden;cursor:default}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cg,linear-gradient(90deg,var(--a1),var(--a2)));opacity:0;transition:opacity var(--t)}
+.sc:hover::after{opacity:1}
+.sc:hover{border-color:rgba(255,255,255,.14);transform:translateY(-2px);box-shadow:var(--shs)}
+.sc-top{display:flex;align-items:center;justify-content:space-between}
+.sc-ico{font-size:20px}
+.sc-ch{font-size:10px;font-weight:600}
+.sc-v{font-size:27px;font-weight:900;font-family:'Space Mono',monospace;letter-spacing:-1px}
+.sc-l{font-size:11px;color:var(--t2);font-weight:500}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:16px}
+.cc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;cursor:pointer;transition:all var(--t) var(--ease);position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px}
+.cc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cg,linear-gradient(90deg,var(--a1),var(--a2)))}
+.cc:hover{border-color:var(--borderG);transform:translateY(-4px);box-shadow:var(--sh)}
+.cc-t{font-size:14px;font-weight:800;line-height:1.4}
+.cc-i{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2)}
+.cc-id{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:#fff;flex-shrink:0}
+.cc-pb{height:5px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;margin-bottom:5px}
+.cc-pf{height:100%;border-radius:99px;background:var(--cg,linear-gradient(90deg,var(--a1),var(--a2)));transition:width .8s var(--ease)}
+.cc-pm{font-size:11px;color:var(--t2);display:flex;justify-content:space-between}
+
+/* ══════════════════════════════════════════
+   LIVE CLASS
+══════════════════════════════════════════ */
+.live-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.live-hdr h2{font-size:21px;font-weight:900;margin-bottom:3px}
+.live-hdr .sub{font-size:13px;color:var(--t2)}
+.live-lay{display:grid;grid-template-columns:1fr 370px;gap:16px}
+.live-p{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;min-height:420px}
+.lph{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2);flex-shrink:0}
+.lph-t{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700}
+.ldot{width:8px;height:8px;border-radius:50%;background:var(--t3);transition:background var(--t);flex-shrink:0}
+.ldot.live{background:var(--red);animation:ldotPop 1.5s ease infinite}
+@keyframes ldotPop{0%,100%{box-shadow:0 0 0 0 rgba(248,113,113,.5)}50%{box-shadow:0 0 0 5px rgba(248,113,113,0)}}
+.lew{flex:1;position:relative;min-height:280px}
+.lew iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.lph-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--t2);gap:12px;padding:40px 24px;text-align:center}
+.lph-ico{font-size:50px;opacity:.28}
+.lph-t2{font-size:14px;font-weight:700;color:var(--t1)}
+.lph-s{font-size:12px;line-height:1.7;max-width:210px}
+.live-ic{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:14px 16px;margin-bottom:16px;display:none}
+.lic-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.lic-row:last-child{margin-bottom:0}
+.lic-l{font-size:10.5px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.7px}
+.lic-v{font-size:13px;font-weight:700}
+
+/* ══════════════════════════════════════════
+   RESOURCES
+══════════════════════════════════════════ */
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:16px}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:all var(--t) var(--ease);cursor:pointer;display:flex;flex-direction:column;gap:11px}
+.rc:hover{border-color:var(--borderG);transform:translateY(-3px);box-shadow:var(--shs)}
+.rc-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.rc-ico.pdf{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.2)}
+.rc-ico.vid{background:rgba(99,179,255,.12);border:1px solid rgba(99,179,255,.2)}
+.rc-ico.doc{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.2)}
+.rc-ico.lnk{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.2)}
+.rc-ico.def{background:var(--card);border:1px solid var(--border)}
+.rc-t{font-size:14px;font-weight:800;line-height:1.4}
+.rc-d{font-size:12px;color:var(--t2);line-height:1.65}
+.rc-f{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:2px}
+.rc-ft{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.rc-fs{font-size:11px;color:var(--t2)}
+
+/* ══════════════════════════════════════════
+   PROFILE
+══════════════════════════════════════════ */
+.pl{display:grid;grid-template-columns:275px 1fr;gap:22px;align-items:start}
+.pid{padding:30px 20px;text-align:center;position:sticky;top:88px}
+.pav-ring{width:88px;height:88px;border-radius:50%;margin:0 auto 14px;padding:3px;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 8px 30px rgba(99,179,255,.3)}
+.pav-in{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#fff;overflow:hidden}
+.pav-in img{width:100%;height:100%;object-fit:cover;display:block}
+.pname{font-size:17px;font-weight:800;margin-bottom:3px;line-height:1.3}
+.pemail{font-size:11.5px;color:var(--t2);margin-bottom:12px;word-break:break-all;line-height:1.6}
+.pbadge{display:inline-flex;align-items:center;gap:4px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);color:var(--a3);font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:99px;margin-bottom:18px}
+.pms{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pms-c{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 6px;text-align:center}
+.pms-v{font-size:17px;font-weight:900;font-family:'Space Mono',monospace;color:var(--a1)}
+.pms-l{font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.7px;margin-top:2px}
+/* Form */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fgr{display:flex;flex-direction:column;gap:6px}
+.fgr.full{grid-column:1/-1}
+.fl{font-size:10.5px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.9px}
+.fi,.fs,.ft{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;font-size:13.5px;font-family:'Poppins',sans-serif;color:var(--t1);transition:border-color var(--t),box-shadow var(--t),background var(--t);outline:none;width:100%}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--a1);background:rgba(99,179,255,.05);box-shadow:0 0 0 3px rgba(99,179,255,.12)}
+.fi::placeholder{color:var(--t3)}
+.fs option{background:var(--bg2);color:var(--t1)}
+.fsec{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:var(--a1);display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:6px;grid-column:1/-1}
+.fsec::after{content:'';flex:1;height:1px;background:var(--border)}
+.ac-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;grid-column:1/-1}
+.ac-c{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--rs);padding:14px;display:flex;flex-direction:column;gap:5px;transition:all var(--t)}
+.ac-c:hover{border-color:var(--borderG)}
+.ac-l{font-size:10.5px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.6px}
+.ac-i{background:none;border:none;outline:none;font-size:26px;font-weight:900;font-family:'Space Mono',monospace;color:var(--a1);width:100%;padding:4px 0 2px;transition:color var(--t)}
+.ac-i::placeholder{color:var(--t3);font-size:20px}
+.ac-s{font-size:10px;color:var(--t3)}
+.psave{display:flex;justify-content:flex-end;gap:10px;padding-top:18px;border-top:1px solid var(--border);margin-top:18px;grid-column:1/-1}
+
+/* ══════════════════════════════════════════
+   BOTTOM NAV
+══════════════════════════════════════════ */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(9,12,26,.97);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
+.bn-in{display:flex;align-items:stretch;height:var(--nh)}
+.bn-i{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:7px 4px;color:var(--t3);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;transition:color var(--t);position:relative;user-select:none}
+.bn-i.on{color:var(--a1)}
+.bn-i.on::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--a1);border-radius:0 0 3px 3px}
+.bn-ico{font-size:21px;transition:transform var(--t) var(--spring)}
+.bn-i.on .bn-ico{transform:translateY(-2px) scale(1.15)}
+.bn-dot{position:absolute;top:7px;right:calc(50% - 14px);width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--bg2);display:none}
+.bn-dot.on{display:block}
+.sb-overlay{position:fixed;inset:0;z-index:199;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity var(--t)}
+.sb-overlay.on{opacity:1;pointer-events:all}
+
+/* ══════════════════════════════════════════
+   MODALS
+══════════════════════════════════════════ */
+.mo{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.mo.on{opacity:1;pointer-events:all}
+.mw{background:rgba(9,12,26,.98);backdrop-filter:var(--glass);border:1px solid var(--border);border-radius:22px;width:100%;max-width:555px;max-height:90vh;overflow-y:auto;padding:36px;transform:scale(.94) translateY(22px);transition:transform .35s var(--spring);box-shadow:var(--sh)}
+.mo.on .mw{transform:scale(1) translateY(0)}
+.mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.mttl{font-size:21px;font-weight:900;letter-spacing:-.3px}
+.msub{font-size:13px;color:var(--t2);margin-bottom:26px;line-height:1.75}
+.mcls{width:30px;height:30px;border-radius:7px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--t2);transition:all var(--t)}
+.mcls:hover{color:var(--t1);background:var(--cardH)}
+
+/* ══════════════════════════════════════════
+   TOASTS
+══════════════════════════════════════════ */
+#tw{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:rgba(9,12,26,.97);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:12px;padding:11px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;transform:translateX(calc(100% + 28px));transition:transform .38s var(--spring);max-width:310px;box-shadow:var(--shs);pointer-events:all}
+.toast.on{transform:translateX(0)}
+.toast.ok{border-color:rgba(52,211,153,.35)}
+.toast.er{border-color:rgba(248,113,113,.35)}
+.toast.in{border-color:rgba(99,179,255,.3)}
+.toast.wn{border-color:rgba(251,191,36,.3)}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr)}.live-lay{grid-template-columns:1fr}.live-p{min-height:300px}.lew{min-height:260px}}
+@media(max-width:900px){.pl{grid-template-columns:1fr}.pid{position:static}.ac-g{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);box-shadow:none}
+  .sidebar.open{transform:translateX(0);box-shadow:var(--sh)}
+  .main{margin-left:0;padding-bottom:var(--nh)}
+  .bnav{display:block}
+  .menu-btn{display:flex}
+  .pc{padding:14px}
+  .topbar{padding:0 14px;height:54px}
+  .tb-title{font-size:15px}
+  .wn{font-size:21px}
+  .welcome{padding:22px}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .cg{grid-template-columns:1fr}
+  .rg{grid-template-columns:1fr}
+  .fg{grid-template-columns:1fr}
+  .ac-g{grid-template-columns:1fr}
+  .auth-box{padding:34px 22px;border-radius:20px}
+  .mw{padding:22px;border-radius:18px;max-width:100%}
+  .live-lay{gap:12px}
+}
+@media(max-width:400px){.stats{grid-template-columns:1fr 1fr}.wn{font-size:19px}}
+</style>
 </head>
-<body class="antialiased selection:bg-indigo-500 selection:text-white">
+<body>
 
-    <!-- 1. LOGIN SCREEN (Visible by default until Auth resolves) -->
-    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-500">
-        <div class="glass-panel p-8 md:p-12 w-full max-w-md text-center relative overflow-hidden">
-            <!-- Decorative blur orbs -->
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-indigo-500 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
-            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
-            
-            <h1 class="text-4xl font-bold mb-2 tracking-tight relative z-10"><span class="text-indigo-400">Ozeen</span>LMS</h1>
-            <p class="text-gray-400 mb-8 relative z-10">Premium Learning Experience</p>
-            
-            <button id="btn-google-login" class="glass-btn w-full py-3 px-4 rounded-xl font-medium flex items-center justify-center gap-3 relative z-10">
-                <i class="fab fa-google text-xl"></i>
-                Continue with Google
-            </button>
-            <div id="login-error" class="text-red-400 text-sm mt-4 hidden relative z-10"></div>
+<!-- ═══════ AUTH ══════════════════════════════════ -->
+<div id="auth">
+  <div class="auth-orb o1"></div>
+  <div class="auth-orb o2"></div>
+  <div class="auth-box">
+    <div class="auth-icon">Oz</div>
+    <div class="auth-brand">Ozeen<span>LMS</span></div>
+    <div class="auth-tag">SMART LEARNING PLATFORM</div>
+    <h2 class="auth-h">Welcome Back 👋</h2>
+    <p class="auth-p">Sign in with your Google account to access your courses, live classes, and all learning resources in one place.</p>
+    <button class="gbtn" id="gbtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+    <p class="auth-ft">By signing in you agree to OzeenLMS Terms of Service.<br/>Your data is encrypted and never shared with third parties.</p>
+  </div>
+</div>
+
+<!-- ═══════ LOADING ═══════════════════════════════ -->
+<div id="loading"><div class="spin"></div><p style="font-size:13px;color:var(--t2);letter-spacing:.4px">Loading workspace…</p></div>
+
+<!-- ═══════ APP ════════════════════════════════════ -->
+<div id="app">
+  <div class="sb-overlay" id="sbo"></div>
+
+  <!-- ── Sidebar ─────────────────────────────── -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">Oz</div>
+      <div>
+        <div class="sb-brand-t">Ozeen<span>LMS</span></div>
+        <div class="sb-brand-s">SMART LEARNING PLATFORM</div>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-sec">Main Menu</div>
+      <div class="ni on" data-tab="dashboard"><span class="ni-ico">⊞</span><span class="ni-lbl">Dashboard</span></div>
+      <div class="ni" data-tab="live"><span class="ni-ico">📡</span><span class="ni-lbl">Live Class</span><span class="live-badge" id="lbdg">LIVE</span></div>
+      <div class="ni" data-tab="resources"><span class="ni-ico">📚</span><span class="ni-lbl">Resources</span></div>
+      <div class="sb-sec" style="margin-top:6px">Account</div>
+      <div class="ni" data-tab="profile"><span class="ni-ico">👤</span><span class="ni-lbl">My Profile</span></div>
+    </div>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-av" id="sbav">U</div>
+        <div class="sb-ui">
+          <div class="sb-un" id="sbun">Student</div>
+          <div class="sb-ur">Student Account</div>
         </div>
+        <div class="sb-out" id="logoutBtn" title="Sign out">⏻</div>
+      </div>
     </div>
+  </nav>
 
-    <!-- 2. MAIN APP LAYOUT (Hidden until authenticated) -->
-    <div id="app-layout" class="hidden h-screen flex flex-col md:flex-row w-full">
-        
-        <!-- Sidebar (Desktop) -->
-        <nav class="glass hidden md:flex flex-col w-64 h-full fixed left-0 top-0 z-40 border-r border-white/5">
-            <div class="p-6">
-                <h1 class="text-2xl font-bold tracking-tight"><span class="text-indigo-400">Ozeen</span>LMS</h1>
-            </div>
-            
-            <div class="flex-1 px-4 space-y-2 mt-4">
-                <a href="#" data-target="dashboard" class="nav-link active flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-colors">
-                    <i class="fas fa-home w-5"></i> Dashboard
-                </a>
-                <a href="#" data-target="live-class" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-colors">
-                    <i class="fas fa-video w-5"></i> Live Class
-                </a>
-                <a href="#" data-target="resources" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-colors">
-                    <i class="fas fa-book w-5"></i> Resources
-                </a>
-                <a href="#" data-target="profile" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-colors">
-                    <i class="fas fa-user w-5"></i> My Profile
-                </a>
-            </div>
-
-            <div class="p-4 border-t border-white/5">
-                <div class="flex items-center gap-3 px-4 py-2 mb-2">
-                    <img id="sidebar-avatar" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" class="w-10 h-10 rounded-full border border-white/20" alt="Avatar">
-                    <div class="overflow-hidden">
-                        <p id="sidebar-name" class="text-sm font-medium truncate">Student</p>
-                        <p class="text-xs text-gray-400">Online</p>
-                    </div>
-                </div>
-                <button id="btn-logout-desktop" class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/5 rounded-lg transition-colors flex items-center gap-2">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </div>
-        </nav>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 md:ml-64 pb-20 md:pb-0 h-full overflow-y-auto">
-            
-            <!-- Topbar Mobile -->
-            <div class="md:hidden glass sticky top-0 z-30 px-6 py-4 flex justify-between items-center border-b border-white/5">
-                <h1 class="text-xl font-bold tracking-tight"><span class="text-indigo-400">Ozeen</span>LMS</h1>
-                <img id="mobile-avatar" src="https://ui-avatars.com/api/?name=User" class="w-8 h-8 rounded-full border border-white/20" alt="Avatar">
-            </div>
-
-            <div class="p-6 md:p-10 max-w-7xl mx-auto">
-                
-                <!-- DASHBOARD TAB -->
-                <section id="dashboard" class="page-section active">
-                    <div class="mb-8">
-                        <h2 class="text-3xl font-bold mb-2">Welcome back, <span id="dash-name" class="text-indigo-400">Student</span> 👋</h2>
-                        <p class="text-gray-400">Here's an overview of your learning journey today.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="glass-panel p-6 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 text-sm">Next Live Class</p>
-                                <p class="font-semibold text-lg">Today, 8:00 PM</p>
-                            </div>
-                        </div>
-                        <div class="glass-panel p-6 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xl">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 text-sm">Assignments</p>
-                                <p class="font-semibold text-lg">All caught up!</p>
-                            </div>
-                        </div>
-                        <div class="glass-panel p-6 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl">
-                                <i class="fas fa-book-open"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 text-sm">New Resources</p>
-                                <p class="font-semibold text-lg">3 PDFs added</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-8 text-center border-indigo-500/30 border">
-                        <h3 class="text-xl font-semibold mb-2">Ready to join today's session?</h3>
-                        <p class="text-gray-400 mb-6">Physics Chapter 4: Work, Energy and Power is live now.</p>
-                        <button onclick="switchTab('live-class')" class="glass-btn px-6 py-2 rounded-lg font-medium">Join Live Hub</button>
-                    </div>
-                </section>
-
-                <!-- LIVE CLASS TAB (Smart Live Hub) -->
-                <section id="live-class" class="page-section">
-                    <div class="mb-6 flex justify-between items-end">
-                        <div>
-                            <h2 class="text-3xl font-bold mb-1">Live Hub <span class="animate-pulse inline-block w-3 h-3 bg-red-500 rounded-full ml-2"></span></h2>
-                            <p class="text-gray-400">Interactive live session and Q&A.</p>
-                        </div>
-                        <div class="text-sm text-gray-400 bg-black/20 px-3 py-1 rounded-full border border-white/5">
-                            <i class="fas fa-users mr-1"></i> <span id="live-viewers">Loading...</span> Viewers
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-220px)] min-h-[600px]">
-                        <!-- Left: YouTube Live Embed -->
-                        <div class="lg:col-span-2 glass-panel p-2 flex flex-col">
-                            <div class="bg-black/40 rounded-t-lg px-4 py-2 flex justify-between items-center border-b border-white/5">
-                                <span class="font-medium text-sm"><i class="fab fa-youtube text-red-500 mr-2"></i> Live Stream</span>
-                            </div>
-                            <div class="video-container flex-1 bg-black rounded-b-lg">
-                                <!-- Default placeholder, updated via Firestore -->
-                                <iframe id="yt-iframe" src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                        </div>
-
-                        <!-- Right: Slido/Pigeonhole Q&A -->
-                        <div class="glass-panel p-2 flex flex-col h-full">
-                            <div class="bg-black/40 rounded-t-lg px-4 py-2 flex justify-between items-center border-b border-white/5">
-                                <span class="font-medium text-sm"><i class="fas fa-comments text-indigo-400 mr-2"></i> Live Q&A</span>
-                            </div>
-                            <div class="flex-1 bg-white rounded-b-lg overflow-hidden relative">
-                                <!-- Using Slido embed. Read-only for files, pure text interaction -->
-                                <iframe id="slido-iframe" src="https://app.sli.do/event/placeholder" class="w-full h-full border-0" title="Slido Q&A"></iframe>
-                                <!-- Overlay to prevent unauthorized file drops if it was a custom form, but Slido handles this securely -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- RESOURCES TAB -->
-                <section id="resources" class="page-section">
-                    <h2 class="text-3xl font-bold mb-2">Resource Center</h2>
-                    <p class="text-gray-400 mb-8">Access your PDF notes and recorded lectures.</p>
-
-                    <!-- Filter Tags -->
-                    <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
-                        <button class="px-4 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-sm whitespace-nowrap">All Subjects</button>
-                        <button class="px-4 py-1.5 rounded-full glass text-gray-300 text-sm hover:bg-white/5 whitespace-nowrap">Physics</button>
-                        <button class="px-4 py-1.5 rounded-full glass text-gray-300 text-sm hover:bg-white/5 whitespace-nowrap">Chemistry</button>
-                        <button class="px-4 py-1.5 rounded-full glass text-gray-300 text-sm hover:bg-white/5 whitespace-nowrap">Higher Math</button>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="resources-grid">
-                        <!-- Mocked Cards -->
-                        <div class="glass-panel p-5 group hover:border-indigo-500/50 transition-colors">
-                            <div class="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400 text-xl mb-4">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <h3 class="font-semibold text-lg mb-1 group-hover:text-indigo-300 transition-colors">Physics - Vector Notes</h3>
-                            <p class="text-sm text-gray-400 mb-4">Chapter 2 • 15 Pages • PDF</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium flex items-center gap-2 hover:text-indigo-300">
-                                Open in Drive <i class="fas fa-external-link-alt text-xs"></i>
-                            </a>
-                        </div>
-
-                        <div class="glass-panel p-5 group hover:border-indigo-500/50 transition-colors">
-                            <div class="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400 text-xl mb-4">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <h3 class="font-semibold text-lg mb-1 group-hover:text-indigo-300 transition-colors">Chemistry - Thermodynamics</h3>
-                            <p class="text-sm text-gray-400 mb-4">Chapter 4 • 22 Pages • PDF</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium flex items-center gap-2 hover:text-indigo-300">
-                                Open in Drive <i class="fas fa-external-link-alt text-xs"></i>
-                            </a>
-                        </div>
-
-                        <div class="glass-panel p-5 group hover:border-indigo-500/50 transition-colors">
-                            <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 text-xl mb-4">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <h3 class="font-semibold text-lg mb-1 group-hover:text-indigo-300 transition-colors">Calculus Limits Recording</h3>
-                            <p class="text-sm text-gray-400 mb-4">Lecture 01 • 1h 20m • Video</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium flex items-center gap-2 hover:text-indigo-300">
-                                Watch Replay <i class="fas fa-play-circle text-xs"></i>
-                            </a>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- PROFILE TAB -->
-                <section id="profile" class="page-section">
-                    <h2 class="text-3xl font-bold mb-2">My Profile</h2>
-                    <p class="text-gray-400 mb-8">Manage your academic details and personal info.</p>
-
-                    <div class="glass-panel p-8 max-w-3xl">
-                        <div class="flex flex-col md:flex-row gap-8 items-start">
-                            <div class="flex-shrink-0 text-center">
-                                <img id="view-avatar" src="" class="w-32 h-32 rounded-2xl border-4 border-white/10 object-cover mb-4 shadow-lg mx-auto" alt="Profile">
-                                <button onclick="openProfileModal(false)" class="glass-btn px-4 py-2 rounded-lg text-sm w-full"><i class="fas fa-edit mr-2"></i>Edit Profile</button>
-                            </div>
-                            
-                            <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
-                                <div>
-                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Full Name</p>
-                                    <p id="view-name" class="font-medium text-lg">-</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Phone Number</p>
-                                    <p id="view-phone" class="font-medium text-lg">-</p>
-                                </div>
-                                <div class="md:col-span-2 border-t border-white/5 pt-4"></div>
-                                <div class="md:col-span-2">
-                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">College/University</p>
-                                    <p id="view-college" class="font-medium text-lg">-</p>
-                                </div>
-                                <div class="md:col-span-2">
-                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Address</p>
-                                    <p id="view-address" class="font-medium text-lg">-</p>
-                                </div>
-                                <div class="md:col-span-2 border-t border-white/5 pt-4"></div>
-                                <div>
-                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Blood Group</p>
-                                    <p id="view-blood" class="font-medium text-lg">-</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Academic Results</p>
-                                    <p class="text-sm text-gray-300">SSC GPA: <span id="view-ssc" class="font-semibold text-white"></span></p>
-                                    <p class="text-sm text-gray-300">HSC GPA: <span id="view-hsc" class="font-semibold text-white"></span></p>
-                                    <p class="text-sm text-gray-300">Uni CGPA: <span id="view-uni" class="font-semibold text-white"></span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button id="btn-logout-mobile" class="md:hidden mt-8 w-full glass border border-red-500/30 text-red-400 py-3 rounded-xl flex justify-center items-center gap-2">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </section>
-
-            </div>
-        </main>
-
-        <!-- Bottom Navbar (Mobile) -->
-        <nav class="glass md:hidden fixed bottom-0 left-0 w-full z-40 border-t border-white/5 flex justify-around items-center pb-safe">
-            <a href="#" data-target="dashboard" class="nav-link active flex flex-col items-center p-3 text-gray-400 flex-1">
-                <i class="fas fa-home text-lg mb-1"></i>
-                <span class="text-[10px] font-medium">Home</span>
-            </a>
-            <a href="#" data-target="live-class" class="nav-link flex flex-col items-center p-3 text-gray-400 flex-1">
-                <i class="fas fa-video text-lg mb-1"></i>
-                <span class="text-[10px] font-medium">Live</span>
-            </a>
-            <a href="#" data-target="resources" class="nav-link flex flex-col items-center p-3 text-gray-400 flex-1">
-                <i class="fas fa-book text-lg mb-1"></i>
-                <span class="text-[10px] font-medium">Notes</span>
-            </a>
-            <a href="#" data-target="profile" class="nav-link flex flex-col items-center p-3 text-gray-400 flex-1">
-                <i class="fas fa-user text-lg mb-1"></i>
-                <span class="text-[10px] font-medium">Profile</span>
-            </a>
-        </nav>
-    </div>
-
-    <!-- 3. PROFILE COMPLETION MODAL (Glassmorphism, Non-dismissible for new users) -->
-    <div id="profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-        <div class="glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
-            
-            <!-- Dismiss button (hidden if required setup) -->
-            <button id="close-modal-btn" class="hidden absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold mb-1">Complete Your Profile</h2>
-                <p class="text-sm text-gray-400" id="modal-subtitle">We need a few details to set up your learning experience.</p>
-            </div>
-
-            <form id="profile-form" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Full Name -->
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-300 font-medium">Full Name *</label>
-                        <input type="text" id="input-name" required class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="e.g. Omar Faruk">
-                    </div>
-                    <!-- Phone -->
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-300 font-medium">Phone Number *</label>
-                        <input type="tel" id="input-phone" required class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="+880 1XXX-XXXXXX">
-                    </div>
-                </div>
-
-                <!-- College/Uni -->
-                <div class="space-y-1">
-                    <label class="text-xs text-gray-300 font-medium">College/University *</label>
-                    <input type="text" id="input-college" required class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="Institution Name">
-                </div>
-
-                <!-- Address -->
-                <div class="space-y-1">
-                    <label class="text-xs text-gray-300 font-medium">Address *</label>
-                    <textarea id="input-address" required rows="2" class="glass-input w-full rounded-lg px-4 py-2.5 text-sm resize-none" placeholder="Your current address"></textarea>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Blood Group -->
-                    <div class="space-y-1 col-span-2 md:col-span-1">
-                        <label class="text-xs text-gray-300 font-medium">Blood Group *</label>
-                        <select id="input-blood" required class="glass-input w-full rounded-lg px-4 py-2.5 text-sm appearance-none">
-                            <option value="" disabled selected>Select</option>
-                            <option value="A+">A+</option><option value="A-">A-</option>
-                            <option value="B+">B+</option><option value="B-">B-</option>
-                            <option value="O+">O+</option><option value="O-">O-</option>
-                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                        </select>
-                    </div>
-                    <!-- Results -->
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-300 font-medium">SSC GPA</label>
-                        <input type="number" step="0.01" max="5.00" id="input-ssc" class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="5.00">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-300 font-medium">HSC GPA</label>
-                        <input type="number" step="0.01" max="5.00" id="input-hsc" class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="5.00">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs text-gray-300 font-medium">Uni CGPA</label>
-                        <input type="number" step="0.01" max="4.00" id="input-uni" class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="4.00">
-                    </div>
-                </div>
-
-                <div class="pt-4">
-                    <button type="submit" id="btn-save-profile" class="glass-btn w-full py-3 rounded-xl font-medium flex justify-center items-center gap-2">
-                        <span>Save Profile & Continue</span>
-                        <i class="fas fa-arrow-right text-sm"></i>
-                    </button>
-                </div>
-            </form>
+  <!-- ── Main ────────────────────────────────── -->
+  <main class="main" id="main">
+    <div class="topbar">
+      <div class="tb-left">
+        <div class="menu-btn" id="menuBtn">☰</div>
+        <div class="tb-title" id="tbTitle">Dashboard</div>
+      </div>
+      <div class="tb-right">
+        <div class="live-pill" id="livePill" onclick="nav('live')">
+          <div class="live-dot-s"></div>LIVE
         </div>
+        <div class="tb-btn" id="refreshBtn" title="Refresh">↻</div>
+      </div>
     </div>
 
-    <!-- Firebase v9 Modular JavaScript -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    <div class="pc">
 
-        // Provided Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDF1Y8EnGitKSOweA6kxwR-lYqG9qjCNEg",
-            authDomain: "ozeenlms.firebaseapp.com",
-            projectId: "ozeenlms",
-            storageBucket: "ozeenlms.firebasestorage.app",
-            messagingSenderId: "180095415158",
-            appId: "1:180095415158:web:41c626ec9080d6987e0057",
-            measurementId: "G-CS5E7X0VKS"
-        };
+      <!-- ═══ DASHBOARD ═══ -->
+      <div class="pg on" id="pg-dashboard">
+        <div class="card welcome glow" style="margin-bottom:22px">
+          <div class="wg">✦ Welcome Back</div>
+          <div class="wn" id="wname">Loading…</div>
+          <div class="ws" id="wsub">Your learning hub is ready.</div>
+          <div class="wa">
+            <button class="btn btn-p btn-sm" onclick="nav('live')">📡 Join Live</button>
+            <button class="btn btn-g btn-sm" onclick="nav('resources')">📚 Resources</button>
+            <button class="btn btn-g btn-sm" onclick="nav('profile')">👤 Profile</button>
+          </div>
+        </div>
+        <div class="stats" id="statsGrid">
+          <div class="sc" style="--cg:linear-gradient(90deg,var(--a1),var(--a2))">
+            <div class="sc-top"><span class="sc-ico">🎓</span><span class="sc-ch" style="color:var(--a1)">Active</span></div>
+            <div class="sc-v" id="stEnrolled">—</div>
+            <div class="sc-l">Enrolled Courses</div>
+          </div>
+          <div class="sc" style="--cg:linear-gradient(90deg,var(--a2),var(--red))">
+            <div class="sc-top"><span class="sc-ico">⏱️</span><span class="sc-ch" style="color:var(--a2)">This week</span></div>
+            <div class="sc-v">12</div>
+            <div class="sc-l">Hours Learned</div>
+          </div>
+          <div class="sc" style="--cg:linear-gradient(90deg,var(--a3),var(--a1))">
+            <div class="sc-top"><span class="sc-ico">🏆</span><span class="sc-ch" style="color:var(--a3)">+1 new</span></div>
+            <div class="sc-v">3</div>
+            <div class="sc-l">Achievements</div>
+          </div>
+          <div class="sc" style="--cg:linear-gradient(90deg,var(--red),var(--warn))">
+            <div class="sc-top"><span class="sc-ico">📡</span><span class="sc-ch" id="stLiveCh" style="color:var(--t2)">Offline</span></div>
+            <div class="sc-v" id="stLive">—</div>
+            <div class="sc-l">Live Status</div>
+          </div>
+        </div>
+        <div class="sec-h">
+          <h2>Enrolled Courses</h2>
+          <span class="tag t-b" id="ccBadge">0 Courses</span>
+        </div>
+        <div class="cg" id="courseGrid"><div class="empty"><div class="spin"></div></div></div>
+      </div>
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+      <!-- ═══ LIVE CLASS ═══ -->
+      <div class="pg" id="pg-live">
+        <div class="live-hdr">
+          <div><h2>Live Class Hub 📡</h2><div class="sub" id="liveStatusLine">Checking live session…</div></div>
+          <div id="liveTitleTag"></div>
+        </div>
+        <div class="live-ic card" id="liveInfoCard">
+          <div class="lic-row"><span class="lic-l">Session Title</span><span class="lic-v" id="licTitle">—</span></div>
+          <div class="lic-row"><span class="lic-l">Status</span><span class="tag t-r" style="animation:badgePop 1.5s infinite">● LIVE NOW</span></div>
+        </div>
+        <div class="live-lay">
+          <div class="live-p">
+            <div class="lph">
+              <div class="lph-t"><div class="ldot" id="ytDot"></div>YouTube Live Stream</div>
+              <span class="tag t-b" style="font-size:9px">HD</span>
+            </div>
+            <div class="lew" id="ytWrap">
+              <div class="lph-empty">
+                <div class="lph-ico">📺</div>
+                <div class="lph-t2">No Active Stream</div>
+                <div class="lph-s">The live class will appear here when your instructor starts streaming.</div>
+              </div>
+            </div>
+          </div>
+          <div class="live-p">
+            <div class="lph">
+              <div class="lph-t"><div class="ldot" id="slidoDot"></div>Slido Q&amp;A</div>
+              <span class="tag t-v" style="font-size:9px">Interactive</span>
+            </div>
+            <div class="lew" id="slidoWrap">
+              <div class="lph-empty">
+                <div class="lph-ico">💬</div>
+                <div class="lph-t2">Q&amp;A Not Active</div>
+                <div class="lph-s">Ask questions and join polls during the live session.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        // UI Elements
-        const loginScreen = document.getElementById('login-screen');
-        const appLayout = document.getElementById('app-layout');
-        const btnGoogleLogin = document.getElementById('btn-google-login');
-        const loginError = document.getElementById('login-error');
-        
-        const profileModal = document.getElementById('profile-modal');
-        const profileForm = document.getElementById('profile-form');
-        const closeModalBtn = document.getElementById('close-modal-btn');
-        const btnSaveProfile = document.getElementById('btn-save-profile');
-        
-        let currentUser = null;
-        let isProfileComplete = false;
-        let liveConfigUnsubscribe = null;
+      <!-- ═══ RESOURCES ═══ -->
+      <div class="pg" id="pg-resources">
+        <div class="sec-h" style="margin-bottom:18px">
+          <h2>Learning Resources 📚</h2>
+          <button class="btn btn-g btn-sm" onclick="loadRes()">↻ Refresh</button>
+        </div>
+        <div class="rg" id="resGrid"><div class="empty"><div class="spin"></div></div></div>
+      </div>
 
-        // --- AUTHENTICATION LOGIC ---
+      <!-- ═══ PROFILE ═══ -->
+      <div class="pg" id="pg-profile">
+        <div class="sec-h" style="margin-bottom:20px"><h2>My Profile 👤</h2></div>
+        <div class="pl">
+          <!-- ID Card -->
+          <div>
+            <div class="card pid glow">
+              <div class="pav-ring"><div class="pav-in" id="pavBig">U</div></div>
+              <div class="pname" id="pDispName">—</div>
+              <div class="pemail" id="pDispEmail">—</div>
+              <div class="pbadge">✦ Verified Student</div>
+              <div class="pms">
+                <div class="pms-c"><div class="pms-v" id="pmsCourses">0</div><div class="pms-l">Courses</div></div>
+                <div class="pms-c"><div class="pms-v">12</div><div class="pms-l">Hours</div></div>
+                <div class="pms-c"><div class="pms-v">3</div><div class="pms-l">Awards</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Form Card -->
+          <div>
+            <div class="card">
+              <div class="fg">
+                <div class="fsec">Personal Information</div>
+                <div class="fgr"><label class="fl">Full Name *</label><input class="fi" id="pfName" type="text" placeholder="Your full name"/></div>
+                <div class="fgr"><label class="fl">Phone Number</label><input class="fi" id="pfPhone" type="tel" placeholder="+880 01X-XXXXXXXX"/></div>
+                <div class="fgr full"><label class="fl">College / School / University</label><input class="fi" id="pfInst" type="text" placeholder="Full name of your institution"/></div>
+                <div class="fgr full"><label class="fl">Address</label><input class="fi" id="pfAddr" type="text" placeholder="District, Division, Country"/></div>
+                <div class="fgr"><label class="fl">Blood Group</label>
+                  <select class="fs" id="pfBlood">
+                    <option value="">— Select —</option>
+                    <option>A+</option><option>A−</option><option>B+</option><option>B−</option>
+                    <option>AB+</option><option>AB−</option><option>O+</option><option>O−</option>
+                  </select>
+                </div>
+                <div class="fgr"><label class="fl">Semester / Year</label><input class="fi" id="pfSem" type="text" placeholder="e.g. 6th Semester"/></div>
+                <div class="fsec">Academic Results</div>
+                <div class="ac-g">
+                  <div class="ac-c"><div class="ac-l">SSC GPA</div><input class="ac-i" id="pfSSC" type="number" min="0" max="5" step="0.01" placeholder="—"/><div class="ac-s">Out of 5.00</div></div>
+                  <div class="ac-c"><div class="ac-l">HSC GPA</div><input class="ac-i" id="pfHSC" type="number" min="0" max="5" step="0.01" placeholder="—"/><div class="ac-s">Out of 5.00</div></div>
+                  <div class="ac-c"><div class="ac-l">University CGPA</div><input class="ac-i" id="pfCGPA" type="number" min="0" max="4" step="0.01" placeholder="—"/><div class="ac-s">Out of 4.00</div></div>
+                </div>
+                <div class="psave">
+                  <button class="btn btn-g btn-sm" onclick="resetProfileForm()">↺ Reset</button>
+                  <button class="btn btn-p" id="saveProfBtn">💾 Save Changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        btnGoogleLogin.addEventListener('click', async () => {
-            const provider = new GoogleAuthProvider();
-            try {
-                loginError.classList.add('hidden');
-                btnGoogleLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
-                await signInWithPopup(auth, provider);
-            } catch (error) {
-                console.error("Auth Error:", error);
-                loginError.textContent = "Login failed: " + error.message;
-                loginError.classList.remove('hidden');
-                btnGoogleLogin.innerHTML = '<i class="fab fa-google text-xl"></i> Continue with Google';
-            }
-        });
+    </div><!-- /pc -->
+  </main>
+</div><!-- /app -->
 
-        const handleLogout = async () => {
-            try {
-                await signOut(auth);
-                if (liveConfigUnsubscribe) liveConfigUnsubscribe();
-            } catch (error) {
-                console.error("Logout Error:", error);
-            }
-        };
+<!-- Bottom Nav -->
+<nav class="bnav" id="bnav">
+  <div class="bn-in">
+    <div class="bn-i on" data-tab="dashboard"><div class="bn-ico">⊞</div>Dashboard</div>
+    <div class="bn-i" data-tab="live"><div class="bn-ico">📡</div><div class="bn-dot" id="bnavLiveDot"></div>Live</div>
+    <div class="bn-i" data-tab="resources"><div class="bn-ico">📚</div>Resources</div>
+    <div class="bn-i" data-tab="profile"><div class="bn-ico">👤</div>Profile</div>
+  </div>
+</nav>
 
-        document.getElementById('btn-logout-desktop').addEventListener('click', handleLogout);
-        document.getElementById('btn-logout-mobile').addEventListener('click', handleLogout);
+<!-- Complete Profile Modal -->
+<div class="mo" id="moCPro">
+  <div class="mw">
+    <div class="mhdr"><div class="mttl">🎉 Welcome to OzeenLMS!</div></div>
+    <p class="msub">Please complete your profile to get started. This helps us personalise your learning experience. It only takes a minute!</p>
+    <div class="fg">
+      <div class="fsec" style="margin-top:0">Basic Details</div>
+      <div class="fgr"><label class="fl">Full Name *</label><input class="fi" id="cpName" type="text" placeholder="Your full name"/></div>
+      <div class="fgr"><label class="fl">Phone Number</label><input class="fi" id="cpPhone" type="tel" placeholder="+880 01X-XXXXXXXX"/></div>
+      <div class="fgr full"><label class="fl">Institution</label><input class="fi" id="cpInst" type="text" placeholder="Your college or university name"/></div>
+      <div class="fgr"><label class="fl">Blood Group</label>
+        <select class="fs" id="cpBlood">
+          <option value="">— Select —</option>
+          <option>A+</option><option>A−</option><option>B+</option><option>B−</option>
+          <option>AB+</option><option>AB−</option><option>O+</option><option>O−</option>
+        </select>
+      </div>
+      <div class="fgr"><label class="fl">Address</label><input class="fi" id="cpAddr" type="text" placeholder="District, Country"/></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:26px">
+      <button class="btn btn-p" id="cpSaveBtn">Complete Setup →</button>
+    </div>
+  </div>
+</div>
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                // Fade out login screen
-                loginScreen.classList.add('opacity-0');
-                setTimeout(() => {
-                    loginScreen.classList.add('hidden');
-                    appLayout.classList.remove('hidden');
-                }, 500);
+<!-- Toast container -->
+<div id="tw"></div>
 
-                updateBasicUI(user);
-                await checkProfileStatus(user.uid);
-                setupLiveConfigListener();
-            } else {
-                currentUser = null;
-                appLayout.classList.add('hidden');
-                loginScreen.classList.remove('hidden', 'opacity-0');
-                profileModal.classList.add('hidden');
-                btnGoogleLogin.innerHTML = '<i class="fab fa-google text-xl"></i> Continue with Google';
-                if (liveConfigUnsubscribe) {
-                    liveConfigUnsubscribe();
-                    liveConfigUnsubscribe = null;
-                }
-            }
-        });
+<!-- Firebase v9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-        function updateBasicUI(user) {
-            const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'Student')}&background=6366f1&color=fff`;
-            const photoURL = user.photoURL || defaultAvatar;
-            const fname = user.displayName?.split(' ')[0] || 'Student';
+<script>
+'use strict';
 
-            document.getElementById('sidebar-avatar').src = photoURL;
-            document.getElementById('mobile-avatar').src = photoURL;
-            document.getElementById('view-avatar').src = photoURL;
-            
-            document.getElementById('sidebar-name').textContent = user.displayName || 'Student';
-            document.getElementById('dash-name').textContent = fname;
-            
-            // Pre-fill form if empty
-            if(!document.getElementById('input-name').value) {
-                document.getElementById('input-name').value = user.displayName || '';
-            }
-        }
+/* ════════════════════════════════════════════
+   FIREBASE
+════════════════════════════════════════════ */
+firebase.initializeApp({
+  apiKey:            "AIzaSyDF1Y8EnGitKSOweA6kxwR-lYqG9qjCNEg",
+  authDomain:        "ozeenlms.firebaseapp.com",
+  projectId:         "ozeenlms",
+  storageBucket:     "ozeenlms.firebasestorage.app",
+  messagingSenderId: "180095415158",
+  appId:             "1:180095415158:web:41c626ec9080d6987e0057",
+  measurementId:     "G-CS5E7X0VKS"
+});
+const auth = firebase.auth();
+const db   = firebase.firestore();
 
-        // --- PROFILE LOGIC ---
+/* ════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════ */
+let CU       = null;   // currentUser
+let UP       = {};     // userProfile
+let TAB      = 'dashboard';
+let liveOff  = null;   // live unsubscribe
+let cLoaded  = false;  // courses loaded flag
 
-        async function checkProfileStatus(uid) {
-            try {
-                const userDocRef = doc(db, "users", uid);
-                const docSnap = await getDoc(userDocRef);
+/* ════════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════════ */
+const $  = id => document.getElementById(id);
+const sv = (id,v) => { const e=$(id); if(e) e.value = v??''; };
+const gv = id => { const e=$(id); return e?e.value.trim():''; };
+const st = (id,v) => { const e=$(id); if(e) e.textContent = v; };
 
-                if (docSnap.exists() && isDataComplete(docSnap.data())) {
-                    isProfileComplete = true;
-                    populateProfileView(docSnap.data());
-                } else {
-                    isProfileComplete = false;
-                    if(docSnap.exists()) populateForm(docSnap.data());
-                    openProfileModal(true); // true = forced setup
-                }
-            } catch (error) {
-                console.error("Error fetching profile:", error);
-                // Even on permission error, enforce form locally to prevent bypass
-                openProfileModal(true);
-            }
-        }
+const TOAST_I = {ok:'✅',er:'❌',in:'ℹ️',wn:'⚠️'};
+function toast(msg, type='in', dur=3500){
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span style="font-size:15px">${TOAST_I[type]||'ℹ️'}</span><span>${msg}</span>`;
+  $('tw').appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('on')));
+  setTimeout(()=>{ el.classList.remove('on'); setTimeout(()=>el.remove(),450); }, dur);
+}
 
-        function isDataComplete(data) {
-            const required = ['fullName', 'phone', 'college', 'address', 'bloodGroup'];
-            return required.every(field => data[field] && data[field].trim() !== '');
-        }
+function setAvatar(id, name, photo){
+  const el=$(id); if(!el) return;
+  const init=(name||'U').charAt(0).toUpperCase();
+  el.innerHTML = photo
+    ? `<img src="${photo}" alt="${init}" onerror="this.parentNode.textContent='${init}'"/>`
+    : init;
+}
 
-        // Expose openProfileModal globally for the Edit button
-        window.openProfileModal = function(isSetup = false) {
-            profileModal.classList.remove('hidden');
-            if (isSetup) {
-                closeModalBtn.classList.add('hidden');
-                document.getElementById('modal-subtitle').textContent = "We need a few details to set up your learning experience.";
-            } else {
-                closeModalBtn.classList.remove('hidden');
-                document.getElementById('modal-subtitle').textContent = "Update your personal and academic information.";
-            }
-        };
+function ytId(url){
+  if(!url) return null;
+  const m=url.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+  return m?m[1]:url;
+}
 
-        closeModalBtn.addEventListener('click', () => {
-            if (isProfileComplete) profileModal.classList.add('hidden');
-        });
+/* ════════════════════════════════════════════
+   AUTH
+════════════════════════════════════════════ */
+$('gbtn').addEventListener('click', async ()=>{
+  const btn=$('gbtn');
+  btn.disabled=true;
+  btn.innerHTML=`<div class="spin" style="width:20px;height:20px;border-width:2px;margin:0"></div> Signing in…`;
+  try{
+    const p=new firebase.auth.GoogleAuthProvider();
+    p.setCustomParameters({prompt:'select_account'});
+    await auth.signInWithPopup(p);
+  } catch(e){
+    toast('Sign-in failed: '+e.message,'er');
+    btn.disabled=false;
+    btn.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google`;
+  }
+});
 
-        profileForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if(!currentUser) return;
+$('logoutBtn').addEventListener('click', async ()=>{
+  if(!confirm('Sign out of OzeenLMS?')) return;
+  if(liveOff) liveOff();
+  await auth.signOut();
+  cLoaded=false;
+  toast('Signed out.','in');
+});
 
-            btnSaveProfile.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-            btnSaveProfile.disabled = true;
+auth.onAuthStateChanged(async user=>{
+  if(user){
+    CU=user;
+    $('loading').style.display='flex';
+    $('auth').classList.add('off');
+    await loadProfile(user);
+    $('loading').style.display='none';
+    showApp();
+  } else {
+    CU=null; UP={};
+    $('app').style.display='none';
+    $('app').classList.remove('on');
+    $('bnav').style.display='none';
+    $('auth').style.display='flex';
+    $('auth').classList.remove('off');
+  }
+});
 
-            const profileData = {
-                fullName: document.getElementById('input-name').value,
-                phone: document.getElementById('input-phone').value,
-                college: document.getElementById('input-college').value,
-                address: document.getElementById('input-address').value,
-                bloodGroup: document.getElementById('input-blood').value,
-                sscGpa: document.getElementById('input-ssc').value || '',
-                hscGpa: document.getElementById('input-hsc').value || '',
-                uniCgpa: document.getElementById('input-uni').value || '',
-                email: currentUser.email,
-                updatedAt: new Date().toISOString()
-            };
+/* ════════════════════════════════════════════
+   PROFILE — FIRESTORE
+════════════════════════════════════════════ */
+async function loadProfile(user){
+  try{
+    const ref=db.collection('users').doc(user.uid);
+    const snap=await ref.get();
+    if(snap.exists){
+      UP=snap.data();
+      if(!UP.profileComplete) openCPModal(user);
+    } else {
+      const base={
+        uid:user.uid, email:user.email||'', photoURL:user.photoURL||'',
+        displayName:user.displayName||'', fullName:user.displayName||'',
+        phone:'', institution:'', address:'', bloodGroup:'',
+        sscGPA:'', hscGPA:'', universityGPA:'', semester:'',
+        profileComplete:false,
+        createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      };
+      await ref.set(base);
+      UP=base;
+      openCPModal(user);
+    }
+  } catch(e){ toast('Profile load error: '+e.message,'er'); }
+}
 
-            try {
-                await setDoc(doc(db, "users", currentUser.uid), profileData, { merge: true });
-                isProfileComplete = true;
-                populateProfileView(profileData);
-                profileModal.classList.add('hidden');
-            } catch (error) {
-                console.error("Error saving profile:", error);
-                alert("Could not save profile. Check permissions or try again.");
-            } finally {
-                btnSaveProfile.innerHTML = '<span>Save Profile & Continue</span><i class="fas fa-arrow-right text-sm"></i>';
-                btnSaveProfile.disabled = false;
-            }
-        });
+function syncUI(){
+  const name  = UP.fullName||UP.displayName||CU?.displayName||'Student';
+  const email = CU?.email||UP.email||'';
+  const photo = UP.photoURL||CU?.photoURL||'';
 
-        function populateProfileView(data) {
-            document.getElementById('view-name').textContent = data.fullName || '-';
-            document.getElementById('view-phone').textContent = data.phone || '-';
-            document.getElementById('view-college').textContent = data.college || '-';
-            document.getElementById('view-address').textContent = data.address || '-';
-            document.getElementById('view-blood').textContent = data.bloodGroup || '-';
-            document.getElementById('view-ssc').textContent = data.sscGpa || 'N/A';
-            document.getElementById('view-hsc').textContent = data.hscGpa || 'N/A';
-            document.getElementById('view-uni').textContent = data.uniCgpa || 'N/A';
-            
-            // Also update form inputs for future edits
-            populateForm(data);
-        }
+  // Sidebar
+  st('sbun', name);
+  setAvatar('sbav', name, photo);
 
-        function populateForm(data) {
-            if(data.fullName) document.getElementById('input-name').value = data.fullName;
-            if(data.phone) document.getElementById('input-phone').value = data.phone;
-            if(data.college) document.getElementById('input-college').value = data.college;
-            if(data.address) document.getElementById('input-address').value = data.address;
-            if(data.bloodGroup) document.getElementById('input-blood').value = data.bloodGroup;
-            if(data.sscGpa) document.getElementById('input-ssc').value = data.sscGpa;
-            if(data.hscGpa) document.getElementById('input-hsc').value = data.hscGpa;
-            if(data.uniCgpa) document.getElementById('input-uni').value = data.uniCgpa;
-        }
+  // Dashboard
+  st('wname', name);
+  st('wsub', `Signed in as ${email} · Keep up the great work! 🚀`);
 
-        // --- SMART LIVE HUB LOGIC ---
+  // Profile page
+  st('pDispName', name);
+  st('pDispEmail', email);
+  setAvatar('pavBig', name, photo);
 
-        function setupLiveConfigListener() {
-            if (liveConfigUnsubscribe) liveConfigUnsubscribe();
+  // Form fill
+  sv('pfName',   UP.fullName     || name);
+  sv('pfPhone',  UP.phone        || '');
+  sv('pfInst',   UP.institution  || '');
+  sv('pfAddr',   UP.address      || '');
+  sv('pfBlood',  UP.bloodGroup   || '');
+  sv('pfSSC',    UP.sscGPA       || '');
+  sv('pfHSC',    UP.hscGPA       || '');
+  sv('pfCGPA',   UP.universityGPA|| '');
+  sv('pfSem',    UP.semester     || '');
+}
 
-            const liveRef = doc(db, 'settings', 'live_config');
-            liveConfigUnsubscribe = onSnapshot(liveRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    
-                    // Update YouTube Iframe
-                    const ytIframe = document.getElementById('yt-iframe');
-                    if (data.youtubeEmbedUrl && ytIframe.src !== data.youtubeEmbedUrl) {
-                        ytIframe.src = data.youtubeEmbedUrl;
-                    }
+function resetProfileForm(){ syncUI(); toast('Reset to saved values.','in',1800); }
 
-                    // Update Slido Iframe
-                    const slidoIframe = document.getElementById('slido-iframe');
-                    if (data.slidoEmbedUrl && slidoIframe.src !== data.slidoEmbedUrl) {
-                        slidoIframe.src = data.slidoEmbedUrl;
-                    }
+/* ════════════════════════════════════════════
+   COMPLETE PROFILE MODAL
+════════════════════════════════════════════ */
+function openCPModal(user){
+  sv('cpName', user.displayName||'');
+  sv('cpPhone',''); sv('cpInst',''); sv('cpBlood',''); sv('cpAddr','');
+  $('moCPro').classList.add('on');
+}
 
-                    // Update Viewers
-                    if(data.activeViewers) {
-                        document.getElementById('live-viewers').textContent = data.activeViewers;
-                    }
-                } else {
-                    console.warn("Live config document does not exist yet.");
-                    document.getElementById('live-viewers').textContent = "0";
-                }
-            }, (error) => {
-                console.error("Live Config listener error:", error);
-                // Non-fatal, keep defaults
-            });
-        }
+$('cpSaveBtn').addEventListener('click', async ()=>{
+  const name=gv('cpName');
+  if(!name){ toast('Full name is required.','er'); return; }
+  const btn=$('cpSaveBtn');
+  btn.textContent='Saving…'; btn.disabled=true;
+  try{
+    const d={
+      fullName:gv('cpName'), phone:gv('cpPhone'),
+      institution:gv('cpInst'), bloodGroup:gv('cpBlood'),
+      address:gv('cpAddr'), profileComplete:true,
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    };
+    await db.collection('users').doc(CU.uid).update(d);
+    UP={...UP,...d};
+    $('moCPro').classList.remove('on');
+    syncUI();
+    toast('Welcome to OzeenLMS! 🎉','ok',4000);
+  } catch(e){ toast('Save failed: '+e.message,'er'); }
+  finally{ btn.textContent='Complete Setup →'; btn.disabled=false; }
+});
 
+/* ════════════════════════════════════════════
+   SAVE FULL PROFILE
+════════════════════════════════════════════ */
+$('saveProfBtn').addEventListener('click', async ()=>{
+  const name=gv('pfName');
+  if(!name){ toast('Full name is required.','er'); return; }
+  const btn=$('saveProfBtn');
+  btn.textContent='⏳ Saving…'; btn.disabled=true;
+  try{
+    const d={
+      fullName:name, phone:gv('pfPhone'), institution:gv('pfInst'),
+      address:gv('pfAddr'), bloodGroup:gv('pfBlood'),
+      sscGPA:gv('pfSSC'), hscGPA:gv('pfHSC'), universityGPA:gv('pfCGPA'),
+      semester:gv('pfSem'), profileComplete:true,
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    };
+    await db.collection('users').doc(CU.uid).update(d);
+    UP={...UP,...d};
+    syncUI();
+    toast('Profile saved successfully! ✅','ok');
+  } catch(e){ toast('Save failed: '+e.message,'er'); }
+  finally{ btn.textContent='💾 Save Changes'; btn.disabled=false; }
+});
 
-        // --- NAVIGATION LOGIC (SPA) ---
+/* ════════════════════════════════════════════
+   LOAD COURSES
+════════════════════════════════════════════ */
+async function loadCourses(){
+  const grid=$('courseGrid');
+  grid.innerHTML='<div class="empty"><div class="spin"></div></div>';
+  try{
+    let docs=[];
+    const uSnap=await db.collection('users').doc(CU.uid).collection('enrolledCourses').get();
+    if(!uSnap.empty){ docs=uSnap.docs; }
+    else {
+      const gSnap=await db.collection('courses').get();
+      docs=gSnap.docs;
+    }
+    const count=docs.length;
+    st('stEnrolled', count||'0');
+    st('pmsCourses', count||'0');
+    $('ccBadge').textContent=`${count} Course${count!==1?'s':''}`;
 
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.page-section');
+    if(count===0){
+      grid.innerHTML=`<div class="empty"><div class="empty-ico">🎓</div><div class="empty-t">No Courses Yet</div><div class="empty-s">You haven't been enrolled in any courses. Contact your administrator to get started.</div></div>`;
+      return;
+    }
 
-        // Expose tab switcher globally for buttons inside content
-        window.switchTab = function(targetId) {
-            // Hide all sections
-            sections.forEach(sec => sec.classList.remove('active'));
-            // Remove active state from all links
-            navLinks.forEach(l => l.classList.remove('active'));
+    const grads=[
+      'linear-gradient(90deg,#63b3ff,#a78bfa)',
+      'linear-gradient(90deg,#a78bfa,#f87171)',
+      'linear-gradient(90deg,#34d399,#63b3ff)',
+      'linear-gradient(90deg,#fbbf24,#f87171)',
+      'linear-gradient(90deg,#f87171,#a78bfa)',
+    ];
+    const subjs=['Mathematics','Physics','Chemistry','Biology','English','Computer Sci.','Economics','History'];
+    grid.innerHTML='';
+    docs.forEach((doc,i)=>{
+      const d=doc.data();
+      const g=grads[i%grads.length];
+      const p=typeof d.progress==='number'?d.progress:Math.floor(Math.random()*75+15);
+      const subj=d.subject||subjs[i%subjs.length];
+      const inst=d.instructor||d.teacher||'Instructor';
+      const title=d.title||d.name||`Course ${i+1}`;
+      grid.innerHTML+=`
+        <div class="cc" style="--cg:${g}">
+          <div><span class="tag t-b" style="margin-bottom:10px;display:inline-flex">${subj}</span>
+          <div class="cc-t">${title}</div></div>
+          <div class="cc-i">
+            <div class="cc-id">${inst.charAt(0).toUpperCase()}</div>${inst}
+          </div>
+          <div>
+            <div class="cc-pb"><div class="cc-pf" style="width:${p}%;background:${g}"></div></div>
+            <div class="cc-pm"><span>Progress</span><span style="font-weight:700;color:var(--a1)">${p}%</span></div>
+          </div>
+        </div>`;
+    });
+    cLoaded=true;
+  } catch(e){
+    grid.innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-t">Failed to Load</div><div class="empty-s">${e.message}</div></div>`;
+  }
+}
 
-            // Show target
-            const targetSec = document.getElementById(targetId);
-            if(targetSec) targetSec.classList.add('active');
+/* ════════════════════════════════════════════
+   LIVE CONFIG — REALTIME LISTENER
+════════════════════════════════════════════ */
+function subLive(){
+  if(liveOff) liveOff();
+  liveOff=db.collection('settings').doc('live_config')
+    .onSnapshot(snap=>renderLive(snap.exists?snap.data():{}),
+                err=>console.warn('live_config:',err.message));
+}
 
-            // Set active on matching links
-            document.querySelectorAll(`.nav-link[data-target="${targetId}"]`).forEach(l => {
-                l.classList.add('active');
-            });
-            
-            // Scroll to top
-            document.querySelector('main').scrollTo({top:0, behavior: 'smooth'});
-        };
+function renderLive(cfg){
+  const isLive = !!cfg.isLive;
+  const ytUrl  = cfg.youtubeUrl||cfg.youtube_url||'';
+  const sUrl   = cfg.slidoUrl||cfg.slido_url||'';
+  const title  = cfg.title||cfg.sessionTitle||'Live Session';
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = link.getAttribute('data-target');
-                window.switchTab(target);
-            });
-        });
+  /* badges */
+  const lbdg=$('lbdg'); if(lbdg) lbdg.style.display=isLive?'inline-flex':'none';
+  const bnd=$('bnavLiveDot'); if(bnd) bnd.classList.toggle('on',isLive);
+  const lp=$('livePill'); if(lp) lp.classList.toggle('on',isLive);
 
-    </script>
+  /* dashboard stat */
+  st('stLive', isLive?'🔴':'—');
+  const ch=$('stLiveCh');
+  if(ch){ ch.textContent=isLive?'Live Now':'Offline'; ch.style.color=isLive?'var(--red)':'var(--t2)'; }
+
+  /* live page */
+  const sl=$('liveStatusLine');
+  if(sl) sl.textContent=isLive?`🔴 LIVE — ${title}`:'No active session right now.';
+
+  const lic=$('liveInfoCard');
+  if(lic) lic.style.display=isLive?'block':'none';
+  if(isLive) st('licTitle',title);
+
+  /* dots */
+  [$('ytDot'),$('slidoDot')].forEach(d=>{ if(d) d.classList.toggle('live',isLive); });
+
+  /* YouTube embed */
+  const yw=$('ytWrap');
+  if(yw){
+    if(isLive && ytUrl){
+      const vid=ytId(ytUrl);
+      yw.innerHTML=`<iframe src="https://www.youtube.com/embed/${vid}?rel=0&modestbranding=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>`;
+    } else {
+      yw.innerHTML=`<div class="lph-empty"><div class="lph-ico">📺</div><div class="lph-t2">No Active Stream</div><div class="lph-s">The live class will appear here when your instructor starts streaming.</div></div>`;
+    }
+  }
+
+  /* Slido embed */
+  const sw=$('slidoWrap');
+  if(sw){
+    if(isLive && sUrl){
+      sw.innerHTML=`<iframe src="${sUrl}"></iframe>`;
+    } else {
+      sw.innerHTML=`<div class="lph-empty"><div class="lph-ico">💬</div><div class="lph-t2">Q&amp;A Not Active</div><div class="lph-s">Ask questions and join polls during the live session.</div></div>`;
+    }
+  }
+}
+
+/* ════════════════════════════════════════════
+   RESOURCES
+════════════════════════════════════════════ */
+async function loadRes(){
+  const grid=$('resGrid');
+  grid.innerHTML='<div class="empty"><div class="spin"></div></div>';
+  try{
+    const snap=await db.collection('resources').orderBy('createdAt','desc').get();
+    if(snap.empty){
+      grid.innerHTML=`<div class="empty"><div class="empty-ico">📂</div><div class="empty-t">No Resources Yet</div><div class="empty-s">Your instructor hasn't added materials yet. Check back soon!</div></div>`;
+      return;
+    }
+    const tm={
+      pdf: {ico:'📄',cls:'pdf',col:'var(--red)'},
+      video:{ico:'🎬',cls:'vid',col:'var(--a1)'},
+      doc: {ico:'📝',cls:'doc',col:'var(--a2)'},
+      link:{ico:'🔗',cls:'lnk',col:'var(--a3)'},
+      zip: {ico:'🗜️',cls:'doc',col:'var(--a2)'},
+    };
+    grid.innerHTML='';
+    snap.docs.forEach(doc=>{
+      const d=doc.data();
+      const t=tm[(d.type||'').toLowerCase()]||{ico:'📎',cls:'def',col:'var(--t2)'};
+      grid.innerHTML+=`
+        <div class="rc" onclick="window.open('${d.url||'#'}','_blank')">
+          <div class="rc-ico ${t.cls}">${t.ico}</div>
+          <div class="rc-t">${d.title||'Resource'}</div>
+          <div class="rc-d">${d.description||'Click to open this resource.'}</div>
+          <div class="rc-f">
+            <span class="rc-ft" style="color:${t.col}">${(d.type||'FILE').toUpperCase()}</span>
+            <span class="rc-fs">${d.subject||'General'}</span>
+          </div>
+        </div>`;
+    });
+  } catch(e){
+    grid.innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-t">Failed to Load</div><div class="empty-s">${e.message}</div></div>`;
+  }
+}
+
+/* ════════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════════ */
+const TITLES={dashboard:'Dashboard',live:'Live Class',resources:'Resources',profile:'My Profile'};
+
+function nav(tab){
+  TAB=tab;
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  const pg=$(`pg-${tab}`); if(pg) pg.classList.add('on');
+  st('tbTitle', TITLES[tab]||tab);
+  document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('on',el.dataset.tab===tab));
+  $('main').scrollTo(0,0);
+  closeSidebar();
+  if(tab==='dashboard' && !cLoaded) loadCourses();
+  if(tab==='resources') loadRes();
+  if(tab==='profile')   syncUI();
+}
+
+document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>nav(el.dataset.tab)));
+$('refreshBtn').addEventListener('click',()=>{
+  if(TAB==='dashboard'){ cLoaded=false; loadCourses(); }
+  if(TAB==='resources') loadRes();
+  if(TAB==='profile')   syncUI();
+  toast('Refreshed!','in',1800);
+});
+
+/* ════════════════════════════════════════════
+   MOBILE SIDEBAR
+════════════════════════════════════════════ */
+function closeSidebar(){ $('sidebar').classList.remove('open'); $('sbo').classList.remove('on'); document.body.style.overflow=''; }
+$('menuBtn').addEventListener('click',()=>{ $('sidebar').classList.add('open'); $('sbo').classList.add('on'); document.body.style.overflow='hidden'; });
+$('sbo').addEventListener('click', closeSidebar);
+
+/* ════════════════════════════════════════════
+   SHOW APP
+════════════════════════════════════════════ */
+function showApp(){
+  const app=$('app'), bnav=$('bnav');
+  app.style.display='flex'; bnav.style.display='block';
+  syncUI();
+  requestAnimationFrame(()=>app.classList.add('on'));
+  nav('dashboard');
+  subLive();
+}
+</script>
 </body>
 </html>
-
