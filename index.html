@@ -3,73 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OzeenLMS | Premium Learning</title>
+    <title>OzeenLMS - Premium Learning</title>
     
-    <!-- Fonts: Poppins -->
+    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS (for layout and utility classes) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Icons: Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
-        :root {
-            --brand-font: 'Poppins', sans-serif;
-        }
-
+        /* Base & Reset */
         body {
-            font-family: var(--brand-font);
-            /* Dark-themed modern gradient */
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             color: #f8fafc;
-            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
         }
 
         /* Glassmorphism Utilities */
         .glass {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
         
         .glass-panel {
-            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 1rem;
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
         }
 
         .glass-input {
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
+            color: #fff;
             transition: all 0.3s ease;
         }
-
+        
         .glass-input:focus {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: #818cf8;
             outline: none;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
-            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
         }
 
-        .glass-button {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.05) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            backdrop-filter: blur(4px);
+        .glass-input option {
+            background: #1e1b4b; /* Dark bg for dropdown options */
+            color: white;
+        }
+
+        .glass-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
             transition: all 0.3s ease;
         }
 
-        .glass-button:hover {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(56, 189, 248, 0.1) 100%);
-            transform: translateY(-1px);
+        .glass-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
         }
 
         /* Custom Scrollbar */
@@ -77,109 +81,379 @@
             width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
+            background: rgba(0, 0, 0, 0.1);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.4);
         }
 
-        /* Navigation Active States */
-        .nav-item.active {
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-            border-right: 3px solid #38bdf8;
+        /* SPA Navigation States */
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #818cf8;
+            color: #818cf8;
         }
         
         @media (max-width: 768px) {
-            .nav-item.active {
-                border-right: none;
-                border-top: 3px solid #38bdf8;
-                background: linear-gradient(to bottom, rgba(56, 189, 248, 0.1) 0%, transparent 100%);
+            .nav-link.active {
+                border-left: none;
+                border-top: 3px solid #818cf8;
+                background: transparent;
             }
         }
-
-        /* Hide sections initially */
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.4s ease forwards; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Loader */
-        .loader {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid #38bdf8;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
+        /* Hide elements dynamically */
+        .hidden { display: none !important; }
+        
+        /* Video Aspect Ratio */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 1rem;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
-<body class="min-h-screen overflow-hidden selection:bg-sky-500/30">
+<body class="antialiased selection:bg-indigo-500 selection:text-white">
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed top-4 right-4 z-[100] flex flex-col gap-2"></div>
-
-    <!-- Screen 1: Login UI -->
-    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="glass-panel p-8 max-w-md w-full text-center relative overflow-hidden">
+    <!-- 1. LOGIN SCREEN (Visible by default until Auth resolves) -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-500">
+        <div class="glass-panel p-8 md:p-12 w-full max-w-md text-center relative overflow-hidden">
             <!-- Decorative blur orbs -->
-            <div class="absolute -top-20 -left-20 w-40 h-40 bg-sky-500/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-20 -right-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-indigo-500 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
+            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-500 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
             
-            <h1 class="text-4xl font-bold tracking-tight mb-2 relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">OzeenLMS</h1>
-            <p class="text-slate-400 mb-8 relative z-10 text-sm">Sign in to access your premium learning dashboard.</p>
+            <h1 class="text-4xl font-bold mb-2 tracking-tight relative z-10"><span class="text-indigo-400">Ozeen</span>LMS</h1>
+            <p class="text-gray-400 mb-8 relative z-10">Premium Learning Experience</p>
             
-            <button id="btn-google-login" class="glass-button w-full py-3 px-4 rounded-xl flex items-center justify-center gap-3 text-white font-medium relative z-10">
-                <svg viewBox="0 0 24 24" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.58c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.58-2.77c-.98.66-2.23 1.06-3.7 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
+            <button id="btn-google-login" class="glass-btn w-full py-3 px-4 rounded-xl font-medium flex items-center justify-center gap-3 relative z-10">
+                <i class="fab fa-google text-xl"></i>
                 Continue with Google
             </button>
-            <div id="login-loader" class="hidden justify-center mt-4 relative z-10">
-                <div class="loader"></div>
-            </div>
+            <div id="login-error" class="text-red-400 text-sm mt-4 hidden relative z-10"></div>
         </div>
     </div>
 
-    <!-- Complete Profile Modal (Forced for new users) -->
-    <div id="profile-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm">
-        <div class="glass-panel p-6 md:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <h2 class="text-2xl font-bold mb-1 text-sky-400">Complete Your Profile</h2>
-            <p class="text-slate-400 text-sm mb-6">Please provide your details to access OzeenLMS.</p>
+    <!-- 2. MAIN APP LAYOUT (Hidden until authenticated) -->
+    <div id="app-layout" class="hidden h-screen flex flex-col md:flex-row w-full">
+        
+        <!-- Sidebar (Desktop) -->
+        <nav class="glass hidden md:flex flex-col w-64 h-full fixed left-0 top-0 z-40 border-r border-white/5">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold tracking-tight"><span class="text-indigo-400">Ozeen</span>LMS</h1>
+            </div>
             
-            <form id="form-complete-profile" class="space-y-4">
+            <div class="flex-1 px-4 space-y-2 mt-4">
+                <a href="#" data-target="dashboard" class="nav-link active flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-colors">
+                    <i class="fas fa-home w-5"></i> Dashboard
+                </a>
+                <a href="#" data-target="live-class" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-colors">
+                    <i class="fas fa-video w-5"></i> Live Class
+                </a>
+                <a href="#" data-target="resources" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-colors">
+                    <i class="fas fa-book w-5"></i> Resources
+                </a>
+                <a href="#" data-target="profile" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-colors">
+                    <i class="fas fa-user w-5"></i> My Profile
+                </a>
+            </div>
+
+            <div class="p-4 border-t border-white/5">
+                <div class="flex items-center gap-3 px-4 py-2 mb-2">
+                    <img id="sidebar-avatar" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" class="w-10 h-10 rounded-full border border-white/20" alt="Avatar">
+                    <div class="overflow-hidden">
+                        <p id="sidebar-name" class="text-sm font-medium truncate">Student</p>
+                        <p class="text-xs text-gray-400">Online</p>
+                    </div>
+                </div>
+                <button id="btn-logout-desktop" class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/5 rounded-lg transition-colors flex items-center gap-2">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 md:ml-64 pb-20 md:pb-0 h-full overflow-y-auto">
+            
+            <!-- Topbar Mobile -->
+            <div class="md:hidden glass sticky top-0 z-30 px-6 py-4 flex justify-between items-center border-b border-white/5">
+                <h1 class="text-xl font-bold tracking-tight"><span class="text-indigo-400">Ozeen</span>LMS</h1>
+                <img id="mobile-avatar" src="https://ui-avatars.com/api/?name=User" class="w-8 h-8 rounded-full border border-white/20" alt="Avatar">
+            </div>
+
+            <div class="p-6 md:p-10 max-w-7xl mx-auto">
+                
+                <!-- DASHBOARD TAB -->
+                <section id="dashboard" class="page-section active">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold mb-2">Welcome back, <span id="dash-name" class="text-indigo-400">Student</span> 👋</h2>
+                        <p class="text-gray-400">Here's an overview of your learning journey today.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="glass-panel p-6 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm">Next Live Class</p>
+                                <p class="font-semibold text-lg">Today, 8:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-6 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xl">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm">Assignments</p>
+                                <p class="font-semibold text-lg">All caught up!</p>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-6 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm">New Resources</p>
+                                <p class="font-semibold text-lg">3 PDFs added</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 text-center border-indigo-500/30 border">
+                        <h3 class="text-xl font-semibold mb-2">Ready to join today's session?</h3>
+                        <p class="text-gray-400 mb-6">Physics Chapter 4: Work, Energy and Power is live now.</p>
+                        <button onclick="switchTab('live-class')" class="glass-btn px-6 py-2 rounded-lg font-medium">Join Live Hub</button>
+                    </div>
+                </section>
+
+                <!-- LIVE CLASS TAB (Smart Live Hub) -->
+                <section id="live-class" class="page-section">
+                    <div class="mb-6 flex justify-between items-end">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-1">Live Hub <span class="animate-pulse inline-block w-3 h-3 bg-red-500 rounded-full ml-2"></span></h2>
+                            <p class="text-gray-400">Interactive live session and Q&A.</p>
+                        </div>
+                        <div class="text-sm text-gray-400 bg-black/20 px-3 py-1 rounded-full border border-white/5">
+                            <i class="fas fa-users mr-1"></i> <span id="live-viewers">Loading...</span> Viewers
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-220px)] min-h-[600px]">
+                        <!-- Left: YouTube Live Embed -->
+                        <div class="lg:col-span-2 glass-panel p-2 flex flex-col">
+                            <div class="bg-black/40 rounded-t-lg px-4 py-2 flex justify-between items-center border-b border-white/5">
+                                <span class="font-medium text-sm"><i class="fab fa-youtube text-red-500 mr-2"></i> Live Stream</span>
+                            </div>
+                            <div class="video-container flex-1 bg-black rounded-b-lg">
+                                <!-- Default placeholder, updated via Firestore -->
+                                <iframe id="yt-iframe" src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+
+                        <!-- Right: Slido/Pigeonhole Q&A -->
+                        <div class="glass-panel p-2 flex flex-col h-full">
+                            <div class="bg-black/40 rounded-t-lg px-4 py-2 flex justify-between items-center border-b border-white/5">
+                                <span class="font-medium text-sm"><i class="fas fa-comments text-indigo-400 mr-2"></i> Live Q&A</span>
+                            </div>
+                            <div class="flex-1 bg-white rounded-b-lg overflow-hidden relative">
+                                <!-- Using Slido embed. Read-only for files, pure text interaction -->
+                                <iframe id="slido-iframe" src="https://app.sli.do/event/placeholder" class="w-full h-full border-0" title="Slido Q&A"></iframe>
+                                <!-- Overlay to prevent unauthorized file drops if it was a custom form, but Slido handles this securely -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RESOURCES TAB -->
+                <section id="resources" class="page-section">
+                    <h2 class="text-3xl font-bold mb-2">Resource Center</h2>
+                    <p class="text-gray-400 mb-8">Access your PDF notes and recorded lectures.</p>
+
+                    <!-- Filter Tags -->
+                    <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
+                        <button class="px-4 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-sm whitespace-nowrap">All Subjects</button>
+                        <button class="px-4 py-1.5 rounded-full glass text-gray-300 text-sm hover:bg-white/5 whitespace-nowrap">Physics</button>
+                        <button class="px-4 py-1.5 rounded-full glass text-gray-300 text-sm hover:bg-white/5 whitespace-nowrap">Chemistry</button>
+                        <button class="px-4 py-1.5 rounded-full glass text-gray-300 text-sm hover:bg-white/5 whitespace-nowrap">Higher Math</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="resources-grid">
+                        <!-- Mocked Cards -->
+                        <div class="glass-panel p-5 group hover:border-indigo-500/50 transition-colors">
+                            <div class="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400 text-xl mb-4">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <h3 class="font-semibold text-lg mb-1 group-hover:text-indigo-300 transition-colors">Physics - Vector Notes</h3>
+                            <p class="text-sm text-gray-400 mb-4">Chapter 2 • 15 Pages • PDF</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium flex items-center gap-2 hover:text-indigo-300">
+                                Open in Drive <i class="fas fa-external-link-alt text-xs"></i>
+                            </a>
+                        </div>
+
+                        <div class="glass-panel p-5 group hover:border-indigo-500/50 transition-colors">
+                            <div class="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400 text-xl mb-4">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <h3 class="font-semibold text-lg mb-1 group-hover:text-indigo-300 transition-colors">Chemistry - Thermodynamics</h3>
+                            <p class="text-sm text-gray-400 mb-4">Chapter 4 • 22 Pages • PDF</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium flex items-center gap-2 hover:text-indigo-300">
+                                Open in Drive <i class="fas fa-external-link-alt text-xs"></i>
+                            </a>
+                        </div>
+
+                        <div class="glass-panel p-5 group hover:border-indigo-500/50 transition-colors">
+                            <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 text-xl mb-4">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h3 class="font-semibold text-lg mb-1 group-hover:text-indigo-300 transition-colors">Calculus Limits Recording</h3>
+                            <p class="text-sm text-gray-400 mb-4">Lecture 01 • 1h 20m • Video</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium flex items-center gap-2 hover:text-indigo-300">
+                                Watch Replay <i class="fas fa-play-circle text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PROFILE TAB -->
+                <section id="profile" class="page-section">
+                    <h2 class="text-3xl font-bold mb-2">My Profile</h2>
+                    <p class="text-gray-400 mb-8">Manage your academic details and personal info.</p>
+
+                    <div class="glass-panel p-8 max-w-3xl">
+                        <div class="flex flex-col md:flex-row gap-8 items-start">
+                            <div class="flex-shrink-0 text-center">
+                                <img id="view-avatar" src="" class="w-32 h-32 rounded-2xl border-4 border-white/10 object-cover mb-4 shadow-lg mx-auto" alt="Profile">
+                                <button onclick="openProfileModal(false)" class="glass-btn px-4 py-2 rounded-lg text-sm w-full"><i class="fas fa-edit mr-2"></i>Edit Profile</button>
+                            </div>
+                            
+                            <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Full Name</p>
+                                    <p id="view-name" class="font-medium text-lg">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Phone Number</p>
+                                    <p id="view-phone" class="font-medium text-lg">-</p>
+                                </div>
+                                <div class="md:col-span-2 border-t border-white/5 pt-4"></div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">College/University</p>
+                                    <p id="view-college" class="font-medium text-lg">-</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Address</p>
+                                    <p id="view-address" class="font-medium text-lg">-</p>
+                                </div>
+                                <div class="md:col-span-2 border-t border-white/5 pt-4"></div>
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Blood Group</p>
+                                    <p id="view-blood" class="font-medium text-lg">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Academic Results</p>
+                                    <p class="text-sm text-gray-300">SSC GPA: <span id="view-ssc" class="font-semibold text-white"></span></p>
+                                    <p class="text-sm text-gray-300">HSC GPA: <span id="view-hsc" class="font-semibold text-white"></span></p>
+                                    <p class="text-sm text-gray-300">Uni CGPA: <span id="view-uni" class="font-semibold text-white"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-logout-mobile" class="md:hidden mt-8 w-full glass border border-red-500/30 text-red-400 py-3 rounded-xl flex justify-center items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Bottom Navbar (Mobile) -->
+        <nav class="glass md:hidden fixed bottom-0 left-0 w-full z-40 border-t border-white/5 flex justify-around items-center pb-safe">
+            <a href="#" data-target="dashboard" class="nav-link active flex flex-col items-center p-3 text-gray-400 flex-1">
+                <i class="fas fa-home text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">Home</span>
+            </a>
+            <a href="#" data-target="live-class" class="nav-link flex flex-col items-center p-3 text-gray-400 flex-1">
+                <i class="fas fa-video text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">Live</span>
+            </a>
+            <a href="#" data-target="resources" class="nav-link flex flex-col items-center p-3 text-gray-400 flex-1">
+                <i class="fas fa-book text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">Notes</span>
+            </a>
+            <a href="#" data-target="profile" class="nav-link flex flex-col items-center p-3 text-gray-400 flex-1">
+                <i class="fas fa-user text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- 3. PROFILE COMPLETION MODAL (Glassmorphism, Non-dismissible for new users) -->
+    <div id="profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+        <div class="glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
+            
+            <!-- Dismiss button (hidden if required setup) -->
+            <button id="close-modal-btn" class="hidden absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold mb-1">Complete Your Profile</h2>
+                <p class="text-sm text-gray-400" id="modal-subtitle">We need a few details to set up your learning experience.</p>
+            </div>
+
+            <form id="profile-form" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Full Name</label>
-                        <input type="text" id="p-name" required class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="John Doe">
+                    <!-- Full Name -->
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-300 font-medium">Full Name *</label>
+                        <input type="text" id="input-name" required class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="e.g. Omar Faruk">
                     </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Phone Number</label>
-                        <input type="tel" id="p-phone" required class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="+1 234 567 890">
+                    <!-- Phone -->
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-300 font-medium">Phone Number *</label>
+                        <input type="tel" id="input-phone" required class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="+880 1XXX-XXXXXX">
                     </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs text-slate-400 mb-1">College/School/University Name</label>
-                        <input type="text" id="p-institution" required class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="Harvard University">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs text-slate-400 mb-1">Address</label>
-                        <textarea id="p-address" required rows="2" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="123 Education St..."></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Blood Group</label>
-                        <select id="p-blood" required class="glass-input w-full rounded-lg px-3 py-2 text-sm">
+                </div>
+
+                <!-- College/Uni -->
+                <div class="space-y-1">
+                    <label class="text-xs text-gray-300 font-medium">College/University *</label>
+                    <input type="text" id="input-college" required class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="Institution Name">
+                </div>
+
+                <!-- Address -->
+                <div class="space-y-1">
+                    <label class="text-xs text-gray-300 font-medium">Address *</label>
+                    <textarea id="input-address" required rows="2" class="glass-input w-full rounded-lg px-4 py-2.5 text-sm resize-none" placeholder="Your current address"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Blood Group -->
+                    <div class="space-y-1 col-span-2 md:col-span-1">
+                        <label class="text-xs text-gray-300 font-medium">Blood Group *</label>
+                        <select id="input-blood" required class="glass-input w-full rounded-lg px-4 py-2.5 text-sm appearance-none">
                             <option value="" disabled selected>Select</option>
                             <option value="A+">A+</option><option value="A-">A-</option>
                             <option value="B+">B+</option><option value="B-">B-</option>
@@ -187,236 +461,38 @@
                             <option value="AB+">AB+</option><option value="AB-">AB-</option>
                         </select>
                     </div>
-                </div>
-
-                <h3 class="text-lg font-semibold mt-6 mb-3 text-sky-400 border-b border-white/10 pb-2">Academic Results</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">SSC GPA/Grade</label>
-                        <input type="text" id="p-ssc" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="e.g. 5.00">
+                    <!-- Results -->
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-300 font-medium">SSC GPA</label>
+                        <input type="number" step="0.01" max="5.00" id="input-ssc" class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="5.00">
                     </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">HSC GPA/Grade</label>
-                        <input type="text" id="p-hsc" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="e.g. 5.00">
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-300 font-medium">HSC GPA</label>
+                        <input type="number" step="0.01" max="5.00" id="input-hsc" class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="5.00">
                     </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">University CGPA</label>
-                        <input type="text" id="p-cgpa" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="e.g. 3.8">
+                    <div class="space-y-1">
+                        <label class="text-xs text-gray-300 font-medium">Uni CGPA</label>
+                        <input type="number" step="0.01" max="4.00" id="input-uni" class="glass-input w-full rounded-lg px-4 py-2.5 text-sm" placeholder="4.00">
                     </div>
                 </div>
 
-                <div class="pt-6">
-                    <button type="submit" id="btn-save-profile" class="w-full glass-button py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
-                        <span>Save & Continue</span>
+                <div class="pt-4">
+                    <button type="submit" id="btn-save-profile" class="glass-btn w-full py-3 rounded-xl font-medium flex justify-center items-center gap-2">
+                        <span>Save Profile & Continue</span>
+                        <i class="fas fa-arrow-right text-sm"></i>
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Main Application UI (Hidden until authenticated) -->
-    <div id="app-ui" class="hidden flex h-screen w-full">
-        
-        <!-- Desktop Sidebar -->
-        <aside class="glass w-64 hidden md:flex flex-col h-full border-r border-white/5 relative z-20">
-            <div class="p-6">
-                <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 tracking-wide">OzeenLMS</h1>
-            </div>
-            <nav class="flex-1 px-4 space-y-2 mt-4">
-                <button onclick="navigate('dashboard')" id="nav-desktop-dashboard" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white transition-colors text-sm font-medium">
-                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-                </button>
-                <button onclick="navigate('live')" id="nav-desktop-live" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white transition-colors text-sm font-medium">
-                    <i data-lucide="monitor-play" class="w-5 h-5 text-red-400"></i> Live Class
-                </button>
-                <button onclick="navigate('profile')" id="nav-desktop-profile" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white transition-colors text-sm font-medium">
-                    <i data-lucide="user" class="w-5 h-5"></i> My Profile
-                </button>
-                <button onclick="navigate('resources')" id="nav-desktop-resources" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white transition-colors text-sm font-medium">
-                    <i data-lucide="library" class="w-5 h-5"></i> Resources
-                </button>
-            </nav>
-            <div class="p-4 mt-auto">
-                <div class="glass-panel p-4 flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-500 flex items-center justify-center text-white font-bold" id="sidebar-avatar">U</div>
-                    <div class="overflow-hidden">
-                        <p class="text-sm font-medium truncate" id="sidebar-name">Loading...</p>
-                        <p class="text-xs text-slate-400 truncate">Student</p>
-                    </div>
-                </div>
-                <button id="btn-logout" class="w-full flex items-center justify-center gap-2 text-slate-400 hover:text-red-400 transition-colors text-sm py-2">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
-                </button>
-            </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 h-full overflow-y-auto pb-20 md:pb-0 relative">
-            <div class="max-w-7xl mx-auto p-4 md:p-8">
-                
-                <!-- Section: Dashboard -->
-                <div id="section-dashboard" class="section active">
-                    <div class="glass-panel p-6 md:p-8 mb-8 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
-                        <h2 class="text-3xl font-bold mb-2">Welcome back, <span id="dash-name" class="text-sky-400">Student</span>! 👋</h2>
-                        <p class="text-slate-400 max-w-2xl">Ready to continue your learning journey? Check out your enrolled courses or join the live class.</p>
-                    </div>
-
-                    <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
-                        <i data-lucide="book-open" class="text-indigo-400"></i> Enrolled Courses
-                    </h3>
-                    <div id="courses-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                        <!-- Fetched from Firestore -->
-                        <div class="glass-panel p-6 flex justify-center items-center h-32">
-                            <div class="loader"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section: Live Class Hub -->
-                <div id="section-live" class="section">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold flex items-center gap-2">
-                            <span class="relative flex h-3 w-3">
-                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                              <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                            </span>
-                            Live Class Hub
-                        </h2>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-140px)] min-h-[600px]">
-                        <!-- Left: YouTube Embed (Takes 2/3 space on large screens) -->
-                        <div class="lg:col-span-2 glass-panel overflow-hidden flex flex-col">
-                            <div class="p-3 border-b border-white/10 bg-black/20 flex items-center gap-2">
-                                <i data-lucide="youtube" class="text-red-500"></i>
-                                <span class="font-medium text-sm">Class Stream</span>
-                            </div>
-                            <div class="flex-1 w-full bg-black relative">
-                                <iframe id="yt-frame" class="absolute inset-0 w-full h-full" src="" title="YouTube Live Stream" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                        </div>
-
-                        <!-- Right: Slido Q&A Embed (Takes 1/3 space) -->
-                        <div class="glass-panel overflow-hidden flex flex-col h-[500px] lg:h-full">
-                            <div class="p-3 border-b border-white/10 bg-black/20 flex items-center gap-2">
-                                <i data-lucide="message-square" class="text-green-400"></i>
-                                <span class="font-medium text-sm">Live Q&A (Slido)</span>
-                            </div>
-                            <div class="flex-1 w-full relative bg-white">
-                                <iframe id="slido-frame" class="absolute inset-0 w-full h-full" src="" frameborder="0" title="Slido Q&A"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section: My Profile (Read/Edit via Firestore) -->
-                <div id="section-profile" class="section">
-                    <h2 class="text-2xl font-bold mb-6">My Profile</h2>
-                    
-                    <div class="glass-panel p-6 md:p-8 max-w-3xl">
-                        <form id="form-edit-profile" class="space-y-6">
-                            <!-- Notice: Read-only visual indicator for inputs to follow "students are read-only" but allowing form updates for their own profile -->
-                            <div class="bg-sky-500/10 border border-sky-500/20 text-sky-200 text-sm p-3 rounded-lg flex gap-2 items-start mb-6">
-                                <i data-lucide="info" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                                <p>This is your student record. File uploads are disabled for security. Update your text details below.</p>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Full Name</label>
-                                    <input type="text" id="e-name" required class="glass-input w-full rounded-lg px-3 py-2 text-sm">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Phone Number</label>
-                                    <input type="tel" id="e-phone" required class="glass-input w-full rounded-lg px-3 py-2 text-sm">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-xs text-slate-400 mb-1">College/School/University Name</label>
-                                    <input type="text" id="e-institution" required class="glass-input w-full rounded-lg px-3 py-2 text-sm">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-xs text-slate-400 mb-1">Address</label>
-                                    <textarea id="e-address" required rows="2" class="glass-input w-full rounded-lg px-3 py-2 text-sm"></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Blood Group</label>
-                                    <select id="e-blood" required class="glass-input w-full rounded-lg px-3 py-2 text-sm [&>option]:bg-slate-800">
-                                        <option value="A+">A+</option><option value="A-">A-</option>
-                                        <option value="B+">B+</option><option value="B-">B-</option>
-                                        <option value="O+">O+</option><option value="O-">O-</option>
-                                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <h3 class="text-lg font-semibold mt-8 mb-4 text-sky-400 border-b border-white/10 pb-2">Academic Results</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">SSC GPA/Grade</label>
-                                    <input type="text" id="e-ssc" class="glass-input w-full rounded-lg px-3 py-2 text-sm">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">HSC GPA/Grade</label>
-                                    <input type="text" id="e-hsc" class="glass-input w-full rounded-lg px-3 py-2 text-sm">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">University CGPA</label>
-                                    <input type="text" id="e-cgpa" class="glass-input w-full rounded-lg px-3 py-2 text-sm">
-                                </div>
-                            </div>
-
-                            <div class="pt-4 flex justify-end">
-                                <button type="submit" id="btn-update-profile" class="glass-button px-6 py-2.5 rounded-lg font-medium flex items-center gap-2">
-                                    <i data-lucide="save" class="w-4 h-4"></i> Update Profile
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Section: Resources (Placeholder for structural completeness) -->
-                <div id="section-resources" class="section">
-                    <h2 class="text-2xl font-bold mb-6">Learning Resources</h2>
-                    <div class="glass-panel p-12 text-center">
-                        <i data-lucide="folder-open" class="w-16 h-16 mx-auto text-slate-600 mb-4"></i>
-                        <h3 class="text-xl font-medium text-slate-300">No resources available</h3>
-                        <p class="text-slate-500 mt-2 text-sm">Study materials will appear here when uploaded by instructors.</p>
-                    </div>
-                </div>
-
-            </div>
-        </main>
-
-        <!-- Mobile Bottom Navigation -->
-        <nav class="md:hidden glass fixed bottom-0 w-full flex justify-around items-center p-2 pb-safe z-50 border-t border-white/5">
-            <button onclick="navigate('dashboard')" id="nav-mobile-dashboard" class="nav-item active flex flex-col items-center p-2 rounded-lg text-slate-400 hover:text-white w-16">
-                <i data-lucide="layout-dashboard" class="w-5 h-5 mb-1"></i>
-                <span class="text-[10px] font-medium">Dash</span>
-            </button>
-            <button onclick="navigate('live')" id="nav-mobile-live" class="nav-item flex flex-col items-center p-2 rounded-lg text-slate-400 hover:text-white w-16">
-                <i data-lucide="monitor-play" class="w-5 h-5 mb-1 text-red-400"></i>
-                <span class="text-[10px] font-medium">Live</span>
-            </button>
-            <button onclick="navigate('profile')" id="nav-mobile-profile" class="nav-item flex flex-col items-center p-2 rounded-lg text-slate-400 hover:text-white w-16">
-                <i data-lucide="user" class="w-5 h-5 mb-1"></i>
-                <span class="text-[10px] font-medium">Profile</span>
-            </button>
-            <button onclick="navigate('resources')" id="nav-mobile-resources" class="nav-item flex flex-col items-center p-2 rounded-lg text-slate-400 hover:text-white w-16">
-                <i data-lucide="library" class="w-5 h-5 mb-1"></i>
-                <span class="text-[10px] font-medium">Docs</span>
-            </button>
-        </nav>
-    </div>
-
-    <!-- Firebase SDK Implementation -->
+    <!-- Firebase v9 Modular JavaScript -->
     <script type="module">
-        // Import Firebase v9 modules using explicit CDN URLs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Your Exact Firebase Configuration
+        // Provided Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDF1Y8EnGitKSOweA6kxwR-lYqG9qjCNEg",
             authDomain: "ozeenlms.firebaseapp.com",
@@ -431,290 +507,266 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const googleProvider = new GoogleAuthProvider();
 
-        // State Management
-        let currentUser = null;
-        let userDataCache = null;
-
-        // UI Initialization
-        lucide.createIcons();
+        // UI Elements
+        const loginScreen = document.getElementById('login-screen');
+        const appLayout = document.getElementById('app-layout');
+        const btnGoogleLogin = document.getElementById('btn-google-login');
+        const loginError = document.getElementById('login-error');
         
-        // Custom Toast Notification System
-        window.showToast = (message, type = 'success') => {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            const bg = type === 'success' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-200' : 'bg-red-500/20 border-red-500/50 text-red-200';
-            toast.className = `glass px-4 py-3 rounded-lg border ${bg} text-sm font-medium shadow-lg transform transition-all duration-300 translate-x-full opacity-0 flex items-center gap-2 max-w-sm`;
-            toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-4 h-4"></i> ${message}`;
-            
-            container.appendChild(toast);
-            lucide.createIcons({root: toast});
-            
-            // Animate in
-            setTimeout(() => { toast.classList.remove('translate-x-full', 'opacity-0'); }, 10);
-            // Animate out
-            setTimeout(() => {
-                toast.classList.add('translate-x-full', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
-        };
+        const profileModal = document.getElementById('profile-modal');
+        const profileForm = document.getElementById('profile-form');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const btnSaveProfile = document.getElementById('btn-save-profile');
+        
+        let currentUser = null;
+        let isProfileComplete = false;
+        let liveConfigUnsubscribe = null;
 
-        // DOM Elements mapping
-        const els = {
-            loginScreen: document.getElementById('login-screen'),
-            appUI: document.getElementById('app-ui'),
-            profileModal: document.getElementById('profile-modal'),
-            btnLogin: document.getElementById('btn-google-login'),
-            btnLogout: document.getElementById('btn-logout'),
-            loginLoader: document.getElementById('login-loader'),
-            
-            // Displays
-            sidebarName: document.getElementById('sidebar-name'),
-            sidebarAvatar: document.getElementById('sidebar-avatar'),
-            dashName: document.getElementById('dash-name'),
-            coursesGrid: document.getElementById('courses-grid'),
-            
-            // Live Iframes
-            ytFrame: document.getElementById('yt-frame'),
-            slidoFrame: document.getElementById('slido-frame'),
-            
-            // Forms
-            formCompleteProfile: document.getElementById('form-complete-profile'),
-            btnSaveProfile: document.getElementById('btn-save-profile'),
-            formEditProfile: document.getElementById('form-edit-profile'),
-            btnUpdateProfile: document.getElementById('btn-update-profile')
-        };
+        // --- AUTHENTICATION LOGIC ---
 
-        // Navigation Logic
-        window.navigate = (sectionId) => {
-            // Update active states on nav items
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`nav-desktop-${sectionId}`)?.classList.add('active');
-            document.getElementById(`nav-mobile-${sectionId}`)?.classList.add('active');
-
-            // Toggle sections
-            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-            document.getElementById(`section-${sectionId}`).classList.add('active');
-
-            // Trigger specific logic on tab switch
-            if (sectionId === 'live') fetchLiveConfig();
-            if (sectionId === 'profile' && userDataCache) populateEditProfile(userDataCache);
-        };
-
-        // --- Auth Flow ---
-        els.btnLogin.addEventListener('click', async () => {
-            els.btnLogin.classList.add('hidden');
-            els.loginLoader.classList.remove('hidden');
-            els.loginLoader.classList.add('flex');
+        btnGoogleLogin.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
             try {
-                await signInWithPopup(auth, googleProvider);
-                // The onAuthStateChanged listener handles the rest
+                loginError.classList.add('hidden');
+                btnGoogleLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                await signInWithPopup(auth, provider);
             } catch (error) {
                 console.error("Auth Error:", error);
-                showToast("Login failed. Check console or domain whitelist.", 'error');
-                els.btnLogin.classList.remove('hidden');
-                els.loginLoader.classList.add('hidden');
-                els.loginLoader.classList.remove('flex');
+                loginError.textContent = "Login failed: " + error.message;
+                loginError.classList.remove('hidden');
+                btnGoogleLogin.innerHTML = '<i class="fab fa-google text-xl"></i> Continue with Google';
             }
         });
 
-        els.btnLogout.addEventListener('click', () => signOut(auth));
+        const handleLogout = async () => {
+            try {
+                await signOut(auth);
+                if (liveConfigUnsubscribe) liveConfigUnsubscribe();
+            } catch (error) {
+                console.error("Logout Error:", error);
+            }
+        };
+
+        document.getElementById('btn-logout-desktop').addEventListener('click', handleLogout);
+        document.getElementById('btn-logout-mobile').addEventListener('click', handleLogout);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                els.loginScreen.classList.add('hidden');
-                els.appUI.classList.remove('hidden');
-                
-                els.sidebarAvatar.textContent = user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U';
-                
-                await checkAndLoadProfile(user.uid);
-                loadDashboardCourses();
+                // Fade out login screen
+                loginScreen.classList.add('opacity-0');
+                setTimeout(() => {
+                    loginScreen.classList.add('hidden');
+                    appLayout.classList.remove('hidden');
+                }, 500);
+
+                updateBasicUI(user);
+                await checkProfileStatus(user.uid);
+                setupLiveConfigListener();
             } else {
                 currentUser = null;
-                userDataCache = null;
-                els.appUI.classList.add('hidden');
-                els.loginScreen.classList.remove('hidden');
-                els.btnLogin.classList.remove('hidden');
-                els.loginLoader.classList.add('hidden');
-                els.loginLoader.classList.remove('flex');
+                appLayout.classList.add('hidden');
+                loginScreen.classList.remove('hidden', 'opacity-0');
+                profileModal.classList.add('hidden');
+                btnGoogleLogin.innerHTML = '<i class="fab fa-google text-xl"></i> Continue with Google';
+                if (liveConfigUnsubscribe) {
+                    liveConfigUnsubscribe();
+                    liveConfigUnsubscribe = null;
+                }
             }
         });
 
-        // --- Database Logic ---
+        function updateBasicUI(user) {
+            const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'Student')}&background=6366f1&color=fff`;
+            const photoURL = user.photoURL || defaultAvatar;
+            const fname = user.displayName?.split(' ')[0] || 'Student';
 
-        // Check if user exists in `users` collection
-        async function checkAndLoadProfile(uid) {
+            document.getElementById('sidebar-avatar').src = photoURL;
+            document.getElementById('mobile-avatar').src = photoURL;
+            document.getElementById('view-avatar').src = photoURL;
+            
+            document.getElementById('sidebar-name').textContent = user.displayName || 'Student';
+            document.getElementById('dash-name').textContent = fname;
+            
+            // Pre-fill form if empty
+            if(!document.getElementById('input-name').value) {
+                document.getElementById('input-name').value = user.displayName || '';
+            }
+        }
+
+        // --- PROFILE LOGIC ---
+
+        async function checkProfileStatus(uid) {
             try {
-                const userRef = doc(db, "users", uid);
-                const docSnap = await getDoc(userRef);
+                const userDocRef = doc(db, "users", uid);
+                const docSnap = await getDoc(userDocRef);
 
-                if (docSnap.exists()) {
-                    // Profile complete
-                    userDataCache = docSnap.data();
-                    updateUIWithUserData(userDataCache);
+                if (docSnap.exists() && isDataComplete(docSnap.data())) {
+                    isProfileComplete = true;
+                    populateProfileView(docSnap.data());
                 } else {
-                    // New User -> Force Complete Profile
-                    els.profileModal.classList.remove('hidden');
-                    els.profileModal.classList.add('flex');
-                    // Pre-fill name from Google
-                    document.getElementById('p-name').value = currentUser.displayName || '';
+                    isProfileComplete = false;
+                    if(docSnap.exists()) populateForm(docSnap.data());
+                    openProfileModal(true); // true = forced setup
                 }
             } catch (error) {
                 console.error("Error fetching profile:", error);
-                showToast("Error connecting to database. Check permissions.", "error");
+                // Even on permission error, enforce form locally to prevent bypass
+                openProfileModal(true);
             }
         }
 
-        function updateUIWithUserData(data) {
-            els.sidebarName.textContent = data.fullName;
-            els.dashName.textContent = data.fullName.split(' ')[0]; // First name
+        function isDataComplete(data) {
+            const required = ['fullName', 'phone', 'college', 'address', 'bloodGroup'];
+            return required.every(field => data[field] && data[field].trim() !== '');
         }
 
-        // Save New Profile (From Modal)
-        els.formCompleteProfile.addEventListener('submit', async (e) => {
+        // Expose openProfileModal globally for the Edit button
+        window.openProfileModal = function(isSetup = false) {
+            profileModal.classList.remove('hidden');
+            if (isSetup) {
+                closeModalBtn.classList.add('hidden');
+                document.getElementById('modal-subtitle').textContent = "We need a few details to set up your learning experience.";
+            } else {
+                closeModalBtn.classList.remove('hidden');
+                document.getElementById('modal-subtitle').textContent = "Update your personal and academic information.";
+            }
+        };
+
+        closeModalBtn.addEventListener('click', () => {
+            if (isProfileComplete) profileModal.classList.add('hidden');
+        });
+
+        profileForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            els.btnSaveProfile.innerHTML = '<div class="loader w-5 h-5 border-2"></div> Saving...';
-            els.btnSaveProfile.disabled = true;
+            if(!currentUser) return;
+
+            btnSaveProfile.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            btnSaveProfile.disabled = true;
 
             const profileData = {
-                fullName: document.getElementById('p-name').value,
-                phone: document.getElementById('p-phone').value,
-                institution: document.getElementById('p-institution').value,
-                address: document.getElementById('p-address').value,
-                bloodGroup: document.getElementById('p-blood').value,
-                ssc: document.getElementById('p-ssc').value,
-                hsc: document.getElementById('p-hsc').value,
-                cgpa: document.getElementById('p-cgpa').value,
-                createdAt: new Date().toISOString(),
-                // Mock initial courses
-                enrolledCourses: [
-                    { id: 'c1', title: 'Advanced Frontend Architecture', instructor: 'Tech Lead', progress: 15, color: 'sky' },
-                    { id: 'c2', title: 'UI/UX Glassmorphism Principles', instructor: 'Design Systems', progress: 40, color: 'purple' }
-                ]
+                fullName: document.getElementById('input-name').value,
+                phone: document.getElementById('input-phone').value,
+                college: document.getElementById('input-college').value,
+                address: document.getElementById('input-address').value,
+                bloodGroup: document.getElementById('input-blood').value,
+                sscGpa: document.getElementById('input-ssc').value || '',
+                hscGpa: document.getElementById('input-hsc').value || '',
+                uniCgpa: document.getElementById('input-uni').value || '',
+                email: currentUser.email,
+                updatedAt: new Date().toISOString()
             };
 
             try {
-                await setDoc(doc(db, "users", currentUser.uid), profileData);
-                userDataCache = profileData;
-                updateUIWithUserData(userDataCache);
-                els.profileModal.classList.add('hidden');
-                els.profileModal.classList.remove('flex');
-                showToast("Profile created successfully!");
-                loadDashboardCourses();
+                await setDoc(doc(db, "users", currentUser.uid), profileData, { merge: true });
+                isProfileComplete = true;
+                populateProfileView(profileData);
+                profileModal.classList.add('hidden');
             } catch (error) {
                 console.error("Error saving profile:", error);
-                showToast("Failed to save profile.", "error");
+                alert("Could not save profile. Check permissions or try again.");
             } finally {
-                els.btnSaveProfile.innerHTML = 'Save & Continue';
-                els.btnSaveProfile.disabled = false;
+                btnSaveProfile.innerHTML = '<span>Save Profile & Continue</span><i class="fas fa-arrow-right text-sm"></i>';
+                btnSaveProfile.disabled = false;
             }
         });
 
-        // Update Profile (From Edit Section)
-        function populateEditProfile(data) {
-            document.getElementById('e-name').value = data.fullName || '';
-            document.getElementById('e-phone').value = data.phone || '';
-            document.getElementById('e-institution').value = data.institution || '';
-            document.getElementById('e-address').value = data.address || '';
-            document.getElementById('e-blood').value = data.bloodGroup || '';
-            document.getElementById('e-ssc').value = data.ssc || '';
-            document.getElementById('e-hsc').value = data.hsc || '';
-            document.getElementById('e-cgpa').value = data.cgpa || '';
+        function populateProfileView(data) {
+            document.getElementById('view-name').textContent = data.fullName || '-';
+            document.getElementById('view-phone').textContent = data.phone || '-';
+            document.getElementById('view-college').textContent = data.college || '-';
+            document.getElementById('view-address').textContent = data.address || '-';
+            document.getElementById('view-blood').textContent = data.bloodGroup || '-';
+            document.getElementById('view-ssc').textContent = data.sscGpa || 'N/A';
+            document.getElementById('view-hsc').textContent = data.hscGpa || 'N/A';
+            document.getElementById('view-uni').textContent = data.uniCgpa || 'N/A';
+            
+            // Also update form inputs for future edits
+            populateForm(data);
         }
 
-        els.formEditProfile.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const originalText = els.btnUpdateProfile.innerHTML;
-            els.btnUpdateProfile.innerHTML = '<div class="loader w-4 h-4 border-2"></div> Updating...';
-            els.btnUpdateProfile.disabled = true;
+        function populateForm(data) {
+            if(data.fullName) document.getElementById('input-name').value = data.fullName;
+            if(data.phone) document.getElementById('input-phone').value = data.phone;
+            if(data.college) document.getElementById('input-college').value = data.college;
+            if(data.address) document.getElementById('input-address').value = data.address;
+            if(data.bloodGroup) document.getElementById('input-blood').value = data.bloodGroup;
+            if(data.sscGpa) document.getElementById('input-ssc').value = data.sscGpa;
+            if(data.hscGpa) document.getElementById('input-hsc').value = data.hscGpa;
+            if(data.uniCgpa) document.getElementById('input-uni').value = data.uniCgpa;
+        }
 
-            const updateData = {
-                fullName: document.getElementById('e-name').value,
-                phone: document.getElementById('e-phone').value,
-                institution: document.getElementById('e-institution').value,
-                address: document.getElementById('e-address').value,
-                bloodGroup: document.getElementById('e-blood').value,
-                ssc: document.getElementById('e-ssc').value,
-                hsc: document.getElementById('e-hsc').value,
-                cgpa: document.getElementById('e-cgpa').value,
-            };
+        // --- SMART LIVE HUB LOGIC ---
 
-            try {
-                await setDoc(doc(db, "users", currentUser.uid), updateData, { merge: true });
-                userDataCache = { ...userDataCache, ...updateData };
-                updateUIWithUserData(userDataCache);
-                showToast("Profile updated successfully!");
-            } catch (error) {
-                console.error("Error updating profile:", error);
-                showToast("Failed to update profile.", "error");
-            } finally {
-                els.btnUpdateProfile.innerHTML = originalText;
-                els.btnUpdateProfile.disabled = false;
-            }
-        });
+        function setupLiveConfigListener() {
+            if (liveConfigUnsubscribe) liveConfigUnsubscribe();
 
-        // Load Dashboard Courses
-        function loadDashboardCourses() {
-            if (!userDataCache || !userDataCache.enrolledCourses) {
-                els.coursesGrid.innerHTML = `<div class="col-span-full glass-panel p-6 text-center text-slate-400">No enrolled courses yet.</div>`;
-                return;
-            }
-
-            els.coursesGrid.innerHTML = userDataCache.enrolledCourses.map(course => `
-                <div class="glass-panel p-5 group hover:border-${course.color}-400/50 transition-colors cursor-pointer relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-${course.color}-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
-                    <div class="w-10 h-10 rounded-lg bg-${course.color}-500/20 flex items-center justify-center text-${course.color}-400 mb-4">
-                        <i data-lucide="book-open" class="w-5 h-5"></i>
-                    </div>
-                    <h4 class="font-semibold mb-1 text-lg">${course.title}</h4>
-                    <p class="text-xs text-slate-400 mb-4">Instructor: ${course.instructor}</p>
+            const liveRef = doc(db, 'settings', 'live_config');
+            liveConfigUnsubscribe = onSnapshot(liveRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
                     
-                    <div class="w-full bg-slate-800 rounded-full h-1.5 mb-2">
-                      <div class="bg-${course.color}-400 h-1.5 rounded-full" style="width: ${course.progress}%"></div>
-                    </div>
-                    <p class="text-right text-[10px] text-slate-400 font-medium">${course.progress}% Completed</p>
-                </div>
-            `).join('');
-            
-            lucide.createIcons();
-        }
-
-        // Live Class Hub Integration
-        let unsubscribeLive = null;
-        
-        function fetchLiveConfig() {
-            if (unsubscribeLive) return; // Already listening
-
-            // Real-time listener for live_config using user's DB structure
-            const docRef = doc(db, "settings", "live_config");
-            
-            // Fallbacks if data empty or permissions fail
-            const defaultYt = "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=1"; // Lofi placeholder
-            const defaultSlido = "https://wall.sli.do/event/sample";
-
-            try {
-                unsubscribeLive = onSnapshot(docRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        els.ytFrame.src = data.youtubeUrl || defaultYt;
-                        els.slidoFrame.src = data.slidoUrl || defaultSlido;
-                    } else {
-                        // Document doesn't exist yet, show fallbacks
-                        els.ytFrame.src = defaultYt;
-                        els.slidoFrame.src = defaultSlido;
+                    // Update YouTube Iframe
+                    const ytIframe = document.getElementById('yt-iframe');
+                    if (data.youtubeEmbedUrl && ytIframe.src !== data.youtubeEmbedUrl) {
+                        ytIframe.src = data.youtubeEmbedUrl;
                     }
-                }, (error) => {
-                    console.error("Live Config Read Error:", error);
-                    // If Firestore rules block reads, use fallbacks
-                    if(!els.ytFrame.src) els.ytFrame.src = defaultYt;
-                    if(!els.slidoFrame.src) els.slidoFrame.src = defaultSlido;
-                });
-            } catch (err) {
-                console.error("Snapshot error:", err);
-            }
+
+                    // Update Slido Iframe
+                    const slidoIframe = document.getElementById('slido-iframe');
+                    if (data.slidoEmbedUrl && slidoIframe.src !== data.slidoEmbedUrl) {
+                        slidoIframe.src = data.slidoEmbedUrl;
+                    }
+
+                    // Update Viewers
+                    if(data.activeViewers) {
+                        document.getElementById('live-viewers').textContent = data.activeViewers;
+                    }
+                } else {
+                    console.warn("Live config document does not exist yet.");
+                    document.getElementById('live-viewers').textContent = "0";
+                }
+            }, (error) => {
+                console.error("Live Config listener error:", error);
+                // Non-fatal, keep defaults
+            });
         }
+
+
+        // --- NAVIGATION LOGIC (SPA) ---
+
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.page-section');
+
+        // Expose tab switcher globally for buttons inside content
+        window.switchTab = function(targetId) {
+            // Hide all sections
+            sections.forEach(sec => sec.classList.remove('active'));
+            // Remove active state from all links
+            navLinks.forEach(l => l.classList.remove('active'));
+
+            // Show target
+            const targetSec = document.getElementById(targetId);
+            if(targetSec) targetSec.classList.add('active');
+
+            // Set active on matching links
+            document.querySelectorAll(`.nav-link[data-target="${targetId}"]`).forEach(l => {
+                l.classList.add('active');
+            });
+            
+            // Scroll to top
+            document.querySelector('main').scrollTo({top:0, behavior: 'smooth'});
+        };
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = link.getAttribute('data-target');
+                window.switchTab(target);
+            });
+        });
+
     </script>
 </body>
 </html>
