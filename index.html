@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>রক্তের টান - একটি জীবন বাঁচাতে, আমরা সবাই একসাথে</title>
-    <meta name="description" content="রক্তের টান একটি জীবন বাঁচাতে, আমরা সবাই একসাথে। বিনামূল্যে রক্ত দাতা ও গ্রহীতার সাথে যোগাযোগ করুন।">
+<title>রক্তের টান - একটি জীবন বাঁচাতে, আমরা সবাই একসাথে</title>
+<meta name="description" content="রক্তের টান একটি জীবন বাঁচাতে, আমরা সবাই একসাথে। বিনামূল্যে রক্ত দাতা ও গ্রহীতার সাথে যোগাযোগ করুন।">
 
-    <meta property="og:title" content="রক্তের টান">
-    <meta property="og:description" content="একটি জীবন বাঁচাতে, আমরা সবাই একসাথে">
-    <meta property="og:image" content="https://i.postimg.cc/Jn97DkMN/1774197899502-2.jpg">
-    <meta property="og:type" content="website">
+<meta property="og:title" content="রক্তের টান">
+<meta property="og:description" content="একটি জীবন বাঁচাতে, আমরা সবাই একসাথে">
+<meta property="og:image" content="https://i.postimg.cc/Jn97DkMN/1774197899502-2.jpg">
+<meta property="og:type" content="website">
 
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -33,13 +34,11 @@
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'slide-up': 'slideUp 0.3s ease-out',
                         'fade-in': 'fadeIn 0.2s ease-out',
-                        'shimmer': 'shimmer 1.5s infinite linear',
                     },
                     keyframes: {
                         ticker: { '0%': { transform: 'translateX(100%)' }, '100%': { transform: 'translateX(-100%)' } },
                         slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        shimmer: { '0%': { backgroundPosition: '-1000px 0' }, '100%': { backgroundPosition: '1000px 0' } }
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } }
                     }
                 }
             }
@@ -59,24 +58,8 @@
         .bottom-nav-item.active .nav-icon-container { background-color: #ffe4e6; transform: translateY(-5px); }
         .dark .bottom-nav-item.active { color: #fb7185; }
         .dark .bottom-nav-item.active .nav-icon-container { background-color: #4c0519; }
-        
-        /* New Loader Styles */
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #e11d48; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Skeleton Animation */
-        .skeleton {
-            background: #f6f7f8;
-            background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-            background-repeat: no-repeat;
-            background-size: 1000px 100%;
-            animation: shimmer 1.5s infinite linear;
-        }
-        .dark .skeleton {
-            background: #1f2937;
-            background-image: linear-gradient(to right, #1f2937 0%, #374151 20%, #1f2937 40%, #1f2937 100%);
-        }
-
         .badge-bronze { background: linear-gradient(135deg, #b87333, #e5a068); color: white; }
         .badge-silver { background: linear-gradient(135deg, #9ca3af, #e5e7eb); color: #1f2937; }
         .badge-gold { background: linear-gradient(135deg, #fbbf24, #fef08a); color: #78350f; }
@@ -154,18 +137,10 @@
                     </div>
                 </div>
 
-                <!-- Feature: Search UX - Clear initial state and better results container -->
-                <div id="search-results-container" class="mt-4">
-                    <h3 id="search-results-header" class="text-md font-bold mb-3 flex justify-between items-center hidden">
+                <div id="search-results-container" class="hidden">
+                    <h3 class="text-md font-bold mb-3 flex justify-between items-center">
                         ফলাফল <span id="search-count" class="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded-full">0 জন</span>
                     </h3>
-                    
-                    <!-- Default State Message before searching -->
-                    <div id="search-initial-state" class="text-center py-10 bg-white dark:bg-gray-800 rounded-3xl border border-dashed border-gray-300 dark:border-gray-700 opacity-70">
-                        <i class="fa-solid fa-hand-holding-droplet text-4xl text-gray-300 dark:text-gray-600 mb-3"></i>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">রক্তদাতা খুঁজতে উপরের ফর্মটি ব্যবহার করুন</p>
-                    </div>
-
                     <div id="search-results-list" class="space-y-3"></div>
                 </div>
             </section>
@@ -178,11 +153,7 @@
                         <i class="fa-solid fa-plus mr-1"></i> পোস্ট করুন
                     </button>
                 </div>
-                <!-- Initial Skeleton Loader -->
-                <div id="sos-list" class="space-y-4">
-                    <div class="skeleton h-32 rounded-3xl w-full"></div>
-                    <div class="skeleton h-32 rounded-3xl w-full"></div>
-                </div>
+                <div id="sos-list" class="space-y-4"><div class="flex justify-center py-10"><div class="loader"></div></div></div>
             </section>
 
             <!-- LEADERBOARD -->
@@ -195,16 +166,14 @@
                             <span id="my-points-display">0</span>
                             <span class="text-sm font-normal text-gray-400" id="my-badge-display">Bronze</span>
                         </div>
-                        <p class="text-xs text-gray-400 mt-2">রক্তদান ও শেয়ার করে পয়েন্ট বাড়ান। <button onclick="earnPoints(10, 'অ্যাপ শেয়ার করার জন্য')" class="text-primary hover:underline">শেয়ার করুন (+10)</button></p>
+                        <!-- Modification 1: Changed onClick to shareAppAndEarn() -->
+                        <p class="text-xs text-gray-400 mt-2">রক্তদান ও শেয়ার করে পয়েন্ট বাড়ান। <button onclick="shareAppAndEarn()" class="text-primary hover:underline">শেয়ার করুন (+10)</button></p>
                     </div>
                 </div>
                 <div>
                     <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-trophy text-yellow-500"></i> টপ ভলান্টিয়ার্স</h2>
                     <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-soft p-2" id="leaderboard-list">
-                         <!-- Initial Skeleton Loader -->
-                         <div class="p-3"><div class="skeleton h-12 rounded-2xl w-full"></div></div>
-                         <div class="p-3"><div class="skeleton h-12 rounded-2xl w-full"></div></div>
-                         <div class="p-3"><div class="skeleton h-12 rounded-2xl w-full"></div></div>
+                         <div class="flex justify-center py-5"><div class="loader"></div></div>
                     </div>
                 </div>
             </section>
@@ -227,10 +196,7 @@
                         <img id="profile-img" src="" class="hidden w-full h-full object-cover">
                         <div id="profile-blood-badge" class="absolute bottom-0 w-full bg-primary text-white text-xs font-bold py-1 hidden"></div>
                     </div>
-                    <h2 class="text-xl font-bold flex items-center justify-center gap-2">
-                        <span id="profile-name-display">গেস্ট ইউজার</span>
-                        <span id="profile-verified-badge" class="hidden text-blue-500 text-lg" title="Verified Volunteer"><i class="fa-solid fa-circle-check"></i></span>
-                    </h2>
+                    <h2 class="text-xl font-bold" id="profile-name-display">গেস্ট ইউজার</h2>
                     <p class="text-sm text-gray-500 mb-3" id="profile-phone-display">ফোন নম্বর সেট করা নেই</p>
                     
                     <button id="btn-google-login" onclick="loginWithGoogle()" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-2.5 px-6 rounded-full shadow-sm flex items-center justify-center gap-2 mx-auto hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
@@ -373,14 +339,6 @@
                         <p class="text-[10px] text-primary mt-1 font-medium">অবশ্যই আপনার হোয়াটসঅ্যাপ নম্বরটি প্রদান করুন।</p>
                     </div>
                     <div><label class="block text-xs font-semibold text-gray-500 mb-2">আপনার রক্তের গ্রুপ</label><div class="grid grid-cols-4 gap-2" id="prof-bg-grid"></div><input type="hidden" id="prof-bg-input" required></div>
-                    
-                    <!-- Feature: Smart Eligibility Filter (Last Donation Date) added -->
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-500 mb-1">শেষ রক্তদানের তারিখ (যদি থাকে)</label>
-                        <input type="date" id="prof-last-donation" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary text-gray-700 dark:text-gray-300">
-                        <p class="text-[10px] text-gray-400 mt-1 font-medium">৯০ দিনের মধ্যে রক্ত দিয়ে থাকলে আপনি "বিশ্রামে আছেন" হিসেবে মার্ক হবেন।</p>
-                    </div>
-
                     <div class="pt-2 border-t border-gray-100 dark:border-gray-700">
                         <label class="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-2">বর্তমান ঠিকানা</label>
                         <div class="grid grid-cols-2 gap-3 mb-3">
@@ -427,7 +385,7 @@
                 </div>
                 <div class="text-center py-4">
                     <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-3"><i class="fa-solid fa-droplet"></i></div>
-                    <h3 class="text-lg font-bold">রক্তের টান V4.5 Pro</h3>
+                    <h3 class="text-lg font-bold">রক্তের টান V4.1</h3>
                     <p class="text-sm text-gray-500 mt-2">একটি অলাভজনক, স্বেচ্ছাসেবী রক্তদান প্ল্যাটফর্ম।</p>
                     <a href="https://www.facebook.com/share/g/1C2EHncojX/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-blue-600 font-bold bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full">
                         <i class="fa-brands fa-facebook"></i> জয়েন করুন ফেসবুক গ্রুপে
@@ -445,7 +403,6 @@
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'rokter-tan-v4';
         
-        // Teacher Note: Leaving original Firebase config untouched to preserve core logic!
         const firebaseConfig = {
             apiKey: "AIzaSyDMHgHancA7i6lg6iNS9aF1-ezVCCauIvA",
             authDomain: "rokter-tan.firebaseapp.com",
@@ -617,37 +574,23 @@
             });
         };
 
-        // 👨‍🏫 FEATURE FIX: Dynamic Geo-Selectors
-        // Teacher Note: When a parent dropdown changes, we MUST reset the child dropdown values to empty 
-        // string ("") so that the user's next search doesn't mistakenly use stale data from a hidden input.
         const setupGeoSelectors = (prefix) => {
-            const divSel = document.getElementById(`${prefix}-division`);
-            const distSel = document.getElementById(`${prefix}-district`);
-            const upaSel = document.getElementById(`${prefix}-upazila`);
+            const divSel = document.getElementById(`${prefix}-division`), distSel = document.getElementById(`${prefix}-district`), upaSel = document.getElementById(`${prefix}-upazila`);
             
             divSel.innerHTML = `<option value="">সকল বিভাগ</option>`;
             Object.keys(geoData).sort().forEach(div => divSel.add(new Option(div, div)));
             
             divSel.addEventListener('change', (e) => {
-                // Completely reset child selectors when Division changes
-                distSel.innerHTML = '<option value="">সকল জেলা</option>'; 
-                upaSel.innerHTML = '<option value="">সকল উপজেলা/পৌরসভা</option>'; 
-                distSel.value = ""; // Crucial fix for stale data
-                upaSel.value = "";  // Crucial fix for stale data
-                upaSel.disabled = true;
-                
+                distSel.innerHTML = '<option value="">সকল জেলা</option>'; upaSel.innerHTML = '<option value="">সকল উপজেলা/পৌরসভা</option>'; upaSel.disabled = true;
                 if(e.target.value) { 
                     distSel.disabled = false; 
                     Object.keys(geoData[e.target.value]).sort().forEach(dist => distSel.add(new Option(dist, dist))); 
-                } else {
-                    distSel.disabled = true;
                 }
+                else distSel.disabled = true;
             });
             
             distSel.addEventListener('change', (e) => {
-                // Reset Upazila selector when District changes
                 upaSel.innerHTML = '<option value="">সকল উপজেলা/পৌরসভা</option>';
-                upaSel.value = ""; // Crucial fix
                 if(e.target.value && divSel.value && geoData[divSel.value][e.target.value]) {
                     upaSel.disabled = false; 
                     geoData[divSel.value][e.target.value].sort().forEach(upa => upaSel.add(new Option(upa, upa)));
@@ -655,7 +598,27 @@
             });
         };
 
-        // Firebase Auth & Data Setup
+        // Modification 1: Native Share API Implementation
+        window.shareAppAndEarn = async () => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'রক্তের টান',
+                        text: 'একটি জীবন বাঁচাতে, আমরা সবাই একসাথে। বিনামূল্যে রক্ত দাতা ও গ্রহীতার সাথে যোগাযোগ করুন।',
+                        url: window.location.href,
+                    });
+                    // শেয়ার সম্পন্ন হলে পয়েন্ট পাবে
+                    earnPoints(10, 'অ্যাপ শেয়ার করার জন্য');
+                } catch (error) {
+                    console.log('Share canceled or failed');
+                    // শেয়ার ক্যানসেল করলে পয়েন্ট পাবে না
+                }
+            } else {
+                showToast("আপনার ব্রাউজারে শেয়ার অপশন সাপোর্ট করছে না। লিংক কপি করুন।", "error");
+            }
+        };
+
+        // Firebase Auth & Data
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -698,7 +661,6 @@
                         name: currentUser.displayName || "গেস্ট ইউজার",
                         photoURL: currentUser.photoURL || "",
                         phone: "", bloodGroup: "", division: "", district: "", upazila: "",
-                        lastDonationDate: "", // Added the new field to the schema
                         isAvailable: false, points: 0, createdAt: serverTimestamp()
                     };
                     setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', currentUser.uid), userProfile);
@@ -714,7 +676,12 @@
                     const data = docSnap.data(); data.id = docSnap.id; allRequests.push(data);
                 });
                 allRequests.sort((a, b) => (b.timestamp?.toMillis() || Date.now()) - (a.timestamp?.toMillis() || Date.now()));
-                document.getElementById('stat-sos').innerText = allRequests.length;
+                
+                // Active calculation for Header Stat (Only live ones)
+                const now = Date.now();
+                const liveCount = allRequests.filter(r => r.status === 'active' && (!r.visibleAfter || r.visibleAfter <= now)).length;
+                document.getElementById('stat-sos').innerText = liveCount;
+                
                 updateTicker(); renderSOSList();
             }, (err) => console.error(err));
         };
@@ -723,13 +690,6 @@
             if(!userProfile) return;
             document.getElementById('profile-name-display').innerText = userProfile.name || "গেস্ট ইউজার";
             document.getElementById('profile-phone-display').innerText = userProfile.phone || "নম্বর সেট করা নেই";
-            
-            // 👨‍🏫 FEATURE: Verification Badge logic applied in Profile view
-            if (userProfile.points > 500) {
-                document.getElementById('profile-verified-badge').classList.remove('hidden');
-            } else {
-                document.getElementById('profile-verified-badge').classList.add('hidden');
-            }
             
             if(currentUser && !currentUser.isAnonymous) {
                 document.getElementById('btn-google-login').classList.add('hidden');
@@ -745,11 +705,8 @@
                 document.getElementById('profile-blood-badge').classList.remove('hidden');
             }
             document.getElementById('profile-visibility').checked = userProfile.isAvailable;
-            
-            // Populate inputs
             document.getElementById('prof-name').value = userProfile.name || '';
             document.getElementById('prof-phone').value = userProfile.phone || '';
-            document.getElementById('prof-last-donation').value = userProfile.lastDonationDate || ''; // Update new field
             
             document.getElementById('my-points-display').innerText = userProfile.points || 0;
             const b = getBadge(userProfile.points || 0);
@@ -772,12 +729,10 @@
             e.preventDefault();
             const btn = document.getElementById('btn-submit-profile'); const og = btn.innerHTML; btn.innerHTML = '<div class="loader w-5 h-5 border-2"></div>';
             try {
-                // 👨‍🏫 FEATURE: Include `lastDonationDate` in Profile update data
                 const data = {
                     name: document.getElementById('prof-name').value, 
                     phone: document.getElementById('prof-phone').value,
                     bloodGroup: document.getElementById('prof-bg-input').value, 
-                    lastDonationDate: document.getElementById('prof-last-donation').value,
                     division: document.getElementById('prof-division').value,
                     district: document.getElementById('prof-district').value, 
                     upazila: document.getElementById('prof-upazila').value,
@@ -788,17 +743,6 @@
                 showToast("প্রোফাইল আপডেট হয়েছে!"); closeModal('modal-edit-profile');
             } catch(er) { showToast(er.message, "error"); } finally { btn.innerHTML = og; }
         });
-
-        // 👨‍🏫 FEATURE: Smart Eligibility Check (Date Math)
-        // Teacher Note: Here we calculate if the last donation date was less than 90 days ago.
-        const checkRestingStatus = (lastDonationDateStr) => {
-            if (!lastDonationDateStr) return false;
-            const lastDate = new Date(lastDonationDateStr);
-            const today = new Date();
-            const diffTime = Math.abs(today - lastDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert MS to Days
-            return diffDays < 90;
-        };
 
         // Search Logic
         window.performSearch = () => {
@@ -814,62 +758,25 @@
             if(dist) res = res.filter(u => u.district === dist);
             if(upa) res = res.filter(u => u.upazila === upa);
 
-            const c = document.getElementById('search-results-container');
-            const l = document.getElementById('search-results-list');
-            const h = document.getElementById('search-results-header');
-            const initialState = document.getElementById('search-initial-state');
-            
+            const c = document.getElementById('search-results-container'), l = document.getElementById('search-results-list');
             document.getElementById('search-count').innerText = `${res.length} জন`; 
-            
-            // 👨‍🏫 FEATURE: Search UX - Hide initial state, show header
-            initialState.classList.add('hidden');
-            h.classList.remove('hidden');
             l.innerHTML = '';
             
             if(res.length === 0) {
-                // Professional Empty State Illustration
-                l.innerHTML = `
-                    <div class="text-center py-10 bg-white dark:bg-gray-800 rounded-3xl border border-dashed border-gray-300 dark:border-gray-700 animate-slide-up">
-                        <i class="fa-solid fa-box-open text-4xl text-gray-300 dark:text-gray-600 mb-3"></i>
-                        <p class="text-gray-500 text-sm font-medium dark:text-gray-400">দুঃখিত, এই এলাকায় এই গ্রুপের কোনো রক্তদাতা পাওয়া যায়নি।</p>
-                    </div>`;
+                l.innerHTML = `<div class="text-center py-10 text-gray-500 text-sm bg-gray-50 dark:bg-gray-800 rounded-3xl border border-dashed border-gray-300 dark:border-gray-700">দুঃখিত, এই এলাকায় এই গ্রুপের কোনো রক্তদাতা পাওয়া যায়নি।</div>`;
             } else {
                 res.forEach(u => {
                     const b = getBadge(u.points || 0);
-                    
-                    // 👨‍🏫 FEATURE FIX: Gamification Badge & Resting Status
-                    const isResting = checkRestingStatus(u.lastDonationDate);
-                    const verifiedIcon = u.points > 500 ? `<i class="fa-solid fa-circle-check text-blue-500 ml-1" title="Verified Volunteer"></i>` : '';
-                    
-                    // Determine which button and status to show
-                    let statusBadgeHTML = `<span class="ml-2 text-[10px] px-1.5 py-0.5 rounded ${b.class}">${b.name}</span>`;
-                    let actionButtonHTML = `<button onclick="openRequestModal('${u.uid}', '${u.bloodGroup}')" class="w-10 h-10 bg-primary text-white rounded-full flex justify-center items-center shadow-lg active:scale-90 transition-transform"><i class="fa-solid fa-paper-plane"></i></button>`;
-
-                    if (isResting) {
-                        statusBadgeHTML += `<span class="bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 text-[10px] px-2 py-0.5 rounded-full ml-1 font-bold shadow-sm border border-orange-200 dark:border-orange-800"><i class="fa-solid fa-bed mr-1"></i>বিশ্রামে আছেন</span>`;
-                        actionButtonHTML = `<button disabled class="w-10 h-10 bg-gray-200 dark:bg-gray-700 text-gray-400 rounded-full flex justify-center items-center shadow-none cursor-not-allowed"><i class="fa-solid fa-ban"></i></button>`;
-                    }
-
-                    // 👨‍🏫 FEATURE: Detailed Search Results Area (Area prominently shown)
-                    const areaString = `${u.upazila ? u.upazila + ', ' : ''}${u.district}`;
-
                     l.innerHTML += `
-                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-soft border border-gray-100 dark:border-gray-700 flex justify-between items-center animate-slide-up ${isResting ? 'opacity-70' : ''}">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-soft border border-gray-100 dark:border-gray-700 flex justify-between items-center animate-slide-up">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 bg-rose-50 dark:bg-rose-900/30 rounded-full flex justify-center items-center text-primary font-bold text-lg border border-rose-100 dark:border-rose-800 relative">
-                                    ${u.bloodGroup}
-                                </div>
+                                <div class="w-12 h-12 bg-rose-50 dark:bg-rose-900/30 rounded-full flex justify-center items-center text-primary font-bold text-lg border border-rose-100 dark:border-rose-800">${u.bloodGroup}</div>
                                 <div>
-                                    <h4 class="font-bold text-sm flex items-center">${u.name} ${verifiedIcon}</h4>
-                                    <div class="flex flex-wrap items-center mt-1">
-                                        <p class="text-[11px] text-gray-600 dark:text-gray-300 font-medium bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
-                                            <i class="fa-solid fa-location-dot mr-1 text-primary"></i>${areaString}
-                                        </p>
-                                    </div>
-                                    <div class="mt-1.5 flex items-center">${statusBadgeHTML}</div>
+                                    <h4 class="font-bold text-sm">${u.name} <span class="ml-1 text-[10px] px-1.5 py-0.5 rounded ${b.class}">${b.name}</span></h4>
+                                    <p class="text-[11px] text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i>${u.upazila ? u.upazila + ', ' : ''}${u.district}</p>
                                 </div>
                             </div>
-                            ${actionButtonHTML}
+                            <button onclick="openRequestModal('${u.uid}', '${u.bloodGroup}')" class="w-10 h-10 bg-primary text-white rounded-full flex justify-center items-center shadow-lg active:scale-90 transition-transform"><i class="fa-solid fa-paper-plane"></i></button>
                         </div>`;
                 });
             }
@@ -892,7 +799,7 @@
             const donorUid = document.getElementById('req-donor-uid').value;
             const donorBg = document.getElementById('req-donor-bg').value;
 
-            const adminPhone = "8801410603930";
+            const adminPhone = "8801410603930"; 
             const message = `*রক্তের জন্য অনুরোধ (UID ভিত্তিক)*\n\n*রোগীর নাম:* ${patientName}\n*রক্তের গ্রুপ:* ${donorBg}\n*পরিমাণ:* ${bags} ব্যাগ\n*হাসপাতাল:* ${hospital}\n\n*ডোনার UID:* ${donorUid}\n\n(অ্যাডমিন প্যানেল থেকে এই UID সার্চ করে ডোনারের সাথে যোগাযোগ করুন)`;
             
             const waUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
@@ -903,10 +810,13 @@
             showToast('অনুরোধ পাঠানো হয়েছে। আমাদের অ্যাডমিন দ্রুত ব্যবস্থা নেবেন।');
         });
 
-        // SOS Posting
+        // Modification 2: Pending SOS System (Randomized Delay)
         document.getElementById('form-add-sos').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('btn-submit-sos'); const og = btn.innerHTML; btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-white"></div>';
             try {
+                // ৩০ থেকে ১২০ সেকেন্ডের (২ মিনিট) একটি রেন্ডম সময় জেনারেট করা হলো
+                const randomDelayMillis = Math.floor(Math.random() * (120000 - 30000 + 1)) + 30000;
+                
                 const data = {
                     patient: document.getElementById('sos-patient').value, 
                     bloodGroup: document.getElementById('sos-bg-input').value,
@@ -916,40 +826,63 @@
                     phone: document.getElementById('sos-phone').value,
                     createdBy: currentUser.uid, 
                     timestamp: serverTimestamp(), 
-                    status: 'active'
+                    status: 'active',
+                    visibleAfter: Date.now() + randomDelayMillis // এই সময়ের পর পোস্ট লাইভ হবে
                 };
                 if(!data.bloodGroup) throw new Error("রক্তের গ্রুপ নির্বাচন করুন");
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'requests'), data);
-                showToast("পোস্ট করা হয়েছে!"); closeModal('modal-add-sos'); document.getElementById('form-add-sos').reset();
+                showToast("পোস্ট করা হয়েছে! যাচাইকরণের পর দ্রুত লাইভ হবে।"); 
+                closeModal('modal-add-sos'); document.getElementById('form-add-sos').reset();
                 switchTab('sos'); earnPoints(5, "SOS পোস্ট করার জন্য");
             } catch(er) { showToast(er.message, "error"); } finally { btn.innerHTML = og; }
         });
 
         const renderSOSList = () => {
             const list = document.getElementById('sos-list'); list.innerHTML = '';
-            const active = allRequests.filter(r => r.status === 'active');
-            if(!active.length) { 
-                list.innerHTML = `
-                <div class="text-center py-10 text-sm bg-white dark:bg-gray-800 rounded-3xl border border-dashed border-gray-200 dark:border-gray-700">
-                    <i class="fa-solid fa-heart-circle-check text-4xl text-gray-300 mb-3"></i><br>বর্তমানে কোনো জরুরি রক্তের প্রয়োজন নেই।
-                </div>`; 
-                return; 
-            }
-            active.forEach(r => {
+            const now = Date.now();
+            
+            // পোস্টগুলোকে লাইভ এবং ইউজারের নিজস্ব পেন্ডিং ক্যাটাগরিতে ভাগ করা
+            const activeAndPending = [];
+            allRequests.forEach(r => {
+                if(r.status === 'active') {
+                    if(!r.visibleAfter || r.visibleAfter <= now) {
+                        activeAndPending.push(r);
+                    } else if (r.createdBy === currentUser.uid) {
+                        // যদি পেন্ডিং থাকে এবং ইউজার নিজের হয়
+                        r.isPending = true;
+                        activeAndPending.push(r);
+                    }
+                }
+            });
+
+            if(!activeAndPending.length) { list.innerHTML = `<div class="text-center py-10 text-sm bg-white dark:bg-gray-800 rounded-3xl">কোনো জরুরি রক্তের প্রয়োজন নেই।</div>`; return; }
+            
+            activeAndPending.forEach(r => {
                 const time = r.timestamp?.toMillis ? new Date(r.timestamp.toMillis()).toLocaleTimeString('bn-BD', {hour:'2-digit', minute:'2-digit'}) : 'এখন';
+                const isPending = r.isPending;
+                
+                let actionsHTML = '';
+                if (isPending) {
+                    actionsHTML = `<button disabled class="flex-1 bg-gray-300 dark:bg-gray-700 text-gray-500 font-bold py-2 rounded-xl text-center text-sm shadow-md flex justify-center items-center gap-2"><i class="fa-solid fa-hourglass-half animate-spin"></i> লাইভ হওয়ার অপেক্ষায়...</button>`;
+                } else {
+                    actionsHTML = `
+                        <a href="tel:${r.phone.replace(/[^0-9+]/g, '')}" class="flex-1 bg-green-500 text-white font-bold py-2 rounded-xl text-center text-sm shadow-md flex justify-center items-center gap-2"><i class="fa-solid fa-phone"></i> কল করুন</a>
+                        ${r.createdBy === currentUser.uid ? `<button onclick="markSOSDone('${r.id}')" class="flex-1 bg-gray-100 dark:bg-gray-700 font-bold py-2 rounded-xl text-sm">সম্পন্ন হয়েছে</button>` : ''}
+                    `;
+                }
+
                 list.innerHTML += `
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl shadow-soft border border-rose-100 dark:border-rose-900/30 relative overflow-hidden animate-slide-up">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl shadow-soft border ${isPending ? 'border-orange-200 dark:border-orange-900/50' : 'border-rose-100 dark:border-rose-900/30'} relative overflow-hidden ${isPending ? 'opacity-80' : ''}">
                         <div class="flex justify-between items-start mb-3">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex justify-center items-center shadow-lg shadow-primary/30 font-bold text-lg">${r.bloodGroup}</div>
+                                <div class="w-12 h-12 ${isPending ? 'bg-orange-400' : 'bg-primary'} text-white rounded-2xl flex justify-center items-center shadow-lg font-bold text-lg">${r.bloodGroup}</div>
                                 <div><h3 class="font-bold text-sm">${r.patient}</h3><p class="text-[11px] text-gray-500"><i class="fa-regular fa-clock"></i> পোস্ট: ${time}</p></div>
                             </div>
-                            <span class="bg-rose-100 text-primary dark:bg-rose-900/50 dark:text-rose-400 text-[10px] font-bold px-2 py-1 rounded-full animate-pulse-slow">${r.bags} ব্যাগ</span>
+                            <span class="${isPending ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/50 dark:text-orange-400' : 'bg-rose-100 text-primary dark:bg-rose-900/50 dark:text-rose-400'} text-[10px] font-bold px-2 py-1 rounded-full ${!isPending ? 'animate-pulse-slow' : ''}">${isPending ? '<i class="fa-solid fa-spinner fa-spin mr-1"></i> পেন্ডিং' : r.bags + ' ব্যাগ'}</span>
                         </div>
                         <div class="space-y-1 mb-4 text-xs text-gray-600 dark:text-gray-300"><p><strong>তারিখ:</strong> ${r.date}</p><p><strong>স্থান:</strong> ${r.hospital}</p></div>
                         <div class="flex gap-2">
-                            <a href="tel:${r.phone.replace(/[^0-9+]/g, '')}" class="flex-1 bg-green-500 text-white font-bold py-2 rounded-xl text-center text-sm shadow-md flex justify-center items-center gap-2 hover:bg-green-600"><i class="fa-solid fa-phone"></i> কল করুন</a>
-                            ${r.createdBy === currentUser.uid ? `<button onclick="markSOSDone('${r.id}')" class="flex-1 bg-gray-100 dark:bg-gray-700 font-bold py-2 rounded-xl text-sm hover:bg-gray-200">সম্পন্ন হয়েছে</button>` : ''}
+                            ${actionsHTML}
                         </div>
                     </div>`;
             });
@@ -960,14 +893,17 @@
         };
 
         const updateTicker = () => {
-            const t = document.getElementById('sos-ticker'), a = allRequests.filter(r => r.status === 'active').slice(0, 5);
+            const now = Date.now();
+            const t = document.getElementById('sos-ticker');
+            // শুধু লাইভ পোস্টগুলো টিকারে দেখাবে
+            const a = allRequests.filter(r => r.status === 'active' && (!r.visibleAfter || r.visibleAfter <= now)).slice(0, 5);
+            
             if(!a.length) { t.innerHTML = '<span class="mx-4"><i class="fa-solid fa-heart-pulse mr-1"></i> বর্তমানে কোনো জরুরি রক্তের প্রয়োজন নেই।</span>'; return; }
             let h = ''; a.forEach(r => h += `<span class="mx-4 font-semibold"><i class="fa-solid fa-droplet animate-pulse-slow mr-1"></i> ${r.bloodGroup} প্রয়োজন ${r.hospital}-এ</span> &nbsp; • &nbsp; `);
             t.innerHTML = h + h;
         };
 
         const getBadge = (p) => p >= 1000 ? {name:"Platinum",class:"badge-platinum",icon:"fa-gem"} : p >= 500 ? {name:"Gold",class:"badge-gold",icon:"fa-crown"} : p >= 100 ? {name:"Silver",class:"badge-silver",icon:"fa-star"} : {name:"Bronze",class:"badge-bronze",icon:"fa-medal"};
-        
         window.earnPoints = async (amt, rs) => { if(currentUser && userProfile) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', currentUser.uid), { points: (userProfile.points || 0) + amt }); showToast(`${rs}: +${amt} পয়েন্ট!`); } };
 
         const renderLeaderboard = () => {
@@ -976,18 +912,11 @@
             if(!s.length) { l.innerHTML = `<div class="p-4 text-center text-sm text-gray-500">কোনো তথ্য নেই।</div>`; return; }
             s.forEach((u, i) => {
                 const b = getBadge(u.points || 0), me = u.uid === currentUser.uid;
-                
-                // 👨‍🏫 FEATURE: Render Blue Verified Tick if > 500 in leaderboard
-                const verifiedIcon = u.points > 500 ? `<i class="fa-solid fa-circle-check text-blue-500 ml-1" title="Verified"></i>` : '';
-
                 l.innerHTML += `
-                    <div class="flex items-center justify-between p-3 border-b border-gray-50 dark:border-gray-700 last:border-0 ${me ? 'bg-rose-50 dark:bg-rose-900/20 rounded-2xl' : 'animate-slide-up'}">
+                    <div class="flex items-center justify-between p-3 border-b border-gray-50 dark:border-gray-700 last:border-0 ${me ? 'bg-rose-50 dark:bg-rose-900/20 rounded-2xl' : ''}">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${i<3 ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 dark:bg-gray-700'}">${i + 1}</div>
-                            <div>
-                                <div class="font-bold text-sm flex items-center gap-1">${u.name||'গেস্ট'} ${verifiedIcon} ${me ? '<span class="text-[10px] bg-primary text-white px-1.5 rounded ml-1">আপনি</span>':''}</div>
-                                <div class="text-[11px] text-gray-500"><i class="fa-solid ${b.icon} mr-1"></i>${b.name}</div>
-                            </div>
+                            <div><div class="font-bold text-sm flex items-center gap-2">${u.name||'গেস্ট'} ${me ? '<span class="text-[10px] bg-primary text-white px-1.5 rounded">আপনি</span>':''}</div><div class="text-[11px] text-gray-500"><i class="fa-solid ${b.icon} mr-1"></i>${b.name}</div></div>
                         </div>
                         <div class="font-bold text-primary">${u.points || 0} <span class="text-[10px] text-gray-400 font-normal">pts</span></div>
                     </div>`;
@@ -997,16 +926,12 @@
         const renderBloodBanks = () => {
             const l = document.getElementById('banks-list'), q = document.getElementById('bank-search-input').value.toLowerCase(); l.innerHTML = '';
             mockBloodBanks.filter(b => b.name.toLowerCase().includes(q) || b.address.toLowerCase().includes(q)).forEach(b => {
-                
-                // 👨‍🏫 FEATURE FIX: Strict Google Maps Template implemented
-                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ', ' + b.address)}`;
-
                 l.innerHTML += `
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center animate-slide-up">
-                        <div><h4 class="font-bold text-sm">${b.name}</h4><p class="text-xs text-gray-500 mb-1"><i class="fa-solid fa-map-pin mr-1 text-primary/70"></i>${b.address}</p><p class="text-xs font-semibold text-primary"><i class="fa-solid fa-phone-volume mr-1"></i>${b.phone}</p></div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                        <div><h4 class="font-bold text-sm">${b.name}</h4><p class="text-xs text-gray-500 mb-1"><i class="fa-solid fa-map-pin mr-1"></i>${b.address}</p><p class="text-xs font-semibold text-primary"><i class="fa-solid fa-phone-volume mr-1"></i>${b.phone}</p></div>
                         <div class="flex flex-col gap-2">
-                             <a href="tel:${b.phone.replace(/[^0-9+]/g, '')}" class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex justify-center items-center hover:bg-green-200"><i class="fa-solid fa-phone"></i></a>
-                             <a href="${mapsUrl}" target="_blank" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex justify-center items-center hover:bg-blue-200"><i class="fa-solid fa-location-arrow"></i></a>
+                             <a href="tel:${b.phone.replace(/[^0-9+]/g, '')}" class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex justify-center items-center"><i class="fa-solid fa-phone"></i></a>
+                             <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ' ' + b.address)}" target="_blank" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex justify-center items-center"><i class="fa-solid fa-location-arrow"></i></a>
                         </div>
                     </div>`;
             });
@@ -1023,6 +948,12 @@
                 if (user) { currentUser = user; setupListeners(); }
             });
             initAuth();
+
+            // টিচার হিসেবে দেওয়া এক্সট্রা লজিক: প্রতি ৫ সেকেন্ড পর পর চেক করবে কোনো পেন্ডিং পোস্ট লাইভ হওয়ার সময় হয়েছে কিনা
+            setInterval(() => {
+                renderSOSList();
+                updateTicker();
+            }, 5000);
         };
     </script>
 </body>
