@@ -166,8 +166,7 @@
                             <span id="my-points-display">0</span>
                             <span class="text-sm font-normal text-gray-400" id="my-badge-display">Bronze</span>
                         </div>
-                        <!-- Modification 1: Changed onClick to shareAppAndEarn() -->
-                        <p class="text-xs text-gray-400 mt-2">রক্তদান ও শেয়ার করে পয়েন্ট বাড়ান। <button onclick="shareAppAndEarn()" class="text-primary hover:underline">শেয়ার করুন (+10)</button></p>
+                        <p class="text-xs text-gray-400 mt-2">রক্তদান ও শেয়ার করে পয়েন্ট বাড়ান। <button onclick="shareApp()" class="text-primary hover:underline font-bold">শেয়ার করুন (+10)</button></p>
                     </div>
                 </div>
                 <div>
@@ -204,7 +203,26 @@
                     </button>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl shadow-soft border border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                <!-- Digital Donor Card -->
+                <div id="digital-donor-card" class="hidden mt-2 glass-effect rounded-[32px] p-5 shadow-soft border border-gray-200 dark:border-gray-700 relative overflow-hidden bg-gradient-to-br from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30">
+                    <div class="absolute -right-6 -top-6 text-primary/10 text-8xl"><i class="fa-solid fa-id-card"></i></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">Digital Donor Card</p>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white" id="card-name">--</h3>
+                                <p class="text-xs text-gray-500 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> <span id="card-location">--</span></p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-lg shadow-md shadow-primary/30" id="card-bg">--</div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-200/50 dark:border-gray-700/50 flex justify-between items-center">
+                            <span class="text-xs text-gray-500 font-medium">Rank Status</span>
+                            <span id="card-badge" class="text-xs font-bold px-2.5 py-1 rounded-full">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl shadow-soft border border-gray-100 dark:border-gray-700 flex justify-between items-center mt-6">
                     <div>
                         <h3 class="font-bold text-sm">রক্তদাতা হিসেবে উপস্থিত</h3>
                         <p class="text-xs text-gray-500">অন্যরা আপনাকে সার্চে খুঁজে পাবে</p>
@@ -293,7 +311,7 @@
             </div>
         </div>
 
-        <!-- Request Donor Modal (Semi-Automatic WhatsApp with UID) -->
+        <!-- Request Donor Modal -->
         <div id="modal-request-donor" class="custom-modal absolute bottom-0 w-full bg-white dark:bg-gray-800 rounded-t-[40px] z-50 transform translate-y-full transition-transform duration-300 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] flex flex-col max-h-[90dvh]">
             <div class="p-4 flex justify-center border-b border-gray-100 dark:border-gray-700"><div class="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full"></div></div>
             <div class="p-6 overflow-y-auto no-scrollbar pb-safe">
@@ -339,6 +357,14 @@
                         <p class="text-[10px] text-primary mt-1 font-medium">অবশ্যই আপনার হোয়াটসঅ্যাপ নম্বরটি প্রদান করুন।</p>
                     </div>
                     <div><label class="block text-xs font-semibold text-gray-500 mb-2">আপনার রক্তের গ্রুপ</label><div class="grid grid-cols-4 gap-2" id="prof-bg-grid"></div><input type="hidden" id="prof-bg-input" required></div>
+                    
+                    <!-- NEW: Last Donation Date -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">সর্বশেষ রক্তদানের তারিখ (ঐচ্ছিক)</label>
+                        <input type="date" id="prof-last-donation" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                        <p class="text-[10px] text-gray-400 mt-1">গত ৯০ দিনের মধ্যে রক্ত দিলে আপনি সার্চে সাময়িকভাবে অদৃশ্য থাকবেন।</p>
+                    </div>
+
                     <div class="pt-2 border-t border-gray-100 dark:border-gray-700">
                         <label class="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-2">বর্তমান ঠিকানা</label>
                         <div class="grid grid-cols-2 gap-3 mb-3">
@@ -422,90 +448,20 @@
         let allUsers = [];
         let allRequests = [];
         let unsubUsers = null, unsubRequests = null;
+        let isInitialReqLoad = true;
+        let latestNewRequestData = null;
 
         const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
         
         const geoData = {
-            "Dhaka": {
-                "Dhaka": ["Savar", "Dhamrai", "Keraniganj", "Nawabganj", "Dohar", "Mirpur", "Uttara", "Mohammadpur", "Gulshan", "Badda", "Motijheel"],
-                "Gazipur": ["Sadar", "Kaliakair", "Kaliganj", "Kapasia", "Sreepur"],
-                "Narayanganj": ["Sadar", "Araihazar", "Bandar", "Rupganj", "Sonargaon"],
-                "Narsingdi": ["Sadar", "Belabo", "Monohardi", "Palash", "Raipura", "Shibpur"],
-                "Manikganj": ["Sadar", "Singair", "Shibalaya", "Saturia", "Harirampur", "Gheor", "Daulatpur"],
-                "Munshiganj": ["Sadar", "Gajaria", "Lohajang", "Sirajdikhan", "Sreenagar", "Tongibari"],
-                "Tangail": ["Sadar", "Basail", "Bhuapur", "Delduar", "Ghatail", "Gopalpur", "Kalihati", "Madhupur", "Mirzapur", "Nagarpur", "Sakhipur"],
-                "Kishoreganj": ["Sadar", "Bajitpur", "Bhairab", "Hossainpur", "Itna", "Karimganj", "Katiadi", "Kuliarchar", "Mithamain", "Nikli", "Pakundia", "Tarail"],
-                "Faridpur": ["Sadar", "Alfadanga", "Bhanga", "Boalmari", "Charbhadrasan", "Madhukhali", "Nagarkanda", "Sadarpur"],
-                "Rajbari": ["Sadar", "Baliakandi", "Goalandaghat", "Pangsha", "Kalukhali"],
-                "Gopalganj": ["Sadar", "Kashiani", "Kotalipara", "Muksudpur", "Tungipara"],
-                "Madaripur": ["Sadar", "Kalkini", "Rajoir", "Shibchar"],
-                "Shariatpur": ["Sadar", "Bhedarganj", "Damudya", "Gosairhat", "Naria", "Zajira"]
-            },
-            "Chattogram": {
-                "Chattogram": ["Kotwali", "Panchlaish", "Pahartali", "Hathazari", "Sitakunda", "Patiya", "Anwara", "Boalkhali", "Chandanaish", "Fatikchhari", "Lohagara", "Mirsharai", "Rangunia", "Raozan", "Sandwip"],
-                "Cox's Bazar": ["Sadar", "Chakaria", "Kutubdia", "Maheshkhali", "Ramu", "Teknaf", "Ukhia", "Pekua"],
-                "Cumilla": ["Sadar", "Barura", "Brahmanpara", "Burichang", "Chandina", "Chauddagram", "Daudkandi", "Debidwar", "Homna", "Laksam", "Monohargonj", "Meghna", "Muradnagar", "Nangalkot", "Titas"],
-                "Brahmanbaria": ["Sadar", "Ashuganj", "Bancharampur", "Bijoynagar", "Kasba", "Nabinagar", "Nasirnagar", "Sarail"],
-                "Chandpur": ["Sadar", "Faridganj", "Hajiganj", "Haimchar", "Kachua", "Matlab Dakshin", "Matlab Uttar", "Shahrasti"],
-                "Feni": ["Sadar", "Chhagalnaiya", "Daganbhuiyan", "Parshuram", "Fulgazi", "Sonagazi"],
-                "Noakhali": ["Sadar", "Begumganj", "Chatkhil", "Companiganj", "Hatiya", "Senbagh", "Sonaimuri", "Subarnachar", "Kabirhat"],
-                "Lakshmipur": ["Sadar", "Kamalnagar", "Raipur", "Ramganj", "Ramgati"],
-                "Khagrachhari": ["Sadar", "Dighinala", "Lakshmichhari", "Mahalchhari", "Manikchhari", "Matiranga", "Panchhari", "Ramgarh"],
-                "Rangamati": ["Sadar", "Bagaichhari", "Barkal", "Kawkhali", "Langadu", "Nanighar", "Rajasthali"],
-                "Bandarban": ["Sadar", "Ali Kadam", "Lama", "Naikhongchhari", "Rowangchhari", "Ruma", "Thanchi"]
-            },
-            "Rajshahi": {
-                "Rajshahi": ["Boalia", "Rajpara", "Motihar", "Godagari", "Paba", "Bagha", "Bagmara", "Charghat", "Durgapur", "Mohanpur", "Tanore"],
-                "Bogra": ["Sadar", "Adamdighi", "Dhunat", "Dhupchanchia", "Gabtali", "Kahaloo", "Nandigram", "Sariakandi", "Sherpur", "Shibganj", "Sonatola"],
-                "Pabna": ["Sadar", "Atgharia", "Bera", "Bhangura", "Chatmohar", "Faridpur", "Ishwardi", "Santhia", "Sujanagar"],
-                "Naogaon": ["Sadar", "Atrai", "Badalgachhi", "Dhamoirhat", "Manda", "Mahadevpur", "Niamatpur", "Patnitala", "Porsha", "Raninagar", "Sapahar"],
-                "Joypurhat": ["Sadar", "Akkelpur", "Kalai", "Khetlal", "Panchbibi"],
-                "Chapai Nawabganj": ["Sadar", "Bholahat", "Gomastapur", "Nachole", "Shibganj"],
-                "Natore": ["Sadar", "Bagatipara", "Baraigram", "Gurudaspur", "Lalpur", "Singra"],
-                "Sirajganj": ["Sadar", "Belkuchi", "Chauhali", "Kamarkhanda", "Kazipur", "Raiganj", "Shahjadpur", "Tarash", "Ullapara"]
-            },
-            "Khulna": {
-                "Khulna": ["Sadar", "Sonadanga", "Khalishpur", "Dumuria", "Batiaghata", "Dacope", "Dighalia", "Koyra", "Paikgachha", "Phultala", "Rupsha", "Terokhada"],
-                "Jessore": ["Sadar", "Abhaynagar", "Bagherpara", "Chaugachha", "Jhikargacha", "Keshabpur", "Manirampur", "Sharsha"],
-                "Bagerhat": ["Sadar", "Chitalmari", "Fakirhat", "Kachua", "Mollahat", "Mongla", "Morrelganj", "Rampal", "Sarankhola"],
-                "Satkhira": ["Sadar", "Assasuni", "Debhata", "Kalaroa", "Kaliganj", "Shyamnagar", "Tala"],
-                "Kushtia": ["Sadar", "Bheramara", "Daulatpur", "Khoksa", "Kumarkhali", "Mirpur"],
-                "Magura": ["Sadar", "Mohammadpur", "Shalikha", "Sreepur"],
-                "Meherpur": ["Sadar", "Gangni", "Mujibnagar"],
-                "Narail": ["Sadar", "Kalia", "Lohagara"],
-                "Chuadanga": ["Sadar", "Alamdanga", "Damurhuda", "Jibannagar"],
-                "Jhenaidah": ["Sadar", "Harinakunda", "Kaliganj", "Kotchandpur", "Maheshpur", "Shailkupa"]
-            },
-            "Barishal": {
-                "Barishal": ["Sadar", "Agailjhara", "Babuganj", "Bakerganj", "Banaripara", "Gournadi", "Hizla", "Mehendiganj", "Muladi", "Wazirpur"],
-                "Bhola": ["Sadar", "Burhanuddin", "Char Fasson", "Daulatkhan", "Lalmohan", "Manpura", "Tazumuddin"],
-                "Patuakhali": ["Sadar", "Bauphal", "Dashmina", "Galachipa", "Kalapara", "Mirzaganj", "Rangabali"],
-                "Pirojpur": ["Sadar", "Bhandaria", "Kawkhali", "Mathbaria", "Nazirpur", "Nesarabad", "Zianagar"],
-                "Barguna": ["Sadar", "Amtali", "Bamna", "Betagi", "Patharghata", "Taltali"],
-                "Jhalokati": ["Sadar", "Kathalia", "Nalchity", "Rajapur"]
-            },
-            "Sylhet": {
-                "Sylhet": ["Sadar", "Dakshin Surma", "Golapganj", "Bishwanath", "Beanibazar", "Balaganj", "Companiganj", "Fenchuganj", "Gowainghat", "Jaintiapur", "Kanaighat", "Zakiganj"],
-                "Moulvibazar": ["Sadar", "Sreemangal", "Kulaura", "Barlekha", "Juri", "Kamalganj", "Rajnagar"],
-                "Habiganj": ["Sadar", "Ajmiriganj", "Bahubal", "Baniyachong", "Chunarughat", "Lakhai", "Madhabpur", "Nabiganj", "Sayestaganj"],
-                "Sunamganj": ["Sadar", "Bishwamvapur", "Chhatak", "Derai", "Dharamapasha", "Dowarabazar", "Jagannathpur", "Jamalganj", "Shantiganj", "Sullah", "Tahirpur"]
-            },
-            "Rangpur": {
-                "Rangpur": ["Sadar", "Mithapukur", "Pirganj", "Badarganj", "Gangachara", "Kaunia", "Pirgachha", "Taraganj"],
-                "Dinajpur": ["Sadar", "Biral", "Birganj", "Bochaganj", "Chirirbandar", "Phulbari", "Ghoraghat", "Hakimpur", "Kaharole", "Khansama", "Nawabganj", "Parbatipur"],
-                "Kurigram": ["Sadar", "Bhurungamari", "Chilmari", "Phulbari", "Nageshwari", "Rajarhat", "Rajibpur", "Ulipur"],
-                "Gaibandha": ["Sadar", "Phulchhari", "Gobindaganj", "Palashbari", "Sadullapur", "Saghata", "Sundarganj"],
-                "Lalmonirhat": ["Sadar", "Aditmari", "Hatibandha", "Kaliganj", "Patgram"],
-                "Nilphamari": ["Sadar", "Dimla", "Domar", "Jaldhaka", "Kishoreganj", "Saidpur"],
-                "Panchagarh": ["Sadar", "Atwari", "Boda", "Debiganj", "Tetulia"],
-                "Thakurgaon": ["Sadar", "Baliadangi", "Haripur", "Pirganj", "Ranisankail"]
-            },
-            "Mymensingh": {
-                "Mymensingh": ["Sadar", "Muktagacha", "Bhaluka", "Trishal", "Dhobaura", "Fulbaria", "Gaffargaon", "Gauripur", "Haluaghat", "Ishwarganj", "Nandail", "Tara Khanda"],
-                "Jamalpur": ["Sadar", "Bakshiganj", "Dewanganj", "Islampur", "Madarganj", "Melandaha", "Sarishabari"],
-                "Netrokona": ["Sadar", "Atpara", "Barhatta", "Durgapur", "Khaliajuri", "Kalmakanda", "Kendua", "Madan", "Mohanganj", "Purbadhala"],
-                "Sherpur": ["Sadar", "Jhenaigati", "Nakla", "Nalitabari", "Sreebardi"]
-            }
+            "Dhaka": { "Dhaka": ["Savar", "Dhamrai", "Keraniganj", "Nawabganj", "Dohar", "Mirpur", "Uttara", "Mohammadpur", "Gulshan", "Badda", "Motijheel"], "Gazipur": ["Sadar", "Kaliakair", "Kaliganj", "Kapasia", "Sreepur"], "Narayanganj": ["Sadar", "Araihazar", "Bandar", "Rupganj", "Sonargaon"], "Narsingdi": ["Sadar", "Belabo", "Monohardi", "Palash", "Raipura", "Shibpur"], "Manikganj": ["Sadar", "Singair", "Shibalaya", "Saturia", "Harirampur", "Gheor", "Daulatpur"], "Munshiganj": ["Sadar", "Gajaria", "Lohajang", "Sirajdikhan", "Sreenagar", "Tongibari"], "Tangail": ["Sadar", "Basail", "Bhuapur", "Delduar", "Ghatail", "Gopalpur", "Kalihati", "Madhupur", "Mirzapur", "Nagarpur", "Sakhipur"], "Kishoreganj": ["Sadar", "Bajitpur", "Bhairab", "Hossainpur", "Itna", "Karimganj", "Katiadi", "Kuliarchar", "Mithamain", "Nikli", "Pakundia", "Tarail"], "Faridpur": ["Sadar", "Alfadanga", "Bhanga", "Boalmari", "Charbhadrasan", "Madhukhali", "Nagarkanda", "Sadarpur"], "Rajbari": ["Sadar", "Baliakandi", "Goalandaghat", "Pangsha", "Kalukhali"], "Gopalganj": ["Sadar", "Kashiani", "Kotalipara", "Muksudpur", "Tungipara"], "Madaripur": ["Sadar", "Kalkini", "Rajoir", "Shibchar"], "Shariatpur": ["Sadar", "Bhedarganj", "Damudya", "Gosairhat", "Naria", "Zajira"] },
+            "Chattogram": { "Chattogram": ["Kotwali", "Panchlaish", "Pahartali", "Hathazari", "Sitakunda", "Patiya", "Anwara", "Boalkhali", "Chandanaish", "Fatikchhari", "Lohagara", "Mirsharai", "Rangunia", "Raozan", "Sandwip"], "Cox's Bazar": ["Sadar", "Chakaria", "Kutubdia", "Maheshkhali", "Ramu", "Teknaf", "Ukhia", "Pekua"], "Cumilla": ["Sadar", "Barura", "Brahmanpara", "Burichang", "Chandina", "Chauddagram", "Daudkandi", "Debidwar", "Homna", "Laksam", "Monohargonj", "Meghna", "Muradnagar", "Nangalkot", "Titas"], "Brahmanbaria": ["Sadar", "Ashuganj", "Bancharampur", "Bijoynagar", "Kasba", "Nabinagar", "Nasirnagar", "Sarail"], "Chandpur": ["Sadar", "Faridganj", "Hajiganj", "Haimchar", "Kachua", "Matlab Dakshin", "Matlab Uttar", "Shahrasti"], "Feni": ["Sadar", "Chhagalnaiya", "Daganbhuiyan", "Parshuram", "Fulgazi", "Sonagazi"], "Noakhali": ["Sadar", "Begumganj", "Chatkhil", "Companiganj", "Hatiya", "Senbagh", "Sonaimuri", "Subarnachar", "Kabirhat"], "Lakshmipur": ["Sadar", "Kamalnagar", "Raipur", "Ramganj", "Ramgati"], "Khagrachhari": ["Sadar", "Dighinala", "Lakshmichhari", "Mahalchhari", "Manikchhari", "Matiranga", "Panchhari", "Ramgarh"], "Rangamati": ["Sadar", "Bagaichhari", "Barkal", "Kawkhali", "Langadu", "Nanighar", "Rajasthali"], "Bandarban": ["Sadar", "Ali Kadam", "Lama", "Naikhongchhari", "Rowangchhari", "Ruma", "Thanchi"] },
+            "Rajshahi": { "Rajshahi": ["Boalia", "Rajpara", "Motihar", "Godagari", "Paba", "Bagha", "Bagmara", "Charghat", "Durgapur", "Mohanpur", "Tanore"], "Bogra": ["Sadar", "Adamdighi", "Dhunat", "Dhupchanchia", "Gabtali", "Kahaloo", "Nandigram", "Sariakandi", "Sherpur", "Shibganj", "Sonatola"], "Pabna": ["Sadar", "Atgharia", "Bera", "Bhangura", "Chatmohar", "Faridpur", "Ishwardi", "Santhia", "Sujanagar"], "Naogaon": ["Sadar", "Atrai", "Badalgachhi", "Dhamoirhat", "Manda", "Mahadevpur", "Niamatpur", "Patnitala", "Porsha", "Raninagar", "Sapahar"], "Joypurhat": ["Sadar", "Akkelpur", "Kalai", "Khetlal", "Panchbibi"], "Chapai Nawabganj": ["Sadar", "Bholahat", "Gomastapur", "Nachole", "Shibganj"], "Natore": ["Sadar", "Bagatipara", "Baraigram", "Gurudaspur", "Lalpur", "Singra"], "Sirajganj": ["Sadar", "Belkuchi", "Chauhali", "Kamarkhanda", "Kazipur", "Raiganj", "Shahjadpur", "Tarash", "Ullapara"] },
+            "Khulna": { "Khulna": ["Sadar", "Sonadanga", "Khalishpur", "Dumuria", "Batiaghata", "Dacope", "Dighalia", "Koyra", "Paikgachha", "Phultala", "Rupsha", "Terokhada"], "Jessore": ["Sadar", "Abhaynagar", "Bagherpara", "Chaugachha", "Jhikargacha", "Keshabpur", "Manirampur", "Sharsha"], "Bagerhat": ["Sadar", "Chitalmari", "Fakirhat", "Kachua", "Mollahat", "Mongla", "Morrelganj", "Rampal", "Sarankhola"], "Satkhira": ["Sadar", "Assasuni", "Debhata", "Kalaroa", "Kaliganj", "Shyamnagar", "Tala"], "Kushtia": ["Sadar", "Bheramara", "Daulatpur", "Khoksa", "Kumarkhali", "Mirpur"], "Magura": ["Sadar", "Mohammadpur", "Shalikha", "Sreepur"], "Meherpur": ["Sadar", "Gangni", "Mujibnagar"], "Narail": ["Sadar", "Kalia", "Lohagara"], "Chuadanga": ["Sadar", "Alamdanga", "Damurhuda", "Jibannagar"], "Jhenaidah": ["Sadar", "Harinakunda", "Kaliganj", "Kotchandpur", "Maheshpur", "Shailkupa"] },
+            "Barishal": { "Barishal": ["Sadar", "Agailjhara", "Babuganj", "Bakerganj", "Banaripara", "Gournadi", "Hizla", "Mehendiganj", "Muladi", "Wazirpur"], "Bhola": ["Sadar", "Burhanuddin", "Char Fasson", "Daulatkhan", "Lalmohan", "Manpura", "Tazumuddin"], "Patuakhali": ["Sadar", "Bauphal", "Dashmina", "Galachipa", "Kalapara", "Mirzaganj", "Rangabali"], "Pirojpur": ["Sadar", "Bhandaria", "Kawkhali", "Mathbaria", "Nazirpur", "Nesarabad", "Zianagar"], "Barguna": ["Sadar", "Amtali", "Bamna", "Betagi", "Patharghata", "Taltali"], "Jhalokati": ["Sadar", "Kathalia", "Nalchity", "Rajapur"] },
+            "Sylhet": { "Sylhet": ["Sadar", "Dakshin Surma", "Golapganj", "Bishwanath", "Beanibazar", "Balaganj", "Companiganj", "Fenchuganj", "Gowainghat", "Jaintiapur", "Kanaighat", "Zakiganj"], "Moulvibazar": ["Sadar", "Sreemangal", "Kulaura", "Barlekha", "Juri", "Kamalganj", "Rajnagar"], "Habiganj": ["Sadar", "Ajmiriganj", "Bahubal", "Baniyachong", "Chunarughat", "Lakhai", "Madhabpur", "Nabiganj", "Sayestaganj"], "Sunamganj": ["Sadar", "Bishwamvapur", "Chhatak", "Derai", "Dharamapasha", "Dowarabazar", "Jagannathpur", "Jamalganj", "Shantiganj", "Sullah", "Tahirpur"] },
+            "Rangpur": { "Rangpur": ["Sadar", "Mithapukur", "Pirganj", "Badarganj", "Gangachara", "Kaunia", "Pirgachha", "Taraganj"], "Dinajpur": ["Sadar", "Biral", "Birganj", "Bochaganj", "Chirirbandar", "Phulbari", "Ghoraghat", "Hakimpur", "Kaharole", "Khansama", "Nawabganj", "Parbatipur"], "Kurigram": ["Sadar", "Bhurungamari", "Chilmari", "Phulbari", "Nageshwari", "Rajarhat", "Rajibpur", "Ulipur"], "Gaibandha": ["Sadar", "Phulchhari", "Gobindaganj", "Palashbari", "Sadullapur", "Saghata", "Sundarganj"], "Lalmonirhat": ["Sadar", "Aditmari", "Hatibandha", "Kaliganj", "Patgram"], "Nilphamari": ["Sadar", "Dimla", "Domar", "Jaldhaka", "Kishoreganj", "Saidpur"], "Panchagarh": ["Sadar", "Atwari", "Boda", "Debiganj", "Tetulia"], "Thakurgaon": ["Sadar", "Baliadangi", "Haripur", "Pirganj", "Ranisankail"] },
+            "Mymensingh": { "Mymensingh": ["Sadar", "Muktagacha", "Bhaluka", "Trishal", "Dhobaura", "Fulbaria", "Gaffargaon", "Gauripur", "Haluaghat", "Ishwarganj", "Nandail", "Tara Khanda"], "Jamalpur": ["Sadar", "Bakshiganj", "Dewanganj", "Islampur", "Madarganj", "Melandaha", "Sarishabari"], "Netrokona": ["Sadar", "Atpara", "Barhatta", "Durgapur", "Khaliajuri", "Kalmakanda", "Kendua", "Madan", "Mohanganj", "Purbadhala"], "Sherpur": ["Sadar", "Jhenaigati", "Nakla", "Nalitabari", "Sreebardi"] }
         };
 
         const mockBloodBanks = [
@@ -598,26 +554,6 @@
             });
         };
 
-        // Modification 1: Native Share API Implementation
-        window.shareAppAndEarn = async () => {
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: 'রক্তের টান',
-                        text: 'একটি জীবন বাঁচাতে, আমরা সবাই একসাথে। বিনামূল্যে রক্ত দাতা ও গ্রহীতার সাথে যোগাযোগ করুন।',
-                        url: window.location.href,
-                    });
-                    // শেয়ার সম্পন্ন হলে পয়েন্ট পাবে
-                    earnPoints(10, 'অ্যাপ শেয়ার করার জন্য');
-                } catch (error) {
-                    console.log('Share canceled or failed');
-                    // শেয়ার ক্যানসেল করলে পয়েন্ট পাবে না
-                }
-            } else {
-                showToast("আপনার ব্রাউজারে শেয়ার অপশন সাপোর্ট করছে না। লিংক কপি করুন।", "error");
-            }
-        };
-
         // Firebase Auth & Data
         const initAuth = async () => {
             try {
@@ -639,6 +575,22 @@
             } catch(e) { showToast("লগইন বাতিল হয়েছে।", "error"); }
         };
 
+        // Notification Listener Alert system 
+        document.getElementById('notification-btn').addEventListener('click', () => {
+            const badge = document.getElementById('notif-badge');
+            if (!badge.classList.contains('hidden')) {
+                badge.classList.add('hidden');
+                if (latestNewRequestData) {
+                    showToast(`নতুন জরুরি রিকোয়েস্ট: ${latestNewRequestData.bloodGroup} প্রয়োজন ${latestNewRequestData.hospital} এ!`, 'info');
+                    switchTab('sos');
+                } else {
+                    showToast('কোনো নতুন নোটিফিকেশন নেই।');
+                }
+            } else {
+                showToast('কোনো নতুন নোটিফিকেশন নেই।');
+            }
+        });
+
         const setupListeners = () => {
             if (!currentUser) return;
             if(unsubUsers) unsubUsers();
@@ -648,7 +600,7 @@
                 allUsers = [];
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
-                    data.uid = docSnap.id;
+                    data.uid = docSnap.id; 
                     allUsers.push(data);
                     if(docSnap.id === currentUser.uid) {
                         userProfile = data;
@@ -661,7 +613,8 @@
                         name: currentUser.displayName || "গেস্ট ইউজার",
                         photoURL: currentUser.photoURL || "",
                         phone: "", bloodGroup: "", division: "", district: "", upazila: "",
-                        isAvailable: false, points: 0, createdAt: serverTimestamp()
+                        isAvailable: false, points: 0, createdAt: serverTimestamp(),
+                        lastDonationDate: ""
                     };
                     setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', currentUser.uid), userProfile);
                 }
@@ -675,13 +628,23 @@
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data(); data.id = docSnap.id; allRequests.push(data);
                 });
+                
+                // Alert System Logic (Detect New Adds)
+                if (!isInitialReqLoad) {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added") {
+                            const newReq = change.doc.data();
+                            if(newReq.status === 'active') {
+                                document.getElementById('notif-badge').classList.remove('hidden');
+                                latestNewRequestData = newReq;
+                            }
+                        }
+                    });
+                }
+                isInitialReqLoad = false;
+
                 allRequests.sort((a, b) => (b.timestamp?.toMillis() || Date.now()) - (a.timestamp?.toMillis() || Date.now()));
-                
-                // Active calculation for Header Stat (Only live ones)
-                const now = Date.now();
-                const liveCount = allRequests.filter(r => r.status === 'active' && (!r.visibleAfter || r.visibleAfter <= now)).length;
-                document.getElementById('stat-sos').innerText = liveCount;
-                
+                document.getElementById('stat-sos').innerText = allRequests.filter(req => req.status === 'active').length;
                 updateTicker(); renderSOSList();
             }, (err) => console.error(err));
         };
@@ -703,10 +666,24 @@
             if(userProfile.bloodGroup) {
                 document.getElementById('profile-blood-badge').innerText = userProfile.bloodGroup;
                 document.getElementById('profile-blood-badge').classList.remove('hidden');
+                
+                // Show Digital Donor Card
+                document.getElementById('digital-donor-card').classList.remove('hidden');
+                document.getElementById('card-name').innerText = userProfile.name || "গেস্ট ইউজার";
+                document.getElementById('card-location').innerText = userProfile.district ? `${userProfile.upazila ? userProfile.upazila + ', ' : ''}${userProfile.district}` : "ঠিকানা আপডেট করুন";
+                document.getElementById('card-bg').innerText = userProfile.bloodGroup;
+                const badgeObj = getBadge(userProfile.points || 0);
+                const cardBadge = document.getElementById('card-badge');
+                cardBadge.innerText = badgeObj.name;
+                cardBadge.className = `text-xs font-bold px-2.5 py-1 rounded-full ${badgeObj.class}`;
+            } else {
+                document.getElementById('digital-donor-card').classList.add('hidden');
             }
+
             document.getElementById('profile-visibility').checked = userProfile.isAvailable;
             document.getElementById('prof-name').value = userProfile.name || '';
             document.getElementById('prof-phone').value = userProfile.phone || '';
+            document.getElementById('prof-last-donation').value = userProfile.lastDonationDate || '';
             
             document.getElementById('my-points-display').innerText = userProfile.points || 0;
             const b = getBadge(userProfile.points || 0);
@@ -736,6 +713,7 @@
                     division: document.getElementById('prof-division').value,
                     district: document.getElementById('prof-district').value, 
                     upazila: document.getElementById('prof-upazila').value,
+                    lastDonationDate: document.getElementById('prof-last-donation').value,
                 };
                 if(!data.bloodGroup) throw new Error("রক্তের গ্রুপ নির্বাচন করুন");
                 if(!data.division) throw new Error("বিভাগ নির্বাচন করুন");
@@ -744,7 +722,7 @@
             } catch(er) { showToast(er.message, "error"); } finally { btn.innerHTML = og; }
         });
 
-        // Search Logic
+        // Search Logic with 90-Day Availability Filter
         window.performSearch = () => {
             const bg = document.getElementById('search-bg-input').value;
             const div = document.getElementById('search-division').value;
@@ -753,7 +731,22 @@
             
             if(!bg) { showToast("অনুগ্রহ করে রক্তের গ্রুপ নির্বাচন করুন।", "error"); return; }
 
-            let res = allUsers.filter(u => u.isAvailable && u.bloodGroup === bg);
+            const ninetyDaysMs = 90 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+
+            let res = allUsers.filter(u => {
+                if (!u.isAvailable || u.bloodGroup !== bg) return false;
+                
+                // 90 days filter
+                if (u.lastDonationDate) {
+                    const lastDate = new Date(u.lastDonationDate).getTime();
+                    if ((now - lastDate) <= ninetyDaysMs) {
+                        return false; // Not available because donated within 90 days
+                    }
+                }
+                return true;
+            });
+
             if(div) res = res.filter(u => u.division === div);
             if(dist) res = res.filter(u => u.district === dist);
             if(upa) res = res.filter(u => u.upazila === upa);
@@ -810,13 +803,44 @@
             showToast('অনুরোধ পাঠানো হয়েছে। আমাদের অ্যাডমিন দ্রুত ব্যবস্থা নেবেন।');
         });
 
-        // Modification 2: Pending SOS System (Randomized Delay)
+        // Advanced Mobile Share System
+        window.shareApp = async () => {
+            const shareData = {
+                title: 'রক্তের টান',
+                text: '🩸 *রক্তের টান* — একটি জীবন বাঁচাতে, আমরা সবাই একসাথে। \nজরুরি প্রয়োজনে বিনামূল্যে রক্তদাতা খুঁজতে বা নিজে রক্তদাতা হিসেবে যুক্ত হতে আজই ভিজিট করুন আমাদের ওয়েবসাইট।\n🔗 লিংক: [https://rokter-tan.vercel.app]',
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    earnPoints(10, 'অ্যাপ শেয়ার করার জন্য');
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        console.error('Error sharing:', err);
+                    }
+                    showToast("শেয়ার ক্যানসেল করা হয়েছে।", "error");
+                }
+            } else {
+                // Fallback for unsupported browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = shareData.text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast("লিংক কপি করা হয়েছে! বন্ধুদের সাথে শেয়ার করুন।");
+                    earnPoints(10, 'অ্যাপ শেয়ার করার জন্য');
+                } catch (err) {
+                    showToast("কপি করতে সমস্যা হয়েছে।", "error");
+                }
+                document.body.removeChild(textArea);
+            }
+        };
+
+        // SOS Posting
         document.getElementById('form-add-sos').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('btn-submit-sos'); const og = btn.innerHTML; btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-white"></div>';
             try {
-                // ৩০ থেকে ১২০ সেকেন্ডের (২ মিনিট) একটি রেন্ডম সময় জেনারেট করা হলো
-                const randomDelayMillis = Math.floor(Math.random() * (120000 - 30000 + 1)) + 30000;
-                
                 const data = {
                     patient: document.getElementById('sos-patient').value, 
                     bloodGroup: document.getElementById('sos-bg-input').value,
@@ -826,63 +850,34 @@
                     phone: document.getElementById('sos-phone').value,
                     createdBy: currentUser.uid, 
                     timestamp: serverTimestamp(), 
-                    status: 'active',
-                    visibleAfter: Date.now() + randomDelayMillis // এই সময়ের পর পোস্ট লাইভ হবে
+                    status: 'active'
                 };
                 if(!data.bloodGroup) throw new Error("রক্তের গ্রুপ নির্বাচন করুন");
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'requests'), data);
-                showToast("পোস্ট করা হয়েছে! যাচাইকরণের পর দ্রুত লাইভ হবে।"); 
-                closeModal('modal-add-sos'); document.getElementById('form-add-sos').reset();
+                showToast("পোস্ট করা হয়েছে!"); closeModal('modal-add-sos'); document.getElementById('form-add-sos').reset();
                 switchTab('sos'); earnPoints(5, "SOS পোস্ট করার জন্য");
             } catch(er) { showToast(er.message, "error"); } finally { btn.innerHTML = og; }
         });
 
         const renderSOSList = () => {
             const list = document.getElementById('sos-list'); list.innerHTML = '';
-            const now = Date.now();
-            
-            // পোস্টগুলোকে লাইভ এবং ইউজারের নিজস্ব পেন্ডিং ক্যাটাগরিতে ভাগ করা
-            const activeAndPending = [];
-            allRequests.forEach(r => {
-                if(r.status === 'active') {
-                    if(!r.visibleAfter || r.visibleAfter <= now) {
-                        activeAndPending.push(r);
-                    } else if (r.createdBy === currentUser.uid) {
-                        // যদি পেন্ডিং থাকে এবং ইউজার নিজের হয়
-                        r.isPending = true;
-                        activeAndPending.push(r);
-                    }
-                }
-            });
-
-            if(!activeAndPending.length) { list.innerHTML = `<div class="text-center py-10 text-sm bg-white dark:bg-gray-800 rounded-3xl">কোনো জরুরি রক্তের প্রয়োজন নেই।</div>`; return; }
-            
-            activeAndPending.forEach(r => {
+            const active = allRequests.filter(r => r.status === 'active');
+            if(!active.length) { list.innerHTML = `<div class="text-center py-10 text-sm bg-white dark:bg-gray-800 rounded-3xl">কোনো জরুরি রক্তের প্রয়োজন নেই।</div>`; return; }
+            active.forEach(r => {
                 const time = r.timestamp?.toMillis ? new Date(r.timestamp.toMillis()).toLocaleTimeString('bn-BD', {hour:'2-digit', minute:'2-digit'}) : 'এখন';
-                const isPending = r.isPending;
-                
-                let actionsHTML = '';
-                if (isPending) {
-                    actionsHTML = `<button disabled class="flex-1 bg-gray-300 dark:bg-gray-700 text-gray-500 font-bold py-2 rounded-xl text-center text-sm shadow-md flex justify-center items-center gap-2"><i class="fa-solid fa-hourglass-half animate-spin"></i> লাইভ হওয়ার অপেক্ষায়...</button>`;
-                } else {
-                    actionsHTML = `
-                        <a href="tel:${r.phone.replace(/[^0-9+]/g, '')}" class="flex-1 bg-green-500 text-white font-bold py-2 rounded-xl text-center text-sm shadow-md flex justify-center items-center gap-2"><i class="fa-solid fa-phone"></i> কল করুন</a>
-                        ${r.createdBy === currentUser.uid ? `<button onclick="markSOSDone('${r.id}')" class="flex-1 bg-gray-100 dark:bg-gray-700 font-bold py-2 rounded-xl text-sm">সম্পন্ন হয়েছে</button>` : ''}
-                    `;
-                }
-
                 list.innerHTML += `
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl shadow-soft border ${isPending ? 'border-orange-200 dark:border-orange-900/50' : 'border-rose-100 dark:border-rose-900/30'} relative overflow-hidden ${isPending ? 'opacity-80' : ''}">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl shadow-soft border border-rose-100 dark:border-rose-900/30 relative overflow-hidden">
                         <div class="flex justify-between items-start mb-3">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 ${isPending ? 'bg-orange-400' : 'bg-primary'} text-white rounded-2xl flex justify-center items-center shadow-lg font-bold text-lg">${r.bloodGroup}</div>
+                                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex justify-center items-center shadow-lg shadow-primary/30 font-bold text-lg">${r.bloodGroup}</div>
                                 <div><h3 class="font-bold text-sm">${r.patient}</h3><p class="text-[11px] text-gray-500"><i class="fa-regular fa-clock"></i> পোস্ট: ${time}</p></div>
                             </div>
-                            <span class="${isPending ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/50 dark:text-orange-400' : 'bg-rose-100 text-primary dark:bg-rose-900/50 dark:text-rose-400'} text-[10px] font-bold px-2 py-1 rounded-full ${!isPending ? 'animate-pulse-slow' : ''}">${isPending ? '<i class="fa-solid fa-spinner fa-spin mr-1"></i> পেন্ডিং' : r.bags + ' ব্যাগ'}</span>
+                            <span class="bg-rose-100 text-primary dark:bg-rose-900/50 dark:text-rose-400 text-[10px] font-bold px-2 py-1 rounded-full animate-pulse-slow">${r.bags} ব্যাগ</span>
                         </div>
                         <div class="space-y-1 mb-4 text-xs text-gray-600 dark:text-gray-300"><p><strong>তারিখ:</strong> ${r.date}</p><p><strong>স্থান:</strong> ${r.hospital}</p></div>
                         <div class="flex gap-2">
-                            ${actionsHTML}
+                            <a href="tel:${r.phone.replace(/[^0-9+]/g, '')}" class="flex-1 bg-green-500 text-white font-bold py-2 rounded-xl text-center text-sm shadow-md flex justify-center items-center gap-2"><i class="fa-solid fa-phone"></i> কল করুন</a>
+                            ${r.createdBy === currentUser.uid ? `<button onclick="markSOSDone('${r.id}')" class="flex-1 bg-gray-100 dark:bg-gray-700 font-bold py-2 rounded-xl text-sm">সম্পন্ন হয়েছে</button>` : ''}
                         </div>
                     </div>`;
             });
@@ -893,11 +888,7 @@
         };
 
         const updateTicker = () => {
-            const now = Date.now();
-            const t = document.getElementById('sos-ticker');
-            // শুধু লাইভ পোস্টগুলো টিকারে দেখাবে
-            const a = allRequests.filter(r => r.status === 'active' && (!r.visibleAfter || r.visibleAfter <= now)).slice(0, 5);
-            
+            const t = document.getElementById('sos-ticker'), a = allRequests.filter(r => r.status === 'active').slice(0, 5);
             if(!a.length) { t.innerHTML = '<span class="mx-4"><i class="fa-solid fa-heart-pulse mr-1"></i> বর্তমানে কোনো জরুরি রক্তের প্রয়োজন নেই।</span>'; return; }
             let h = ''; a.forEach(r => h += `<span class="mx-4 font-semibold"><i class="fa-solid fa-droplet animate-pulse-slow mr-1"></i> ${r.bloodGroup} প্রয়োজন ${r.hospital}-এ</span> &nbsp; • &nbsp; `);
             t.innerHTML = h + h;
@@ -948,12 +939,6 @@
                 if (user) { currentUser = user; setupListeners(); }
             });
             initAuth();
-
-            // টিচার হিসেবে দেওয়া এক্সট্রা লজিক: প্রতি ৫ সেকেন্ড পর পর চেক করবে কোনো পেন্ডিং পোস্ট লাইভ হওয়ার সময় হয়েছে কিনা
-            setInterval(() => {
-                renderSOSList();
-                updateTicker();
-            }, 5000);
         };
     </script>
 </body>
