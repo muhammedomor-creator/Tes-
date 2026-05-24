@@ -431,48 +431,45 @@
                     <h2 class="text-xl font-bold text-primary"><i class="fa-solid fa-paper-plane mr-2"></i>রক্তের জন্য অনুরোধ</h2>
                     <button onclick="closeModal('modal-request-donor')" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-      <form id="form-request-donor" class="space-y-5">
+      <form id="form-request-donor" class="space-y-4">
     <input type="hidden" id="req-donor-uid">
     <input type="hidden" id="req-donor-bg">
-    <input type="hidden" id="req-patient-name">
-
-    <div class="space-y-1">
-        <label class="text-sm font-semibold text-gray-600 ml-1">রোগীর নাম</label>
-        <input type="text" id="patientName" placeholder="রোগীর নাম লিখুন" class="w-full p-4 bg-white/50 border-2 border-gray-200 rounded-2xl focus:border-red-400 focus:bg-white outline-none transition-all placeholder-gray-400">
+    
+    <div class="flex flex-col">
+        <label class="text-xs font-bold text-gray-800 mb-1 ml-1">রোগীর নাম</label>
+        <input type="text" id="patientName" placeholder="রোগীর নাম লিখুন" class="w-full p-3 border-2 border-black rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none transition-all placeholder:text-xs placeholder:font-semibold placeholder:text-gray-600">
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
-        <div class="space-y-1">
-            <label class="text-sm font-semibold text-gray-600 ml-1">কত ব্যাগ?</label>
-            <input type="number" id="bags" placeholder="যেমন: ১" class="w-full p-4 bg-white/50 border-2 border-gray-200 rounded-2xl focus:border-red-400 focus:bg-white outline-none transition-all placeholder-gray-400">
-        </div>
-        <div class="space-y-1">
-            <label class="text-sm font-semibold text-gray-600 ml-1">মোবাইল নম্বর</label>
-            <input type="tel" id="requesterPhone" placeholder="০১৭XXXXXXXX" class="w-full p-4 bg-white/50 border-2 border-gray-200 rounded-2xl focus:border-red-400 focus:bg-white outline-none transition-all placeholder-gray-400">
-        </div>
+    <div class="flex flex-col">
+        <label class="text-xs font-bold text-gray-800 mb-1 ml-1">কত ব্যাগ রক্ত লাগবে?</label>
+        <input type="number" id="bags" placeholder="ব্যাগ সংখ্যা লিখুন" class="w-full p-3 border-2 border-black rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none transition-all placeholder:text-xs placeholder:font-semibold placeholder:text-gray-600">
     </div>
 
-    <div class="space-y-1">
-        <label class="text-sm font-semibold text-gray-600 ml-1">হাসপাতাল ও ঠিকানা</label>
-        <input type="text" id="hospital" placeholder="যেমন: ঢাকা মেডিকেল কলেজ" class="w-full p-4 bg-white/50 border-2 border-gray-200 rounded-2xl focus:border-red-400 focus:bg-white outline-none transition-all placeholder-gray-400">
+    <div class="flex flex-col">
+        <label class="text-xs font-bold text-gray-800 mb-1 ml-1">হাসপাতাল ও ঠিকানা</label>
+        <input type="text" id="hospital" placeholder="হাসপাতালের নাম ও ঠিকানা" class="w-full p-3 border-2 border-black rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none transition-all placeholder:text-xs placeholder:font-semibold placeholder:text-gray-600">
     </div>
 
-    <div class="space-y-1">
-        <label class="text-sm font-semibold text-gray-600 ml-1">রোগের বিবরণ</label>
-        <input type="text" id="patientReason" placeholder="যেমন: সিজার বা থ্যালাসেমিয়া" class="w-full p-4 bg-white/50 border-2 border-gray-200 rounded-2xl focus:border-red-400 focus:bg-white outline-none transition-all placeholder-gray-400">
+    <div class="flex flex-col">
+        <label class="text-xs font-bold text-gray-800 mb-1 ml-1">আপনার সচল মোবাইল নম্বর</label>
+        <input type="tel" id="requesterPhone" placeholder="01XXXXXXXXX" class="w-full p-3 border-2 border-black rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none transition-all placeholder:text-xs placeholder:font-semibold placeholder:text-gray-600">
     </div>
 
-    <div class="space-y-1">
-        <label class="text-sm font-semibold text-gray-600 ml-1">সময়সীমা</label>
-        <input type="text" id="donationTime" placeholder="যেমন: আজ রাত ৯টার আগে" class="w-full p-4 bg-white/50 border-2 border-gray-200 rounded-2xl focus:border-red-400 focus:bg-white outline-none transition-all placeholder-gray-400">
+    <div class="flex flex-col">
+        <label class="text-xs font-bold text-gray-800 mb-1 ml-1">রোগের বিবরণ</label>
+        <input type="text" id="patientReason" placeholder="যেমন: সিজার বা থ্যালাসেমিয়া" class="w-full p-3 border-2 border-black rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none transition-all placeholder:text-xs placeholder:font-semibold placeholder:text-gray-600">
     </div>
 
-    <button type="submit" class="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold shadow-lg transform transition active:scale-95 mt-4">
+    <div class="flex flex-col">
+        <label class="text-xs font-bold text-gray-800 mb-1 ml-1">রক্তের প্রয়োজনীয় সময়</label>
+        <input type="text" id="donationTime" placeholder="যেমন: আজ রাত ৯টার আগে" class="w-full p-3 border-2 border-black rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-200 outline-none transition-all placeholder:text-xs placeholder:font-semibold placeholder:text-gray-600">
+    </div>
+
+    <button type="submit" class="w-full py-4 bg-green-600 text-white rounded-xl font-bold border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-green-700 transition-all">
         অ্যাডমিনকে পাঠান
     </button>
 </form>
 
-            </div>
         </div>
 
         <!-- Edit Profile Modal -->
