@@ -262,14 +262,20 @@
             </section>
 
             <!-- SECURE ADMIN DASHBOARD -->
-            <section id="view-admin" class="view-section hidden p-6 space-y-4 animate-fade-in">
+            <section id="view-admin" class="view-section hidden p-6 space-y-6 animate-fade-in">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold"><i class="fa-solid fa-user-shield text-primary mr-2"></i> অ্যাডমিন প্যানেল</h2>
                     <span class="bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">Secure</span>
                 </div>
+
+                <!-- Admin Tab System to Toggle Views -->
+                <div class="flex border-b border-gray-200 dark:border-gray-700">
+                    <button id="admin-tab-donors" onclick="switchAdminSubTab('donors')" class="flex-1 py-2 text-center font-bold text-sm border-b-2 border-primary text-primary">রক্তদাতা তালিকা</button>
+                    <button id="admin-tab-requests" onclick="switchAdminSubTab('requests')" class="flex-1 py-2 text-center font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700">রক্তের অনুরোধসমূহ (Requests)</button>
+                </div>
                 
-                <h3 class="text-sm font-bold text-gray-600 dark:text-gray-400 mt-4"><i class="fa-solid fa-users mr-1"></i> ডোনার ভেরিফিকেশন</h3>
-                <div class="glass-effect overflow-hidden rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 relative z-10">
+                <!-- Admin Donors View -->
+                <div id="admin-donors-container" class="glass-effect overflow-hidden rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 relative z-10">
                     <div class="overflow-x-auto no-scrollbar">
                         <table class="w-full text-sm text-left whitespace-nowrap">
                             <thead class="text-xs text-gray-500 uppercase bg-gray-100/50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
@@ -286,21 +292,21 @@
                     </div>
                 </div>
 
-                <!-- NEW: Admin Request Management Table -->
-                <h3 class="text-sm font-bold text-gray-600 dark:text-gray-400 mt-8"><i class="fa-solid fa-truck-medical mr-1"></i> রক্তের রিকোয়েস্ট সমূহ</h3>
-                <div class="glass-effect overflow-hidden rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 relative z-10 mb-8">
+                <!-- Admin Requests View -->
+                <div id="admin-requests-container" class="hidden glass-effect overflow-hidden rounded-2xl shadow-soft border border-gray-200 dark:border-gray-700 relative z-10">
                     <div class="overflow-x-auto no-scrollbar">
-                        <table class="w-full text-sm text-left whitespace-nowrap">
+                        <table id="view-requests" class="w-full text-sm text-left whitespace-nowrap">
                             <thead class="text-xs text-gray-500 uppercase bg-gray-100/50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
                                 <tr>
-                                    <th class="px-4 py-3 font-semibold">রোগী ও গ্রুপ</th>
-                                    <th class="px-4 py-3 font-semibold">হাসপাতাল ও ফোন</th>
-                                    <th class="px-4 py-3 font-semibold">কারণ</th>
-                                    <th class="px-4 py-3 font-semibold">ডেডলাইন (অবস্থা)</th>
+                                    <th class="px-4 py-3 font-semibold">রোগী ও গ্রহীতার মোবাইল</th>
+                                    <th class="px-4 py-3 font-semibold">রোগের বিবরণ</th>
+                                    <th class="px-4 py-3 font-semibold">গ্রুপ ও ব্যাগ</th>
+                                    <th class="px-4 py-3 font-semibold">শেষ সময়/তারিখ</th>
+                                    <th class="px-4 py-3 font-semibold text-center">স্ট্যাটাস</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-requests-list" class="divide-y divide-gray-100 dark:divide-gray-700/50 bg-white/40 dark:bg-gray-800/40">
-                                <!-- Admin Request Rows Generate Here -->
+                                <!-- Admin Requests Rows Generate Here -->
                             </tbody>
                         </table>
                     </div>
@@ -332,7 +338,7 @@
                     <div class="nav-icon-container w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 mb-0.5"><i class="fa-solid fa-user text-lg"></i></div>
                     <span class="text-[10px] font-medium truncate w-full text-center">প্রোফাইল</span>
                 </button>
-                <!-- ADMIN NAV (Hidden By Default) -->
+                <!-- ADMIN NAV -->
                 <button id="nav-admin" onclick="switchTab('admin')" class="bottom-nav-item hidden flex flex-col items-center flex-1 min-w-0 text-gray-400 transition-all" data-target="view-admin">
                     <div class="nav-icon-container w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 mb-0.5"><i class="fa-solid fa-user-shield text-lg"></i></div>
                     <span class="text-[10px] font-medium truncate w-full text-center">অ্যাডমিন</span>
@@ -344,7 +350,7 @@
         <div id="toast-container" class="absolute top-20 left-0 w-full px-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
         <div id="modal-backdrop" class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300"></div>
 
-        <!-- Add SOS Modal (Expanded) -->
+        <!-- Add SOS Modal (Updated Form Fields) -->
         <div id="modal-add-sos" class="custom-modal absolute bottom-0 w-full bg-white dark:bg-gray-800 rounded-t-[40px] z-50 transform translate-y-full transition-transform duration-300 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] flex flex-col max-h-[90dvh]">
             <div class="p-4 flex justify-center border-b border-gray-100 dark:border-gray-700"><div class="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full"></div></div>
             <div class="p-6 overflow-y-auto no-scrollbar pb-safe">
@@ -353,24 +359,64 @@
                     <button onclick="closeModal('modal-add-sos')" class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <form id="form-add-sos" class="space-y-4">
-                    <div><label class="block text-xs font-semibold text-gray-500 mb-1">রোগীর নাম</label><input type="text" id="sos-patient" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary"></div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">রোগীর নাম</label>
+                        <input type="text" id="sos-patient" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                    </div>
                     
-                    <!-- UPDATED: Reason Input Text -->
-                    <div><label class="block text-xs font-semibold text-gray-500 mb-1">রোগীর রোগ/সমস্যার কারণ</label><textarea id="sos-reason" rows="2" placeholder="যেমন: সিজার, থ্যালাসেমিয়া, এক্সিডেন্ট" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary resize-none"></textarea></div>
-
-                    <div><label class="block text-xs font-semibold text-gray-500 mb-2">প্রয়োজনীয় রক্তের গ্রুপ</label><div class="grid grid-cols-4 gap-2" id="sos-bg-grid"></div><input type="hidden" id="sos-bg-input" required></div>
-                    
-                    <div class="grid grid-cols-2 gap-3">
-                        <div><label class="block text-xs font-semibold text-gray-500 mb-1">কত ব্যাগ রক্ত প্রয়োজন?</label><input type="number" id="sos-bags" value="1" min="1" max="10" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary"></div>
-                        
-                        <!-- UPDATED: Added Deadline field (combines date & time natively) -->
-                        <div><label class="block text-xs font-semibold text-gray-500 mb-1">রক্তদানের শেষ সময় (Deadline)</label><input type="datetime-local" id="sos-deadline" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary"></div>
+                    <!-- NEW: গ্রহীতার মোবাইল নম্বর -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">গ্রহীতার মোবাইল নম্বর</label>
+                        <input type="tel" id="sos-recipient-phone" placeholder="01XXXXXXXXX" required pattern="[0-9]{11}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
                     </div>
 
-                    <div><label class="block text-xs font-semibold text-gray-500 mb-1">হাসপাতাল ও ঠিকানা</label><input type="text" id="sos-hospital" placeholder="যেমন: ঢাকা মেডিকেল কলেজ, ঢাকা" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary"></div>
+                    <!-- NEW: রোগের বিবরণ -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">রোগের বিবরণ</label>
+                        <input type="text" id="sos-disease-detail" placeholder="যেমন: সিজার, থ্যালাসেমিয়া, এক্সিডেন্ট" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                    </div>
+
+                    <!-- Backwards compatibility for previous model references -->
+                    <div class="hidden">
+                        <textarea id="sos-reason" rows="1" class="hidden">N/A</textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-2">প্রয়োজনীয় রক্তের গ্রুপ</label>
+                        <div class="grid grid-cols-4 gap-2" id="sos-bg-grid"></div>
+                        <input type="hidden" id="sos-bg-input" required>
+                    </div>
                     
-                    <!-- UPDATED: Requester/Receiver Phone -->
-                    <div><label class="block text-xs font-semibold text-gray-500 mb-1">গ্রহীতার মোবাইল নম্বর</label><input type="tel" id="sos-phone" placeholder="01XXXXXXXXX" required pattern="[0-9]{11}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary"></div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">কত ব্যাগ রক্ত প্রয়োজন?</label>
+                            <input type="number" id="sos-bags" value="1" min="1" max="10" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">তারিখ</label>
+                            <input type="date" id="sos-date" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                        </div>
+                    </div>
+
+                    <!-- NEW: রক্তদানের শেষ সময়/তারিখ -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">রক্তদানের শেষ সময়/তারিখ</label>
+                        <input type="datetime-local" id="sos-deadline" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                    </div>
+
+                    <div class="hidden">
+                        <input type="hidden" id="sos-time" value="N/A">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">হাসপাতাল ও ঠিকানা</label>
+                        <input type="text" id="sos-hospital" placeholder="যেমন: ঢাকা মেডিকেল কলেজ, ঢাকা" required class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">যোগাযোগের নম্বর</label>
+                        <input type="tel" id="sos-phone" placeholder="01XXXXXXXXX" required pattern="[0-9]{11}" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                    </div>
                     
                     <button type="submit" id="btn-submit-sos" class="w-full bg-primary text-white font-bold py-3.5 rounded-2xl shadow-lg mt-4 flex justify-center items-center gap-2 active:scale-95 transition-all">পোস্ট করুন</button>
                 </form>
@@ -477,7 +523,7 @@
                 </div>
                 <div class="text-center py-4">
                     <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-3"><i class="fa-solid fa-droplet"></i></div>
-                    <h3 class="text-lg font-bold">রক্তের টান V4.2</h3>
+                    <h3 class="text-lg font-bold">রক্তের টান V4.1</h3>
                     <p class="text-sm text-gray-500 mt-2">একটি অলাভজনক, স্বেচ্ছাসেবী রক্তদান প্ল্যাটফর্ম।</p>
                     <a href="https://www.facebook.com/share/g/1C2EHncojX/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-blue-600 font-bold bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full">
                         <i class="fa-brands fa-facebook"></i> জয়েন করুন ফেসবুক গ্রুপে
@@ -647,14 +693,15 @@
             } catch(e) { showToast("লগইন বাতিল হয়েছে।", "error"); }
         };
 
-        // Notification logic
+        // In-App Alert System
         document.getElementById('notification-btn').addEventListener('click', () => {
             const badge = document.getElementById('notif-badge');
             if (!badge.classList.contains('hidden')) {
                 badge.classList.add('hidden');
                 if (latestNewRequestData) {
                     const bagText = latestNewRequestData.bags ? `${latestNewRequestData.bags} ব্যাগ ` : '';
-                    showToast(`নতুন জরুরি রিকোয়েস্ট: ${bagText}${latestNewRequestData.bloodGroup} প্রয়োজন ${latestNewRequestData.hospital} এ!`, 'info');
+                    const reasonText = latestNewRequestData.diseaseDetail || latestNewRequestData.reason ? `(${latestNewRequestData.diseaseDetail || latestNewRequestData.reason})` : '';
+                    showToast(`নতুন জরুরি রিকোয়েস্ট: ${bagText}${latestNewRequestData.bloodGroup} প্রয়োজন ${latestNewRequestData.hospital} এ! ${reasonText}`, 'info');
                     switchTab('sos');
                 } else {
                     showToast('কোনো নতুন নোটিফিকেশন নেই।');
@@ -727,8 +774,6 @@
                 allRequests.sort((a, b) => (b.timestamp?.toMillis() || Date.now()) - (a.timestamp?.toMillis() || Date.now()));
                 document.getElementById('stat-sos').innerText = allRequests.filter(req => req.status === 'active').length;
                 updateTicker(); renderSOSList();
-                
-                // Re-render admin panel requests if viewing
                 if (!document.getElementById('view-admin').classList.contains('hidden')) renderAdminRequests();
             }, (err) => console.error(err));
         };
@@ -753,8 +798,11 @@
                 
                 // Digital Donor Card
                 document.getElementById('digital-donor-card').classList.remove('hidden');
+                
+                // Add verification badge logic to the card name
                 const verifyBadge = userProfile.isVerified ? '<i class="fa-solid fa-circle-check text-green-500 ml-1 text-sm" title="Verified Donor"></i>' : '';
                 document.getElementById('card-name').innerHTML = `${userProfile.name || "গেস্ট ইউজার"} ${verifyBadge}`;
+                
                 document.getElementById('card-location').innerText = userProfile.district ? `${userProfile.upazila ? userProfile.upazila + ', ' : ''}${userProfile.district}` : "ঠিকানা আপডেট করুন";
                 document.getElementById('card-bg').innerText = userProfile.bloodGroup;
                 const badgeObj = getBadge(userProfile.points || 0);
@@ -807,7 +855,7 @@
             } catch(er) { showToast(er.message, "error"); } finally { btn.innerHTML = og; }
         });
 
-        // Search Logic
+        // Search Logic with 90-Day Filter and Verified Badge
         window.performSearch = () => {
             const bg = document.getElementById('search-bg-input').value;
             const div = document.getElementById('search-division').value;
@@ -821,9 +869,13 @@
 
             let res = allUsers.filter(u => {
                 if (!u.isAvailable || u.bloodGroup !== bg) return false;
+                
+                // 90 days filter
                 if (u.lastDonationDate) {
                     const lastDate = new Date(u.lastDonationDate).getTime();
-                    if ((now - lastDate) <= ninetyDaysMs) return false; 
+                    if ((now - lastDate) <= ninetyDaysMs) {
+                        return false; 
+                    }
                 }
                 return true;
             });
@@ -860,6 +912,7 @@
             setTimeout(() => document.getElementById('main-content').scrollTo({ top: c.offsetTop - 20, behavior: 'smooth' }), 100);
         };
 
+        // WhatsApp Request System
         window.openRequestModal = (donorUid, donorBg) => {
             document.getElementById('req-donor-uid').value = donorUid;
             document.getElementById('req-donor-bg').value = donorBg;
@@ -885,10 +938,11 @@
             showToast('অনুরোধ পাঠানো হয়েছে। আমাদের অ্যাডমিন দ্রুত ব্যবস্থা নেবেন।');
         });
 
+        // Advanced Mobile Share System
         window.shareApp = async () => {
             const shareData = {
                 title: 'রক্তের টান',
-                text: '🩸 *রক্তের টান* — একটি জীবন বাঁচাতে, আমরা সবাই একসাথে। \nজরুরি প্রয়োজনে বিনামূল্যে রক্তদাতা খুঁজতে বা নিজে রক্তদাতা হিসেবে যুক্ত হতে আজই ভিজিট করুন আমাদের ওয়েবসাইট।\n🔗 লিংক: [https://rokter-tan.vercel.app]',
+                text: '🩸 *রক্তের টান* -- একটি জীবন বাঁচাতে, আমরা সবাই একসাথে। \nজরুরি প্রয়োজনে বিনামূল্যে রক্তদাতা খুঁজতে বা নিজে রক্তদাতা হিসেবে যুক্ত হতে আজই ভিজিট করুন আমাদের ওয়েবসাইট।\n🔗 লিংক:https://rokter-tan.vercel.app',
             };
 
             if (navigator.share) {
@@ -896,7 +950,9 @@
                     await navigator.share(shareData);
                     earnPoints(10, 'অ্যাপ শেয়ার করার জন্য');
                 } catch (err) {
-                    if (err.name !== 'AbortError') console.error('Error sharing:', err);
+                    if (err.name !== 'AbortError') {
+                        console.error('Error sharing:', err);
+                    }
                     showToast("শেয়ার ক্যানসেল করা হয়েছে।", "error");
                 }
             } else {
@@ -908,23 +964,29 @@
                     document.execCommand('copy');
                     showToast("লিংক কপি করা হয়েছে! বন্ধুদের সাথে শেয়ার করুন।");
                     earnPoints(10, 'অ্যাপ শেয়ার করার জন্য');
-                } catch (err) { showToast("কপি করতে সমস্যা হয়েছে।", "error"); }
+                } catch (err) {
+                    showToast("কপি করতে সমস্যা হয়েছে।", "error");
+                }
                 document.body.removeChild(textArea);
             }
         };
 
-        // NEW: SOS Submission modified to use Deadline Date&Time
+        // NEW: Blood Request Submission logic storing the requested new fields
         document.getElementById('form-add-sos').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('btn-submit-sos'); const og = btn.innerHTML; btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-white"></div>';
             try {
                 const data = {
                     patient: document.getElementById('sos-patient').value, 
-                    reason: document.getElementById('sos-reason').value, 
+                    reason: document.getElementById('sos-disease-detail').value, // backward compatible fallback
+                    diseaseDetail: document.getElementById('sos-disease-detail').value, // new field
                     bloodGroup: document.getElementById('sos-bg-input').value,
                     bags: document.getElementById('sos-bags').value, 
-                    deadline: document.getElementById('sos-deadline').value, // Native DateTime Local
+                    date: document.getElementById('sos-date').value,
+                    donationTime: document.getElementById('sos-deadline').value, // backward compatible fallback
+                    deadline: document.getElementById('sos-deadline').value, // new field
                     hospital: document.getElementById('sos-hospital').value, 
                     phone: document.getElementById('sos-phone').value,
+                    recipientPhone: document.getElementById('sos-recipient-phone').value, // new field
                     createdBy: currentUser.uid, 
                     timestamp: serverTimestamp(), 
                     status: 'active'
@@ -939,15 +1001,14 @@
         const renderSOSList = () => {
             const list = document.getElementById('sos-list'); list.innerHTML = '';
             
+            // Auto-Expiry Logic
+            const todayLocal = new Date();
+            todayLocal.setHours(0, 0, 0, 0);
+
             const active = allRequests.filter(r => {
                 if(r.status !== 'active') return false;
-                
-                // Expiry Logic based on new Deadline or old Date
-                if(r.deadline) {
-                    if(new Date(r.deadline) < new Date()) return false; // Hide expired dynamically
-                } else if(r.date) {
+                if(r.date) {
                     const reqDate = new Date(r.date);
-                    const todayLocal = new Date(); todayLocal.setHours(0,0,0,0);
                     if(reqDate < todayLocal) return false;
                 }
                 return true;
@@ -957,11 +1018,10 @@
             active.forEach(r => {
                 const time = r.timestamp?.toMillis ? new Date(r.timestamp.toMillis()).toLocaleTimeString('bn-BD', {hour:'2-digit', minute:'2-digit'}) : 'এখন';
                 
-                // Advanced Date rendering
-                const reasonUI = r.reason ? `<p><i class="fa-solid fa-notes-medical w-4"></i> <strong class="text-gray-900 dark:text-gray-100">কারণ:</strong> ${r.reason}</p>` : '';
-                const deadlineUI = r.deadline ? 
-                    `<p><i class="fa-regular fa-clock w-4 text-red-500"></i> <strong class="text-red-500">ডেডলাইন:</strong> <span class="text-red-500 font-bold">${new Date(r.deadline).toLocaleString('bn-BD', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})}</span></p>` : 
-                    `<p><i class="fa-regular fa-calendar w-4"></i> <strong>তারিখ:</strong> ${r.date} ${r.donationTime ? `| ${r.donationTime}` : ''}</p>`;
+                // Unified display variables to support legacy/future structures gracefully
+                const displayReason = r.diseaseDetail || r.reason || "N/A";
+                const displayDeadline = r.deadline ? new Date(r.deadline).toLocaleString('bn-BD', {dateStyle: 'medium', timeStyle: 'short'}) : (r.donationTime || r.date || 'N/A');
+                const displayRecipientPhone = r.recipientPhone ? `<p><i class="fa-solid fa-phone-flip w-4"></i> <strong>গ্রহীতা ফোন:</strong> ${r.recipientPhone}</p>` : '';
 
                 list.innerHTML += `
                     <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl shadow-soft border border-rose-100 dark:border-rose-900/30 relative overflow-hidden">
@@ -973,13 +1033,15 @@
                             <span class="bg-rose-100 text-primary dark:bg-rose-900/50 dark:text-rose-400 text-[10px] font-bold px-2 py-1 rounded-full animate-pulse-slow">${r.bags} ব্যাগ</span>
                         </div>
                         <div class="space-y-1.5 mb-4 text-xs text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl">
-                            ${reasonUI}
-                            ${deadlineUI}
+                            <p><i class="fa-solid fa-notes-medical w-4"></i> <strong>রোগের বিবরণ:</strong> ${displayReason}</p>
+                            <p><i class="fa-regular fa-calendar w-4"></i> <strong>রক্তদানের তারিখ:</strong> ${r.date}</p>
+                            <p><i class="fa-regular fa-clock w-4"></i> <strong>শেষ সময়/তারিখ:</strong> ${displayDeadline}</p>
+                            ${displayRecipientPhone}
                             <p><i class="fa-regular fa-hospital w-4"></i> <strong>স্থান:</strong> ${r.hospital}</p>
                         </div>
                         <div class="flex gap-2">
                             <a href="tel:${r.phone.replace(/[^0-9+]/g, '')}" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-2.5 rounded-xl text-center text-sm shadow-md flex justify-center items-center gap-2 transition-colors"><i class="fa-solid fa-phone"></i> কল করুন</a>
-                            ${r.createdBy === currentUser.uid ? `<button onclick="markSOSDone('${r.id}')" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 font-bold py-2.5 rounded-xl text-sm transition-colors text-gray-700 dark:text-gray-300">সম্পন্ন</button>` : ''}
+                            ${r.createdBy === currentUser.uid ? `<button onclick="markSOSDone('${r.id}')" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 font-bold py-2.5 rounded-xl text-sm transition-colors text-gray-700 dark:text-gray-300">সম্পন্ন হয়েছে</button>` : ''}
                         </div>
                     </div>`;
             });
@@ -1034,8 +1096,28 @@
         document.getElementById('bank-search-input').addEventListener('input', renderBloodBanks);
 
         // ==========================================
-        // ADMIN PANEL RENDERING LOGIC
+        // ADMIN PANEL SUBTAB INTERACTION & RENDERING
         // ==========================================
+        window.switchAdminSubTab = (subTab) => {
+            const donorsTab = document.getElementById('admin-tab-donors');
+            const requestsTab = document.getElementById('admin-tab-requests');
+            const donorsCont = document.getElementById('admin-donors-container');
+            const requestsCont = document.getElementById('admin-requests-container');
+
+            if (subTab === 'donors') {
+                donorsTab.className = 'flex-1 py-2 text-center font-bold text-sm border-b-2 border-primary text-primary';
+                requestsTab.className = 'flex-1 py-2 text-center font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700';
+                donorsCont.classList.remove('hidden');
+                requestsCont.classList.add('hidden');
+            } else {
+                requestsTab.className = 'flex-1 py-2 text-center font-bold text-sm border-b-2 border-primary text-primary';
+                donorsTab.className = 'flex-1 py-2 text-center font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700';
+                donorsCont.classList.add('hidden');
+                requestsCont.classList.remove('hidden');
+                renderAdminRequests();
+            }
+        };
+
         const renderAdminPanel = () => {
             const list = document.getElementById('admin-donors-list');
             list.innerHTML = '';
@@ -1044,92 +1126,89 @@
 
             if(registeredUsers.length === 0) {
                 list.innerHTML = `<tr><td colspan="3" class="px-4 py-6 text-center text-gray-500 text-sm">কোনো ইউজার পাওয়া যায়নি</td></tr>`;
-            } else {
-                registeredUsers.forEach(u => {
-                    const isVerified = u.isVerified === true;
-                    list.innerHTML += `
-                        <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors">
-                            <td class="px-4 py-3">
-                                <div class="font-bold text-sm text-gray-900 dark:text-white truncate max-w-[120px]">${u.name || "N/A"}</div>
-                                <div class="text-[10px] text-gray-500">${u.phone}</div>
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                                <span class="inline-block px-2 py-1 text-[10px] font-bold text-primary bg-rose-50 dark:bg-rose-900/30 rounded-md border border-rose-100 dark:border-rose-800">
-                                    ${u.bloodGroup || "N/A"}
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" ${isVerified ? 'checked' : ''} onchange="toggleAdminVerification('${u.uid}', this.checked)" class="sr-only peer admin-toggle">
-                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
-                                </label>
-                            </td>
-                        </tr>
-                    `;
-                });
-            }
-
-            renderAdminRequests();
-        };
-
-        // NEW: Admin View Requests Table Rendering
-        const renderAdminRequests = () => {
-            const list = document.getElementById('admin-requests-list');
-            list.innerHTML = '';
-            
-            if(allRequests.length === 0) {
-                list.innerHTML = `<tr><td colspan="4" class="px-4 py-6 text-center text-gray-500 text-sm">কোনো রিকোয়েস্ট পাওয়া যায়নি</td></tr>`;
                 return;
             }
 
-            allRequests.forEach(req => {
-                let urgencyHtml = '';
-                let rowClass = 'hover:bg-gray-50/50 dark:hover:bg-gray-700/50';
-                
-                // Advanced Urgency Calculations using the new Deadline field
-                if (req.deadline) {
-                    const deadlineTime = new Date(req.deadline).getTime();
-                    const now = Date.now();
-                    const timeDiff = deadlineTime - now;
-                    const hoursLeft = timeDiff / (1000 * 60 * 60);
-
-                    if (req.status === 'completed') {
-                        urgencyHtml = `<span class="px-2 py-1 text-[10px] font-bold text-green-700 bg-green-100 rounded-md border border-green-200 shadow-sm"><i class="fa-solid fa-check mr-1"></i>Completed</span>`;
-                    } else if (timeDiff < 0) {
-                        urgencyHtml = `<span class="px-2 py-1 text-[10px] font-bold text-gray-600 bg-gray-200 rounded-md border border-gray-300 shadow-sm">Expired</span>`;
-                        rowClass = 'bg-gray-50 dark:bg-gray-800/80 opacity-75';
-                    } else if (hoursLeft <= 12) {
-                        urgencyHtml = `<span class="px-2 py-1 text-[10px] font-bold text-white bg-red-600 rounded-md shadow-sm animate-pulse"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Critical (${Math.max(1, Math.round(hoursLeft))}h left)</span>`;
-                        rowClass = 'bg-red-50/50 dark:bg-red-900/20';
-                    } else {
-                        urgencyHtml = `<span class="px-2 py-1 text-[10px] font-bold text-orange-700 bg-orange-100 rounded-md border border-orange-200 shadow-sm">Active</span>`;
-                    }
-                } else {
-                    urgencyHtml = `<span class="px-2 py-1 text-[10px] font-bold text-gray-700 bg-gray-100 rounded-md border border-gray-200">No Deadline</span>`;
-                }
-
-                const formattedDeadline = req.deadline ? new Date(req.deadline).toLocaleString('en-GB', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : (req.date || 'N/A');
-
+            registeredUsers.forEach(u => {
+                const isVerified = u.isVerified === true;
                 list.innerHTML += `
-                    <tr class="${rowClass} transition-colors border-b border-gray-100 dark:border-gray-700/50 last:border-0">
-                        <td class="px-4 py-3 align-top">
-                            <div class="font-bold text-sm text-gray-900 dark:text-white truncate max-w-[120px]">${req.patient || "N/A"}</div>
-                            <div class="text-[11px] font-bold text-primary mt-0.5">${req.bags} Bags | ${req.bloodGroup}</div>
+                    <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors">
+                        <td class="px-4 py-3">
+                            <div class="font-bold text-sm text-gray-900 dark:text-white truncate max-w-[120px]">${u.name || "N/A"}</div>
+                            <div class="text-[10px] text-gray-500">${u.phone}</div>
                         </td>
-                        <td class="px-4 py-3 align-top">
-                            <div class="text-xs text-gray-800 dark:text-gray-200 truncate max-w-[150px]" title="${req.hospital}"><i class="fa-regular fa-hospital mr-1"></i>${req.hospital || "N/A"}</div>
-                            <div class="text-[11px] text-gray-500 mt-1"><i class="fa-solid fa-phone mr-1"></i>${req.phone || "N/A"}</div>
+                        <td class="px-4 py-3 text-center">
+                            <span class="inline-block px-2 py-1 text-[10px] font-bold text-primary bg-rose-50 dark:bg-rose-900/30 rounded-md border border-rose-100 dark:border-rose-800">
+                                ${u.bloodGroup || "N/A"}
+                            </span>
                         </td>
-                        <td class="px-4 py-3 align-top">
-                            <div class="text-xs text-gray-600 dark:text-gray-400 whitespace-normal line-clamp-2 max-w-[150px]" title="${req.reason || 'No specific reason provided'}">${req.reason || "N/A"}</div>
-                        </td>
-                        <td class="px-4 py-3 align-top">
-                            <div class="text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1.5">${formattedDeadline}</div>
-                            ${urgencyHtml}
+                        <td class="px-4 py-3 text-center">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" ${isVerified ? 'checked' : ''} onchange="toggleAdminVerification('${u.uid}', this.checked)" class="sr-only peer admin-toggle">
+                                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                            </label>
                         </td>
                     </tr>
                 `;
             });
+
+            renderAdminRequests();
+        };
+
+        // NEW: Admin panel request table displaying custom parameters
+        const renderAdminRequests = () => {
+            const list = document.getElementById('admin-requests-list');
+            if(!list) return;
+            list.innerHTML = '';
+
+            if (allRequests.length === 0) {
+                list.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-gray-500 text-sm">কোনো অনুরোধ পাওয়া যায়নি</td></tr>`;
+                return;
+            }
+
+            allRequests.forEach(r => {
+                const recipientPhone = r.recipientPhone || r.phone || "N/A";
+                const diseaseDetail = r.diseaseDetail || r.reason || "N/A";
+                const deadlineDisplay = r.deadline ? new Date(r.deadline).toLocaleString('bn-BD', {dateStyle: 'short', timeStyle: 'short'}) : (r.donationTime || r.date || 'N/A');
+                const isCompleted = r.status === 'completed';
+
+                list.innerHTML += `
+                    <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors">
+                        <td class="px-4 py-3">
+                            <div class="font-bold text-sm text-gray-900 dark:text-white truncate max-w-[120px]">${r.patient || "N/A"}</div>
+                            <div class="text-[10px] text-gray-500">${recipientPhone}</div>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 max-w-[150px] truncate" title="${diseaseDetail}">
+                            ${diseaseDetail}
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="inline-block px-2 py-0.5 text-[10px] font-bold text-primary bg-rose-50 dark:bg-rose-900/30 rounded border border-rose-100 dark:border-rose-800 mr-1">
+                                ${r.bloodGroup || "N/A"}
+                            </span>
+                            <span class="text-xs text-gray-600 dark:text-gray-400">${r.bags || 1} ব্যাগ</span>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
+                            ${deadlineDisplay}
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="toggleRequestStatus('${r.id}', '${r.status}')" class="px-3 py-1 rounded-full text-xs font-bold transition-all ${isCompleted ? 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400' : 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400'}">
+                                ${isCompleted ? 'সম্পন্ন' : 'চলমান'}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        };
+
+        window.toggleRequestStatus = async (reqId, currentStatus) => {
+            const nextStatus = currentStatus === 'completed' ? 'active' : 'completed';
+            try {
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'requests', reqId), { status: nextStatus });
+                showToast("স্ট্যাটাস আপডেট করা হয়েছে!");
+                renderAdminRequests();
+            } catch (e) {
+                showToast("এরর: " + e.message, "error");
+            }
         };
 
         window.toggleAdminVerification = async (uid, newStatus) => {
